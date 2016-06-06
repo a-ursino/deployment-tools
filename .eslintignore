@@ -1,0 +1,3 @@
+# node_modules ignored by default but seems it doesn't works
+node_modules/
+dist/

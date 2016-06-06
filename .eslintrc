@@ -1,0 +1,22 @@
+{
+  // use babel-eslint parser instead of espree (Esprima) to support Flow syntax
+  // OR //github.com/gcazaciuc/eslint-plugin-flowtype
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "globals": {
+    "VERSION": true,
+    "__DEV__": true,
+    "__PRERELEASE__": true,
+  },
+  "rules": {
+    // use one tab for indent
+    "indent": [2, "tab"],
+    // permit alert
+    "no-alert": [0],
+    "no-console": [0],
+    "id-length": [0],
+    "valid-jsdoc": [2],
+    "max-len": [0],
+    "array-callback-return":[0]
+  }
+}
