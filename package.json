@@ -21,7 +21,15 @@
     "mainStyle": "main.less",
     "mainBackoffileStyle": "main-admin.less",
     "buildPathCss": "/data/css/",
-    "cleanBuildPathCss": "true"
+    "cleanBuildPathCss": "true",
+    "pre-git": {
+      "commit-msg": "conventional",
+      "pre-commit": [
+        "npm run lint-t"
+      ],
+      "pre-push": [],
+      "post-merge": []
+    }
   },
   "configDev": {
     "buildPathJs": "/dist/",
@@ -31,9 +39,13 @@
     "packageJson": "/data/package.json"
   },
   "scripts": {
-    "postinstallFAKE": "copy with override to tools",
+    "postinstall": "babel-node src/run postinstall",
+		"changeloginit": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+		"changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 500",
     "doc": "esdoc -c ./esdoc.json",
-    "COMMAND SCRIPTS": "COMMAND SCRIPTS",
+    "build-t": "babel src -d dist",
+    "lint-t": "cross-env DEBUG=dt DEV=true babel-node src/run lint",
+    "USE THIS SCRIPTS TO SIMULATE THE USE IN A REAL PROJECT": "###########",
     "testDev": "babel-node node_modules/blue-tape/bin/blue-tape ./test/**/*.js | faucet",
     "lintDev": "cross-env DEBUG=dt DEV=true babel-node src/run lint",
     "cleanDev": "cross-env DEBUG=dt DEV=true babel-node src/run clean",
@@ -42,6 +54,7 @@
     "deployDev": "cross-env DEBUG=dt DEV=true babel-node src/run deploy",
     "uploadDev": "cross-env DEBUG=dt DEV=true babel-node src/run upload",
     "watchDev": "cross-env DEBUG=dt DEV=true babel-node src/run watch",
+		"COPY THIS IN YOUR PROJECT": "#########",
     "test": "babel-node node_modules/blue-tape/bin/blue-tape ./test/**/*.js | faucet",
     "lint": "cross-env DEBUG=dt babel-node src/run lint",
     "clean": "cross-env DEBUG=dt babel-node src/run clean",
@@ -54,9 +67,12 @@
   "keywords": [],
   "license": "ISC",
   "devDependencies": {
+    "conventional-changelog": "^1.1.0",
+    "conventional-changelog-cli": "^1.2.0",
     "debug": "^2.2.0",
     "esdoc": "^0.4.7",
     "esdoc-es7-plugin": "0.0.3",
+    "pre-git": "^3.8.4",
     "sinon": "^1.17.4",
     "tape": "^4.5.1"
   },
