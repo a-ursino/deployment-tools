@@ -25,7 +25,7 @@
     "pre-git": {
       "commit-msg": "conventional",
       "pre-commit": [
-        "npm run lintDev"
+        "npm run lint-t"
       ],
       "pre-push": [],
       "post-merge": []
@@ -43,7 +43,9 @@
 		"changeloginit": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
 		"changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 500",
     "doc": "esdoc -c ./esdoc.json",
-    "COMMAND SCRIPTS": "COMMAND SCRIPTS",
+    "build-t": "babel src -d dist",
+    "lint-t": "cross-env DEBUG=dt DEV=true babel-node src/run lint",
+    "USE THIS SCRIPTS TO SIMULATE THE USE IN A REAL PROJECT": "###########",
     "testDev": "babel-node node_modules/blue-tape/bin/blue-tape ./test/**/*.js | faucet",
     "lintDev": "cross-env DEBUG=dt DEV=true babel-node src/run lint",
     "cleanDev": "cross-env DEBUG=dt DEV=true babel-node src/run clean",
@@ -52,6 +54,7 @@
     "deployDev": "cross-env DEBUG=dt DEV=true babel-node src/run deploy",
     "uploadDev": "cross-env DEBUG=dt DEV=true babel-node src/run upload",
     "watchDev": "cross-env DEBUG=dt DEV=true babel-node src/run watch",
+		"COPY THIS IN YOUR PROJECT": "#########",
     "test": "babel-node node_modules/blue-tape/bin/blue-tape ./test/**/*.js | faucet",
     "lint": "cross-env DEBUG=dt babel-node src/run lint",
     "clean": "cross-env DEBUG=dt babel-node src/run clean",
