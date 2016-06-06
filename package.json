@@ -31,7 +31,7 @@
     "packageJson": "/data/package.json"
   },
   "scripts": {
-    "postinstallFAKE": "copy with override to tools",
+    "postinstall": "babel-node src/run postinstall",
     "doc": "esdoc -c ./esdoc.json",
     "COMMAND SCRIPTS": "COMMAND SCRIPTS",
     "testDev": "babel-node node_modules/blue-tape/bin/blue-tape ./test/**/*.js | faucet",
