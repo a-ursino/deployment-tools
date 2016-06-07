@@ -1,9 +1,9 @@
 {
-  "name": "deploy-tools",
-  "version": "1.0.0",
-  "description": "",
+  "name": "deployment-tools",
+  "version": "1.0.1",
+  "description": "A node.js scripts that helps you to compile and deploy the static assets(css/JavaScript) of your website",
   "main": "index.js",
-  "author": "Alessandro Ursino <a.ursino@directio.it> (http://www.directio.it)",
+  "author": "Alessandro Ursino (killanaca)",
   "engines": {
     "node": ">=6.0.0"
   },
@@ -25,7 +25,7 @@
     "pre-git": {
       "commit-msg": "conventional",
       "pre-commit": [
-        "npm run lint-t"
+        "npm run lint"
       ],
       "pre-push": [],
       "post-merge": []
@@ -39,12 +39,6 @@
     "packageJson": "/data/package.json"
   },
   "scripts": {
-    "postinstall": "babel-node src/run postinstall",
-		"changeloginit": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-		"changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 500",
-    "doc": "esdoc -c ./esdoc.json",
-    "build-t": "babel src -d dist",
-    "lint-t": "cross-env DEBUG=dt DEV=true babel-node src/run lint",
     "USE THIS SCRIPTS TO SIMULATE THE USE IN A REAL PROJECT": "###########",
     "testDev": "babel-node node_modules/blue-tape/bin/blue-tape ./test/**/*.js | faucet",
     "lintDev": "cross-env DEBUG=dt DEV=true babel-node src/run lint",
@@ -54,15 +48,16 @@
     "deployDev": "cross-env DEBUG=dt DEV=true babel-node src/run deploy",
     "uploadDev": "cross-env DEBUG=dt DEV=true babel-node src/run upload",
     "watchDev": "cross-env DEBUG=dt DEV=true babel-node src/run watch",
-		"COPY THIS IN YOUR PROJECT": "#########",
+		"GENERAL PACKAGE SCRIPTS": "########",
+		"publish-please": "publish-please",
+		"prepublish": "publish-please guard",
+		"postinstall": "babel-node src/run postinstall",
     "test": "babel-node node_modules/blue-tape/bin/blue-tape ./test/**/*.js | faucet",
-    "lint": "cross-env DEBUG=dt babel-node src/run lint",
-    "clean": "cross-env DEBUG=dt babel-node src/run clean",
-    "build": "cross-env DEBUG=dt babel-node src/run build",
-    "bump": "cross-env DEBUG=dt babel-node src/run bump",
-    "deploy": "cross-env DEBUG=dt babel-node src/run deploy",
-    "upload": "cross-env DEBUG=dt babel-node src/run upload",
-    "watch": "cross-env DEBUG=dt  babel-node src/run watch"
+		"changeloginit": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+		"changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 500",
+		"doc": "esdoc -c ./esdoc.json",
+		"build": "babel src -d dist",
+		"lint": "cross-env DEBUG=dt DEV=true babel-node src/run lint"
   },
   "keywords": [],
   "license": "ISC",
@@ -73,6 +68,7 @@
     "esdoc": "^0.4.7",
     "esdoc-es7-plugin": "0.0.3",
     "pre-git": "^3.8.4",
+    "publish-please": "^2.1.4",
     "sinon": "^1.17.4",
     "tape": "^4.5.1"
   },
