@@ -6,8 +6,8 @@ function isDev() {
 }
 
 // Factory function
-// Dependency Injection and clousure for easily unit testing
-export default (fileSystem = fs, filename = 'package.json') => {
+// Dependency Injection for easily unit testing and clousure for data privacy
+export default ({ fileSystem = fs, filename = 'package.json', inDev = isDev(), env = process.env.NODE_ENV } = {}) => {
 	let store = {}; // eslint-disable-line no-unused-vars
 	return Object.assign({}, {
 		get type() {
@@ -18,9 +18,9 @@ export default (fileSystem = fs, filename = 'package.json') => {
 			const pkg = JSON.parse(content);
 			// if we are in dev mode, merge the two configuration objects so we can override the default values inside config {} with configDev {}
 			// otherwise use only the config {}
-			const configDev = isDev() ? pkg.configDev : {};
+			const configDev = inDev ? pkg.configDev : {};
 			// extract config object from package.json and add version, and production
-			const production = process.env.NODE_ENV === 'production';
+			const production = env === 'production';
 			store = Object.assign({}, pkg.config, configDev, { version: pkg.version, production });
 			return this;
 		},

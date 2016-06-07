@@ -1,5 +1,5 @@
 import test from 'blue-tape';
-import fu from '../../src/libs/files-utils';
+import fu from '../src/libs/files-utils';
 
 test('file utils getNewVersion', assert => {
 	assert.throws(fu.getNewVersion, /Use a valid version type between patch, minor, major/, 'missing index');
