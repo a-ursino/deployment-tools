@@ -9,7 +9,7 @@ const debug = require('debug')('dt');
 const loadConfig = () => c().load();
 
 
-async function compileLessAsync(srcFolder, outputFolder, filename, production = false) {
+async function compileLessAsync(srcFolder, outputFolder, filename, minify = false) {
 	// if filename is undefined, skip
 	if (filename === undefined) return;
 	const filepath = `${srcFolder}${filename}`;
@@ -17,7 +17,7 @@ async function compileLessAsync(srcFolder, outputFolder, filename, production = 
 	// add the folder with the less files
 	lessPath.push(path.join(process.cwd(), 'node_modules'));
 	lessPath.push(path.join(process.cwd(), srcFolder));
-	debug(`compileLessAsync srcFolder:${srcFolder} outputFolder:${outputFolder} filename:${filename} production:${production} path: ${lessPath}`);
+	debug(`compileLessAsync srcFolder:${srcFolder} outputFolder:${outputFolder} filename:${filename} minify:${minify} path: ${lessPath}`);
 	const lessInput = await fs.readFileAsync(filepath);
 	const outputCss = await less.render(lessInput, { paths: lessPath, sourceMap: { sourceMapFileInline: true } });
 	// es: main.less-> main
@@ -33,7 +33,7 @@ async function compileLessAsync(srcFolder, outputFolder, filename, production = 
 		fs.writeFileAsync(cssOutputPath, processedCssObject.css),
 	];
 	// enable minify???
-	if (production) {
+	if (minify) {
 		const nano = cssnano({ discardComments: { removeAll: true } });
 		// make minify via Css-Nano
 		const processedMinCssObject = await cssProcessor.use(nano).process(processedCssObject.css);
@@ -45,14 +45,14 @@ async function compileLessAsync(srcFolder, outputFolder, filename, production = 
 
 
 // cross-env NODE_ENV=production lessc --include-path=node_modules ./less/main.less ./css/main.min.css --clean-css=\"--s1 --advanced --compatibility=ie8\"
-async function lessTaskAsync(config = loadConfig()) {
+async function lessTaskAsync(config = loadConfig(), minify = false) {
 	// if the srcLess is not set -> skip this task
 	if (config.get('srcLess') === undefined) return;
 
 	const tasks = [
-		compileLessAsync(config.get('srcLess'), config.get('buildPathCss'), config.get('mainStyle'), config.get('production')),
+		compileLessAsync(config.get('srcLess'), config.get('buildPathCss'), config.get('mainStyle'), minify),
 		// the main-backoffice is OPT-IN
-		compileLessAsync(config.get('srcLess'), config.get('buildPathCss'), config.get('mainBackoffileStyle'), config.get('production')),
+		compileLessAsync(config.get('srcLess'), config.get('buildPathCss'), config.get('mainBackoffileStyle'), minify),
 	];
 	await Promise.all(tasks);
 }

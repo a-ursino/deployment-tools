@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 let less = (() => {
 	var ref = _asyncToGenerator(function* (config = loadConfig()) {
 		try {
-			yield (0, _less2.default)(config);
+			yield (0, _less2.default)(config, true);
 		} catch (e) {
 			console.error(e); // eslint-disable-line no-console
 		}

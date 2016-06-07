@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 let compileLessAsync = (() => {
-	var ref = _asyncToGenerator(function* (srcFolder, outputFolder, filename, production = false) {
+	var ref = _asyncToGenerator(function* (srcFolder, outputFolder, filename, minify = false) {
 		// if filename is undefined, skip
 		if (filename === undefined) return;
 		const filepath = `${ srcFolder }${ filename }`;
@@ -13,7 +13,7 @@ let compileLessAsync = (() => {
 		// add the folder with the less files
 		lessPath.push(_path2.default.join(process.cwd(), 'node_modules'));
 		lessPath.push(_path2.default.join(process.cwd(), srcFolder));
-		debug(`compileLessAsync srcFolder:${ srcFolder } outputFolder:${ outputFolder } filename:${ filename } production:${ production } path: ${ lessPath }`);
+		debug(`compileLessAsync srcFolder:${ srcFolder } outputFolder:${ outputFolder } filename:${ filename } minify:${ minify } path: ${ lessPath }`);
 		const lessInput = yield _fs2.default.readFileAsync(filepath);
 		const outputCss = yield _less2.default.render(lessInput, { paths: lessPath, sourceMap: { sourceMapFileInline: true } });
 		// es: main.less-> main
@@ -27,7 +27,7 @@ let compileLessAsync = (() => {
 		const processedCssObject = yield cssProcessor.process(outputCss.css);
 		const outputTask = [_fs2.default.writeFileAsync(cssOutputPath, processedCssObject.css)];
 		// enable minify???
-		if (production) {
+		if (minify) {
 			const nano = (0, _cssnano2.default)({ discardComments: { removeAll: true } });
 			// make minify via Css-Nano
 			const processedMinCssObject = yield cssProcessor.use(nano).process(processedCssObject.css);
@@ -46,17 +46,17 @@ let compileLessAsync = (() => {
 
 
 let lessTaskAsync = (() => {
-	var ref = _asyncToGenerator(function* (config = loadConfig()) {
+	var ref = _asyncToGenerator(function* (config = loadConfig(), minify = false) {
 		// if the srcLess is not set -> skip this task
 		if (config.get('srcLess') === undefined) return;
 
-		const tasks = [compileLessAsync(config.get('srcLess'), config.get('buildPathCss'), config.get('mainStyle'), config.get('production')),
+		const tasks = [compileLessAsync(config.get('srcLess'), config.get('buildPathCss'), config.get('mainStyle'), minify),
 		// the main-backoffice is OPT-IN
-		compileLessAsync(config.get('srcLess'), config.get('buildPathCss'), config.get('mainBackoffileStyle'), config.get('production'))];
+		compileLessAsync(config.get('srcLess'), config.get('buildPathCss'), config.get('mainBackoffileStyle'), minify)];
 		yield Promise.all(tasks);
 	});
 
-	return function lessTaskAsync(_x5) {
+	return function lessTaskAsync(_x5, _x6) {
 		return ref.apply(this, arguments);
 	};
 })();
