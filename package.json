@@ -1,6 +1,6 @@
 {
   "name": "deployment-tools",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A node.js scripts that helps you to compile and deploy the static assets(css/JavaScript) of your website without gulp and grunt using node and npm script",
   "main": "index.js",
   "author": "Alessandro Ursino (killanaca)",
@@ -21,7 +21,7 @@
     "mainStyle": "main.less",
     "mainBackoffileStyle": "main-admin.less",
     "buildPathCss": "/data/css/",
-    "cleanBuildPathCss": "true",
+    "preserveBuildPathCss": true,
     "pre-git": {
       "commit-msg": "conventional",
       "pre-commit": [
@@ -51,7 +51,7 @@
     "GENERAL PACKAGE SCRIPTS": "########",
     "publish-please": "publish-please",
     "prepublish": "publish-please guard",
-    "postinstall": "babel-node src/run postinstall",
+    "postinstall": "node dist/run postinstall",
     "test": "babel-node node_modules/blue-tape/bin/blue-tape ./test/**/*.js | faucet",
     "changeloginit": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 500",

@@ -34,7 +34,7 @@ The scripts available at the moment are:
 * `mainStyle`: the entry file of the front's styles (es: main.less/main.sass)
 * `mainBackoffileStyle`: the entry file of the backoffice's styles (es: main-admin.less/main.sass) [OPT-IN]
 * `buildPathCss`: the path of the compiled Css files (es: css)
-* `cleanBuildPathCss`: when set and true, avoid to delete the css folder during `clean` task
+* `preserveBuildPathCss`: when set and true, avoid to delete the css folder during `clean` task
 
 **JavaScript**
 * `srcJsPath`: the path with the JavaScript files
@@ -148,7 +148,7 @@ and the relative confing settings to `package.json` file
     "mainStyle": "main.less",
     "mainBackoffileStyle": "main-admin.less",
     "buildPathCss": "/data/css/",
-    "cleanBuildPathCss": "true"
+    "preserveBuildPathCss": "true"
 	}
 }
 ```

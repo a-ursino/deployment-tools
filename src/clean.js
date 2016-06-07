@@ -20,8 +20,10 @@ async function clean(config = loadConfig()) {
 	// TODO: check if we must delete css folder
 	const distFolder = [
 		path.join(process.cwd(), config.get('buildPathJs')),
-		path.join(process.cwd(), config.get('buildPathCss')),
 	];
+	if (!config.get('preserveBuildPathCss')) {
+		distFolder.push(path.join(process.cwd(), config.get('buildPathCss')));
+	}
 	// compact the array
 	const distFolderCompacted = compact(distFolder);
 	debug(`try to delete folder(s) ${distFolderCompacted}`);
