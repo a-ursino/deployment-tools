@@ -8,8 +8,8 @@
         ".env"
       ]
     },
-    "branch": "master",
-    "gitTag": true
+    "branch": false,
+    "gitTag": false
   },
   "confirm": true,
   "publishTag": "latest",
