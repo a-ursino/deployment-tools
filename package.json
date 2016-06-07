@@ -1,6 +1,6 @@
 {
   "name": "deployment-tools",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A node.js scripts that helps you to compile and deploy the static assets(css/JavaScript) of your website",
   "main": "index.js",
   "author": "Alessandro Ursino (killanaca)",
