@@ -7,7 +7,10 @@ Object.defineProperty(exports, "__esModule", {
 let clean = (() => {
 	var ref = _asyncToGenerator(function* (config = loadConfig()) {
 		// TODO: check if we must delete css folder
-		const distFolder = [_path2.default.join(process.cwd(), config.get('buildPathJs')), _path2.default.join(process.cwd(), config.get('buildPathCss'))];
+		const distFolder = [_path2.default.join(process.cwd(), config.get('buildPathJs'))];
+		if (!config.get('preserveBuildPathCss')) {
+			distFolder.push(_path2.default.join(process.cwd(), config.get('buildPathCss')));
+		}
 		// compact the array
 		const distFolderCompacted = (0, _compact2.default)(distFolder);
 		debug(`try to delete folder(s) ${ distFolderCompacted }`);
