@@ -7,25 +7,26 @@
 *
 */
 
-// import ncp from 'ncp';
-// import del from 'del';
+import ncp from 'ncp';
+import del from 'del';
 import path from 'path';
-const debug = require('debug')('dt');
 
 async function postinstall() {
-	const cwd = path.resolve();
+	// this is the path of the package: ..../node_modules/deployment-tools
+	const packagePath = process.cwd();
+	const src = path.join(packagePath, 'dist');
+	const projectPath = path.join(packagePath, '../../');
+	const destPath = path.join(projectPath, 'tools');
+	console.log('src', src, 'projectPath', projectPath, 'destPath', destPath);
 	// first delete folder
-	const destFolder = path.join(process.cwd(), 'tools');
-	console.log('cwd', cwd, 'process.cwd()', process.cwd(), 'destFolder', destFolder);
-	debug(`try to delete folder(s) ${destFolder}`);
-	// await del(destFolder, { dot: true });
-	// then copy src into projects tools folder
-	// ncp(source, destFolder, function (err) {
-	// 	if (err) {
-	// 		return console.error(err);
-	// 	}
-	// 	console.log('done!');
-	// });
+	await del(destPath, { dot: true, dryRun: true });
+	// then copy dist into projects tools folder
+	ncp(src, destPath, (err) => {
+		if (err) {
+			return console.error(err);
+		}
+		return console.log('done!');
+	});
 }
 
 export default postinstall;
