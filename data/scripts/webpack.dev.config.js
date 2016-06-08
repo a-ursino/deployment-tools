@@ -8,6 +8,6 @@ module.exports = webpackConfig({
 	saveStats: false,
 	failOnError: false,
 	devTool: 'eval',
-	banner: true,
+	banner: false, // false otherwise invalid hash logic
 	progress: true,
 });

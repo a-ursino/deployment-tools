@@ -13,7 +13,7 @@ let postinstall = (() => {
 		const destPath = _path2.default.join(projectPath, 'tools');
 		console.log('src', src, 'projectPath', projectPath, 'destPath', destPath);
 		// first delete folder
-		yield (0, _del2.default)(destPath, { dot: true, dryRun: true });
+		yield (0, _del2.default)(destPath, { dot: true, dryRun: true, force: true });
 		// then copy dist into projects tools folder
 		(0, _ncp2.default)(src, destPath, function (err) {
 			if (err) {

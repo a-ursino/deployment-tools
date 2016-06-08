@@ -33,7 +33,7 @@ async function upload(config = loadConfig()) {
 		// read again the correct package.json
 		const pkg = JSON.parse(await fs.readFileAsync(config.getEnsure('packageJson')));
 		const version = pkg.version;
-		debug(`Upload files to container ${container} with ${version}`);
+		logger.log(`Upload files to container: ${container} with version: ${version}`);
 		// create the project folder if not exists
 		await bs.createContainerIfNotExistsAsync(container, { publicAccessLevel: 'blob' });
 		// check if there is already this version
@@ -63,10 +63,10 @@ async function upload(config = loadConfig()) {
 			// from apply to spread operator
 			filesToUpload.push(...cssFiles);
 		}
-		debug(`Files to upload ${filesToUpload}`);
+		logger.log(`Files to upload ${filesToUpload}`);
 		// upload files in parallel
 		await Promise.all(
-			filesToUpload.map((i) => bs.createBlockBlobFromLocalFileAsync(container, `${version}/${i}`, i)),
+			filesToUpload.map((i) => bs.createBlockBlobFromLocalFileAsync(container, `${version}/${path.relative(process.cwd(), i)}`, i)),
 		);
 	} catch (e) {
 		logger.error('upload', e);

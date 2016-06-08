@@ -18,7 +18,7 @@ let upload = (() => {
 			// read again the correct package.json
 			const pkg = JSON.parse((yield _fs2.default.readFileAsync(config.getEnsure('packageJson'))));
 			const version = pkg.version;
-			debug(`Upload files to container ${ container } with ${ version }`);
+			_logger2.default.log(`Upload files to container: ${ container } with version: ${ version }`);
 			// create the project folder if not exists
 			yield bs.createContainerIfNotExistsAsync(container, { publicAccessLevel: 'blob' });
 			// check if there is already this version
@@ -48,10 +48,10 @@ let upload = (() => {
 				// from apply to spread operator
 				filesToUpload.push(...cssFiles);
 			}
-			debug(`Files to upload ${ filesToUpload }`);
+			_logger2.default.log(`Files to upload ${ filesToUpload }`);
 			// upload files in parallel
 			yield Promise.all(filesToUpload.map(function (i) {
-				return bs.createBlockBlobFromLocalFileAsync(container, `${ version }/${ i }`, i);
+				return bs.createBlockBlobFromLocalFileAsync(container, `${ version }/${ _path2.default.relative(process.cwd(), i) }`, i);
 			}));
 		} catch (e) {
 			_logger2.default.error('upload', e);

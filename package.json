@@ -1,6 +1,6 @@
 {
   "name": "deployment-tools",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A node.js scripts that helps you to compile and deploy the static assets(css/JavaScript) of your website without gulp and grunt using node and npm script",
   "main": "index.js",
   "author": "Alessandro Ursino (killanaca)",
