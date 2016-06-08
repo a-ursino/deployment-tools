@@ -11,7 +11,7 @@
     "branch": false,
     "gitTag": false
   },
-  "confirm": true,
+  "confirm": false,
   "publishTag": "latest",
   "prePublishScript": "npm test"
 }

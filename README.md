@@ -78,7 +78,7 @@ while client-side
 ```html
 <html>
 	....
-	<body>
+	<body data-swversion='@ConfigurationManager.AppSettings["swversion"]'>
 		<script src="https://cdn.ravenjs.com/3.0.5/raven.min.js"></script>
 <script>
     Raven.config('...', {
@@ -99,6 +99,7 @@ while client-side
 * compile Sass files
 * process css files with [postcss](https://github.com/postcss/postcss)
 * add vendor prefixes with [autoprefixer](https://github.com/postcss/autoprefixer) postcss's plugin
+* adjust image urls inside css for CDN with [postcss-url](https://github.com/postcss/postcss-url) postcss's plugin
 * minify css files with [cssnano](https://github.com/ben-eb/cssnano) postcss's plugin
 
 ## Package Features
@@ -122,11 +123,11 @@ then you must copy the `npm` scripts that you want to use to your `package.json`
 	"scripts": {
 		"lint": "babel-node tools/run lint",
 		"clean": "babel-node tools/run clean",
-		"build": "babel-node tools/run build",
+		"build": "cross-env NODE_ENV=production babel-node tools/run build",
 		"bump": "babel-node tools/run bump",
-		"deploy": "babel-node tools/run deploy",
+		"deploy": "cross-env NODE_ENV=production babel-node tools/run deploy",
 		"upload": "babel-node tools/run upload",
-		"watch": " babel-node tools/run watch"
+		"watch": "babel-node tools/run watch"
 	}
 }
 ```

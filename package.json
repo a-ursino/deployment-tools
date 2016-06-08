@@ -1,6 +1,6 @@
 {
   "name": "deployment-tools",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A node.js scripts that helps you to compile and deploy the static assets(css/JavaScript) of your website without gulp and grunt using node and npm script",
   "main": "index.js",
   "author": "Alessandro Ursino (killanaca)",
@@ -10,18 +10,18 @@
   "config": {
     "domain": "http://az889637.vo.msecnd.net",
     "projectName": "projectname",
-    "webConfig": "Web.config",
-    "packageJson": "/package.json",
-    "srcJsPath": "/script/",
+    "webConfig": "/data/Web.config",
+    "packageJson": "/data/package.json",
+    "srcJsPath": "/data/scripts/",
     "mainJs": "main.js",
     "mainBackoffileJs": "main-backoffice.js",
     "buildPathJs": "/data/bundles/",
     "srcSassOUT": "/sass/",
-    "srcLess": "/less/",
+    "srcLess": "/data/less/",
     "mainStyle": "main.less",
     "mainBackoffileStyle": "main-admin.less",
     "buildPathCss": "/data/css/",
-    "preserveBuildPathCss": true,
+    "preserveBuildPathCss": false,
     "pre-git": {
       "commit-msg": "conventional",
       "pre-commit": [
@@ -31,13 +31,7 @@
       "post-merge": []
     }
   },
-  "configDev": {
-    "buildPathJs": "/dist/",
-    "srcJsPath": "/data/scripts/",
-    "srcLess": "/data/less/",
-    "webConfig": "/data/Web.config",
-    "packageJson": "/data/package.json"
-  },
+  "configDev": {},
   "scripts": {
     "USE THIS SCRIPTS TO SIMULATE THE USE IN A REAL PROJECT": "###########",
     "testDev": "babel-node node_modules/blue-tape/bin/blue-tape ./test/**/*.js | faucet",
@@ -107,6 +101,7 @@
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
     "postcss": "^5.0.21",
+    "postcss-url": "^5.1.2",
     "progress-bar-webpack-plugin": "^1.8.0",
     "recursive-readdir": "^2.0.0",
     "semver": "^5.1.0",

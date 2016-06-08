@@ -5,12 +5,13 @@ import c from '../libs/config';
 import path from 'path';
 import cssnano from 'cssnano';
 import autoprefixer from 'autoprefixer';
+import url from 'postcss-url';
 import logger from '../libs/logger';
-const debug = require('debug')('dt');
+// const debug = require('debug')('dt');
 const loadConfig = () => c().load();
 
 
-async function compileLessAsync(srcFolder, outputFolder, filename, minify = false) {
+async function compileLessAsync({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName, version }) {
 	// if filename is undefined, skip
 	if (filename === undefined) return;
 	const filepath = `${srcFolder}${filename}`;
@@ -20,7 +21,7 @@ async function compileLessAsync(srcFolder, outputFolder, filename, minify = fals
 	lessPath.push(path.join(process.cwd(), srcFolder));
 	logger.log(`compile less srcFolder:${srcFolder} outputFolder:${outputFolder} filename:${filename} minify:${minify} path: ${lessPath}`);
 	const lessInput = await fs.readFileAsync(filepath);
-	const outputCss = await less.render(lessInput, { paths: lessPath, sourceMap: { sourceMapFileInline: true } });
+	const outputCss = await less.render(lessInput, { paths: lessPath, sourceMap: { sourceMapFileInline: false } });
 	// es: main.less-> main
 	const cssOutputFileName = filename.replace('.less', '');
 	// css/main.css
@@ -28,7 +29,15 @@ async function compileLessAsync(srcFolder, outputFolder, filename, minify = fals
 	// const cssMapOutputPath = `${pkg.staticAssets.css}${cssOutputFileName}.css.map`;
 	const cssMinOutputPath = `${outputFolder}${cssOutputFileName}.min.css`;
 	// const cssMinOutputPath = `${pkg.staticAssets.css}${cssOutputFileName}.css.map`;
-	const cssProcessor = postcss([autoprefixer()]);
+	const cssProcessor = postcss([autoprefixer()]).use(url({
+		// transform image url for CDN
+		url(imageurl) {
+			if (minify) {
+				return `${cdnDomain}/${projectName}/${version}${outputFolder}${imageurl}`;
+			}
+			return imageurl;
+		},
+	}));
 	const processedCssObject = await cssProcessor.process(outputCss.css);
 	const outputTask = [
 		fs.writeFileAsync(cssOutputPath, processedCssObject.css),
@@ -49,11 +58,15 @@ async function compileLessAsync(srcFolder, outputFolder, filename, minify = fals
 async function lessTaskAsync(config = loadConfig(), minify = false) {
 	// if the srcLess is not set -> skip this task
 	if (config.get('srcLess') === undefined) return;
-
+	const srcFolder = config.get('srcLess');
+	const outputFolder = config.get('buildPathCss');
+	const cdnDomain = config.get('domain');
+	const projectName = config.get('projectName');
+	const version = config.get('version');
 	const tasks = [
-		compileLessAsync(config.get('srcLess'), config.get('buildPathCss'), config.get('mainStyle'), minify),
+		compileLessAsync({ filename: config.get('mainStyle'), srcFolder, outputFolder, cdnDomain, minify, projectName, version }),
 		// the main-backoffice is OPT-IN
-		compileLessAsync(config.get('srcLess'), config.get('buildPathCss'), config.get('mainBackoffileStyle'), minify),
+		compileLessAsync({ filename: config.get('mainBackoffileStyle'), srcFolder, outputFolder, cdnDomain, minify, projectName, version }),
 	];
 	await Promise.all(tasks);
 }
