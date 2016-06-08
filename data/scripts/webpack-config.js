@@ -66,10 +66,15 @@ module.exports = function exportsOptions(initOptions) {
 		// Minimize all JavaScript output of chunks
 		plugins.push(new webpack.optimize.UglifyJsPlugin({
 			compress: {
-				warnings: false,
-				dead_code: true,
-				screw_ie8: false,
+				drop_console: false, // Pass true to discard calls to console.* functions
+				warnings: false, // display warnings when dropping unreachable code or unused declarations etc.
+				dead_code: true, // remove unreachable code
+				screw_ie8: true, // don't care about full compliance with Internet Explorer 6-8 quirks
 				conditionals: true,
+				drop_debugger: true,
+			},
+			output: {
+				comments: false, // remove all comments
 			},
 		}));
 		// plugins.push(new webpack.optimize.DedupePlugin());
