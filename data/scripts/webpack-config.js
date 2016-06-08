@@ -2,10 +2,8 @@ const webpack = require('webpack');
 const path = require('path');
 const pkg = require('../package.json');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
-// var webpackStatsHelper = require('./webpack-stats-helper');
-// const autoprefixer = require('autoprefixer');
 
-module.exports = function exportsOptions(options) {
+module.exports = function exportsOptions(initOptions) {
 	const defaultOptions = {
 		hot: false,
 		hash: false,
@@ -19,8 +17,7 @@ module.exports = function exportsOptions(options) {
 		banner: false,
 	};
 
-	/* eslint-disable no-param-reassign*/
-	options = Object.assign(defaultOptions, options || {});
+	const options = Object.assign(defaultOptions, initOptions || {});
 
 	const loaders = [
 		// transpile from ES6 to ES5

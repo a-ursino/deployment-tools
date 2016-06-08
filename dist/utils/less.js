@@ -13,7 +13,7 @@ let compileLessAsync = (() => {
 		// add the folder with the less files
 		lessPath.push(_path2.default.join(process.cwd(), 'node_modules'));
 		lessPath.push(_path2.default.join(process.cwd(), srcFolder));
-		debug(`compileLessAsync srcFolder:${ srcFolder } outputFolder:${ outputFolder } filename:${ filename } minify:${ minify } path: ${ lessPath }`);
+		_logger2.default.log(`compile less srcFolder:${ srcFolder } outputFolder:${ outputFolder } filename:${ filename } minify:${ minify } path: ${ lessPath }`);
 		const lessInput = yield _fs2.default.readFileAsync(filepath);
 		const outputCss = yield _less2.default.render(lessInput, { paths: lessPath, sourceMap: { sourceMapFileInline: true } });
 		// es: main.less-> main
@@ -88,6 +88,10 @@ var _cssnano2 = _interopRequireDefault(_cssnano);
 var _autoprefixer = require('autoprefixer');
 
 var _autoprefixer2 = _interopRequireDefault(_autoprefixer);
+
+var _logger = require('../libs/logger');
+
+var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

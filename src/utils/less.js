@@ -5,6 +5,7 @@ import c from '../libs/config';
 import path from 'path';
 import cssnano from 'cssnano';
 import autoprefixer from 'autoprefixer';
+import logger from '../libs/logger';
 const debug = require('debug')('dt');
 const loadConfig = () => c().load();
 
@@ -17,7 +18,7 @@ async function compileLessAsync(srcFolder, outputFolder, filename, minify = fals
 	// add the folder with the less files
 	lessPath.push(path.join(process.cwd(), 'node_modules'));
 	lessPath.push(path.join(process.cwd(), srcFolder));
-	debug(`compileLessAsync srcFolder:${srcFolder} outputFolder:${outputFolder} filename:${filename} minify:${minify} path: ${lessPath}`);
+	logger.log(`compile less srcFolder:${srcFolder} outputFolder:${outputFolder} filename:${filename} minify:${minify} path: ${lessPath}`);
 	const lessInput = await fs.readFileAsync(filepath);
 	const outputCss = await less.render(lessInput, { paths: lessPath, sourceMap: { sourceMapFileInline: true } });
 	// es: main.less-> main

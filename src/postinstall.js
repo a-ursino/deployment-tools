@@ -19,7 +19,7 @@ async function postinstall() {
 	const destPath = path.join(projectPath, 'tools');
 	console.log('src', src, 'projectPath', projectPath, 'destPath', destPath);
 	// first delete folder
-	await del(destPath, { dot: true, dryRun: true });
+	await del(destPath, { dot: true, dryRun: true, force: true });
 	// then copy dist into projects tools folder
 	ncp(src, destPath, (err) => {
 		if (err) {
