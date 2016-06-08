@@ -10,14 +10,14 @@
   "config": {
     "domain": "http://az889637.vo.msecnd.net",
     "projectName": "projectname",
-    "webConfig": "Web.config",
-    "packageJson": "/package.json",
-    "srcJsPath": "/script/",
+    "webConfig": "/data/Web.config",
+    "packageJson": "/data/package.json",
+    "srcJsPath": "/data/scripts/",
     "mainJs": "main.js",
     "mainBackoffileJs": "main-backoffice.js",
     "buildPathJs": "/data/bundles/",
     "srcSassOUT": "/sass/",
-    "srcLess": "/less/",
+    "srcLess": "/data/less/",
     "mainStyle": "main.less",
     "mainBackoffileStyle": "main-admin.less",
     "buildPathCss": "/data/css/",
@@ -32,11 +32,6 @@
     }
   },
   "configDev": {
-    "buildPathJs": "/dist/",
-    "srcJsPath": "/data/scripts/",
-    "srcLess": "/data/less/",
-    "webConfig": "/data/Web.config",
-    "packageJson": "/data/package.json"
   },
   "scripts": {
     "USE THIS SCRIPTS TO SIMULATE THE USE IN A REAL PROJECT": "###########",
