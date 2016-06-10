@@ -26,8 +26,10 @@ let compileLessAsync = (() => {
 		const cssProcessor = (0, _postcss2.default)([(0, _autoprefixer2.default)()]).use((0, _postcssUrl2.default)({
 			// transform image url for CDN
 			url(imageurl) {
-				if (minify && !imageurl.startsWith('htt')) {
-					return `${ cdnDomain }/${ projectName }${ imageurl }`;
+				if (minify) {
+					if (!imageurl.startsWith('http')) {
+						return imageurl.startsWith('/') ? `${ cdnDomain }/${ projectName }${ imageurl }` : imageurl;
+					}
 				}
 				return imageurl;
 			}
