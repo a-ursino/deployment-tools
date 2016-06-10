@@ -10,14 +10,17 @@ let build = (() => {
 		// clean folder
 		yield (0, _clean2.default)(config);
 		// compile js files
-		yield Promise.all([(0, _buildJs2.default)(config), (0, _buildLess2.default)(config)]);
-		// upload to azure storage
+		yield Promise.all([(0, _buildJs2.default)(config), (0, _buildLess2.default)(config), (0, _imagemin2.default)(config)]);
 	});
 
 	return function build() {
 		return ref.apply(this, arguments);
 	};
 })();
+
+var _config = require('./libs/config');
+
+var _config2 = _interopRequireDefault(_config);
 
 var _clean = require('./clean');
 
@@ -27,9 +30,9 @@ var _buildJs = require('./buildJs');
 
 var _buildJs2 = _interopRequireDefault(_buildJs);
 
-var _config = require('./libs/config');
+var _imagemin = require('./imagemin');
 
-var _config2 = _interopRequireDefault(_config);
+var _imagemin2 = _interopRequireDefault(_imagemin);
 
 var _buildLess = require('./buildLess');
 

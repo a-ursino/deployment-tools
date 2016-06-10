@@ -6,18 +6,27 @@ Object.defineProperty(exports, "__esModule", {
 
 let clean = (() => {
 	var ref = _asyncToGenerator(function* (config = loadConfig()) {
-		// TODO: check if we must delete css folder
-		const distFolder = [_path2.default.join(process.cwd(), config.get('buildPathJs'))];
+		const distFolder = [];
+		// delete js build folder?
+		if (config.get('buildPathJs')) {
+			distFolder.push(_path2.default.join(process.cwd(), config.get('buildPathJs')));
+		}
+
+		// delete css build folder?
 		if (!config.get('preserveBuildPathCss')) {
 			distFolder.push(_path2.default.join(process.cwd(), config.get('buildPathCss')));
 		}
-		// compact the array
-		const distFolderCompacted = (0, _compact2.default)(distFolder);
-		debug(`try to delete folder(s) ${ distFolderCompacted }`);
-		yield (0, _del2.default)(distFolderCompacted, { dot: true });
-		debug(`deleted folder(s) ${ distFolderCompacted }`);
-		yield _fs2.default.makeDirsAsync(distFolderCompacted);
-		debug(`created folder(s) ${ distFolderCompacted }`);
+
+		// delete image build folder?
+		if (config.get('imagesPath')) {
+			distFolder.push(_path2.default.join(process.cwd(), `${ (0, _trimEnd2.default)(config.get('imagesPath'), '/') }-temp`));
+		}
+
+		debug(`try to delete folder(s) ${ distFolder }`);
+		yield (0, _del2.default)(distFolder, { dot: true });
+		debug(`deleted folder(s) ${ distFolder }`);
+		yield _fs2.default.makeDirsAsync(distFolder);
+		debug(`created folder(s) ${ distFolder }`);
 	});
 
 	return function clean(_x) {
@@ -33,9 +42,9 @@ var _fs = require('./libs/fs');
 
 var _fs2 = _interopRequireDefault(_fs);
 
-var _compact = require('lodash/compact');
+var _trimEnd = require('lodash/trimEnd');
 
-var _compact2 = _interopRequireDefault(_compact);
+var _trimEnd2 = _interopRequireDefault(_trimEnd);
 
 var _config = require('./libs/config');
 

@@ -10,23 +10,22 @@
 import ncp from 'ncp';
 import del from 'del';
 import path from 'path';
+import logger from './libs/logger';
+import { promisify } from 'bluebird';
 
 async function postinstall() {
+	const ncpAsync = promisify(ncp);
 	// this is the path of the package: ..../node_modules/deployment-tools
 	const packagePath = process.cwd();
 	const src = path.join(packagePath, 'dist');
 	const projectPath = path.join(packagePath, '../../');
 	const destPath = path.join(projectPath, 'tools');
-	console.log('src', src, 'projectPath', projectPath, 'destPath', destPath);
+	logger.log('postinstall try to copy files from src', src, 'to destPath', destPath);
 	// first delete folder
 	await del(destPath, { dot: true, dryRun: true, force: true });
 	// then copy dist into projects tools folder
-	ncp(src, destPath, (err) => {
-		if (err) {
-			return console.error(err);
-		}
-		return console.log('done!');
-	});
+	await ncpAsync(src, destPath);
+	logger.log('postinstall copied files from src', src, 'to destPath', destPath);
 }
 
 export default postinstall;
