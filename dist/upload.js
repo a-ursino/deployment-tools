@@ -4,22 +4,89 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+let prepareCssFiles = (() => {
+	var ref = _asyncToGenerator(function* ({ buildPathCss, version }) {
+		if (buildPathCss !== '') {
+			// get all the files paths from source
+			const cssFiles = yield recDir(_path2.default.join(process.cwd(), buildPathCss));
+			debug(`Upload css files ${ cssFiles } from path ${ buildPathCss }`);
+			// css files on storage: 5.2.8/css/main.css
+			// css files with versioning
+			const f = cssFiles.map(function (i) {
+				return { file: i, remoteDest: `${ version }/${ _path2.default.relative(process.cwd(), i) }` };
+			});
+			return f;
+		}
+		return [];
+	});
+
+	return function prepareCssFiles(_x) {
+		return ref.apply(this, arguments);
+	};
+})();
+
+let prepareJsFiles = (() => {
+	var ref = _asyncToGenerator(function* ({ buildPathJs, version }) {
+		// js?
+		if (buildPathJs !== '') {
+			const jsFiles = yield recDir(_path2.default.join(process.cwd(), buildPathJs));
+			debug(`Upload js files ${ jsFiles } from path ${ buildPathJs }`);
+			// js files on storage: 5.2.8/bundles/main.js
+			// js files with versioning
+			const f = jsFiles.map(function (i) {
+				return { file: i, remoteDest: `${ version }/${ _path2.default.relative(process.cwd(), i) }` };
+			});
+			return f;
+		}
+		return [];
+	});
+
+	return function prepareJsFiles(_x2) {
+		return ref.apply(this, arguments);
+	};
+})();
+
+let prepareImagesFiles = (() => {
+	var ref = _asyncToGenerator(function* ({ imagesPath }) {
+		if (imagesPath !== '') {
+			// read images from temp path not the source one
+			const src = _path2.default.join(process.cwd(), imagesPath);
+			const files = yield recDir(src);
+			debug(`Upload images files ${ files } from path ${ imagesPath }`);
+			// images files on storage: images/background.png
+			// images files without versioning
+			// the images are inside folder temp folder (images-temp) but goes inside imagesPath /images/
+			// remove the first / otherwise an empty folder is created on storage
+			const dest = imagesPath.substr(1);
+			const f = files.map(function (i) {
+				return { file: i, remoteDest: `${ dest }${ _path2.default.basename(i) }` };
+			});
+			return f;
+		}
+		return [];
+	});
+
+	return function prepareImagesFiles(_x3) {
+		return ref.apply(this, arguments);
+	};
+})();
+
 let upload = (() => {
 	var ref = _asyncToGenerator(function* (config = loadConfig()) {
 		try {
+			// read the config settings from env
 			const storageName = process.env.STORAGE_NAME;
 			const storageKey = process.env.STORAGE_KEY;
 			debug(`Azure Storage name ${ storageName } key ${ storageKey }`);
 			const blobService = _azureStorage2.default.createBlobService(storageName, storageKey);
-			// promisify all azure methods. (append Async at the end of the method)
+			// promisify all azure methods. (bluebird append Async at the end of the method)
 			const bs = (0, _bluebird.promisifyAll)(blobService);
-
 			const container = config.getEnsure('projectName', 'Set a valid azureProjectName(container) inside package.json');
 			// read again the correct package.json
 			const pkg = JSON.parse((yield _fs2.default.readFileAsync(config.getEnsure('packageJson'))));
 			const version = pkg.version;
 			_logger2.default.log(`Upload files to container: ${ container } with version: ${ version }`);
-			// create the project folder if not exists
+			// create the project container if not exists
 			yield bs.createContainerIfNotExistsAsync(container, { publicAccessLevel: 'blob' });
 			// check if there is already this version
 			const blobResult = yield bs.listBlobsSegmentedWithPrefixAsync(container, version, null);
@@ -28,37 +95,22 @@ let upload = (() => {
 			}
 
 			const filesToUpload = [];
-			const buildPathJs = config.get('buildPathJs');
-			const buildPathCss = config.get('buildPathCss');
-			// js?
-			if (buildPathJs !== '') {
-				const jsFiles = yield recDir(_path2.default.join(process.cwd(), buildPathJs));
-				debug(`Upload js files ${ jsFiles } from path ${ buildPathJs }`);
-				// Merge the second array into the first one
-				// Array.prototype.push.apply(filesToUpload, jsFiles);
-				// from apply to spread operator
-				filesToUpload.push(...jsFiles);
-			}
-			// css?
-			if (buildPathCss !== '') {
-				const cssFiles = yield recDir(_path2.default.join(process.cwd(), buildPathCss));
-				debug(`Upload css files ${ cssFiles } from path ${ buildPathCss }`);
-				// Merge the second array into the first one
-				// Array.prototype.push.apply(filesToUpload, cssFiles);
-				// from apply to spread operator
-				filesToUpload.push(...cssFiles);
-			}
-			_logger2.default.log(`Files to upload ${ filesToUpload }`);
+			filesToUpload.push(...(yield prepareCssFiles({ buildPathCss: config.get('buildPathCss'), version })));
+			filesToUpload.push(...(yield prepareJsFiles({ buildPathJs: config.get('buildPathJs'), version })));
+			filesToUpload.push(...(yield prepareImagesFiles({ imagesPath: config.get('imagesPath') })));
+
+			// logger.log(`Files to upload on container ${container} ${util.inspect(filesToUpload)}`);
 			// upload files in parallel
-			yield Promise.all(filesToUpload.map(function (i) {
-				return bs.createBlockBlobFromLocalFileAsync(container, `${ version }/${ _path2.default.relative(process.cwd(), i) }`, i);
+			yield Promise.all(filesToUpload.map(function (f) {
+				debug(f.remoteDest, f.file);
+				return bs.createBlockBlobFromLocalFileAsync(container, f.remoteDest, f.file);
 			}));
 		} catch (e) {
 			_logger2.default.error('upload', e);
 		}
 	});
 
-	return function upload(_x) {
+	return function upload(_x4) {
 		return ref.apply(this, arguments);
 	};
 })();
