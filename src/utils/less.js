@@ -32,8 +32,10 @@ async function compileLessAsync({ srcFolder, outputFolder, filename, cdnDomain, 
 	const cssProcessor = postcss([autoprefixer()]).use(url({
 		// transform image url for CDN
 		url(imageurl) {
-			if (minify && !imageurl.startsWith('htt')) {
-				return `${cdnDomain}/${projectName}${imageurl}`;
+			if (minify) {
+				if (!imageurl.startsWith('http')) {
+					return imageurl.startsWith('/') ? `${cdnDomain}/${projectName}${imageurl}` : imageurl;
+				}
 			}
 			return imageurl;
 		},
