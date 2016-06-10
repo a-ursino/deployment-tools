@@ -16,6 +16,7 @@ The scripts available at the moment are:
 * `deploy`: bump -> clean -> build[ js | style ] -> upload
 * `watch`: starts `webpack-dev-server` for js files
 * `test`: test files inside folder with tape/blue-tape (TAP specification) and format the output with faucet
+* `imagemin`: minify images
 
 *note: -> means in serial, | means in parallel*
 
@@ -33,8 +34,8 @@ The scripts available at the moment are:
 * `srcLess`: the path of the less files (es: less/). When set __Less__ is used [OPT-IN]
 * `mainStyle`: the entry file of the front's styles (es: main.less/main.sass)
 * `mainBackoffileStyle`: the entry file of the backoffice's styles (es: main-admin.less/main.sass) [OPT-IN]
-* `buildPathCss`: the path of the compiled Css files (es: css)
-* `preserveBuildPathCss`: when set and true, avoid to delete the css folder during `clean` task
+* `buildPathCss`: the path of the compiled css files (es: css)
+* `preserveBuildPathCss`: when true, avoid to delete the css folder during `clean` task [OPT-IN]
 
 **JavaScript**
 * `srcJsPath`: the path with the JavaScript files
@@ -44,12 +45,15 @@ The scripts available at the moment are:
 * `vendorsBackoffileJs`: the filename of the vendors file for backoffice (es: vendors-backoffice.js)[OPT-IN]
 * `buildPathJs`: the path of the compiled JavaScript files (es: bundles)
 
+**Image**
+* `imagesPath` minify and copy to CDN the images inside the path (es: /data/images/)[OPT-IT]
+
 
 *note all the config path must ends with trailing slash*
 
 
-### Web.config
-If your your website is a .net website (so with a web.config file) you can add a key to appSetting named `swversion`. When you run `npm run bump` or `npm run deploy` the version inside is upgraded automatically.
+### .Net website and Web.config
+If your your website is a .net website (so with a `Web.config` file) you can add a key to appSetting named `swversion`. When you run `npm run bump` or `npm run deploy` the version inside is upgraded automatically.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -60,8 +64,9 @@ If your your website is a .net website (so with a web.config file) you can add a
 </configuration>
 ```
 In this way you can track project version in your .net website easily (for example alongside error reporting).
-This is an example of how it could works with Sentry and Raven Client in an MVC website server-side
+This is an example of how it could works with Sentry and Raven Client in an MVC website.
 
+server-side:
 ```csharp
 protected void Application_Error(object sender, EventArgs e) {
 	string v = ConfigurationManager.AppSettings["swversion"];
@@ -73,7 +78,7 @@ protected void Application_Error(object sender, EventArgs e) {
 	HttpContext.Current.ClearError();
 }
 ```
-while client-side
+client-side:
 
 ```html
 <html>
@@ -95,12 +100,12 @@ while client-side
 * *Transpile* JavaScript files with [Babel 6](https://babeljs.io) and [webpack](http://webpack.github.io/)
 * *Lint* JavaScript files with [ESLint](http://eslint.org/)
 * serve js files via [webpack-dev-server](https://webpack.github.io/docs/webpack-dev-server.html)
-* compile Less files
-* compile Sass files
+* compile Less files with [less](https://github.com/less/less.js)
 * process css files with [postcss](https://github.com/postcss/postcss)
 * add vendor prefixes with [autoprefixer](https://github.com/postcss/autoprefixer) postcss's plugin
-* adjust image urls inside css for CDN with [postcss-url](https://github.com/postcss/postcss-url) postcss's plugin
+* adjust images urls inside css for CDN with [postcss-url](https://github.com/postcss/postcss-url) postcss's plugin
 * minify css files with [cssnano](https://github.com/ben-eb/cssnano) postcss's plugin
+* minify images with [imagemin](https://github.com/imagemin/imagemin) and plugins ([imagemin-mozjpeg](https://github.com/imagemin/imagemin-mozjpeg) [imagemin-pngquant](https://github.com/imagemin/imagemin-pngquant) [imagemin-gifsicle](https://github.com/imagemin/imagemin-gifsicle))
 
 ## Package Features
 * conventional commit message validator (`commitizen`, `pre-git`) with [conventional-commit-message](https://github.com/bahmutov/conventional-commit-message)
@@ -123,6 +128,8 @@ then you must copy the `npm` scripts that you want to use to your `package.json`
 	"scripts": {
 		"lint": "babel-node tools/run lint",
 		"clean": "babel-node tools/run clean",
+		"preimagemin": "npm run clean",
+		"imagemin": "babel-node src/run imagemin",
 		"build": "cross-env NODE_ENV=production babel-node tools/run build",
 		"bump": "babel-node tools/run bump",
 		"deploy": "cross-env NODE_ENV=production babel-node tools/run deploy",
@@ -136,7 +143,7 @@ and the relative confing settings to `package.json` file
 ```json
 {
 	"config": {
-    "domain": "http://YOURCDNDOMAIN",
+    "domain": "http://YOUR.CDN.DOMAIN",
     "projectName": "projectname",
     "webConfig": "Web.config",
     "packageJson": "/package.json",
@@ -149,12 +156,14 @@ and the relative confing settings to `package.json` file
     "mainStyle": "main.less",
     "mainBackoffileStyle": "main-admin.less",
     "buildPathCss": "/data/css/",
-    "preserveBuildPathCss": "true"
+    "preserveBuildPathCss": "true",
+    "imagesPath": "/data/images/"
 	}
 }
 ```
 
 ## TODO
+* compile sass files
 * add `amazon` CDN provider
 * code coverage
 

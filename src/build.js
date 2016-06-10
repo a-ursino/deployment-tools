@@ -7,9 +7,10 @@
 *
 */
 
+import c from './libs/config';
 import clean from './clean';
 import buildJS from './buildJs';
-import c from './libs/config';
+import imagemin from './imagemin';
 import buildLess from './buildLess';
 
 async function build() {
@@ -20,8 +21,8 @@ async function build() {
 	await Promise.all([
 		buildJS(config),
 		buildLess(config),
+		imagemin(config),
 	]);
-	// upload to azure storage
 }
 
 export default build;

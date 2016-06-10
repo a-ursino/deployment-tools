@@ -9,7 +9,7 @@
 
 import del from 'del';
 import fs from './libs/fs';
-import compact from 'lodash/compact';
+import trimEnd from 'lodash/trimEnd';
 import c from './libs/config';
 import path from 'path';
 const debug = require('debug')('dt');
@@ -17,20 +17,27 @@ const debug = require('debug')('dt');
 const loadConfig = () => c().load();
 
 async function clean(config = loadConfig()) {
-	// TODO: check if we must delete css folder
-	const distFolder = [
-		path.join(process.cwd(), config.get('buildPathJs')),
-	];
+	const distFolder = [];
+	// delete js build folder?
+	if (config.get('buildPathJs')) {
+		distFolder.push(path.join(process.cwd(), config.get('buildPathJs')));
+	}
+
+	// delete css build folder?
 	if (!config.get('preserveBuildPathCss')) {
 		distFolder.push(path.join(process.cwd(), config.get('buildPathCss')));
 	}
-	// compact the array
-	const distFolderCompacted = compact(distFolder);
-	debug(`try to delete folder(s) ${distFolderCompacted}`);
-	await del(distFolderCompacted, { dot: true });
-	debug(`deleted folder(s) ${distFolderCompacted}`);
-	await fs.makeDirsAsync(distFolderCompacted);
-	debug(`created folder(s) ${distFolderCompacted}`);
+
+	// delete image build folder?
+	if (config.get('imagesPath')) {
+		distFolder.push(path.join(process.cwd(), `${trimEnd(config.get('imagesPath'), '/')}-temp`));
+	}
+
+	debug(`try to delete folder(s) ${distFolder}`);
+	await del(distFolder, { dot: true });
+	debug(`deleted folder(s) ${distFolder}`);
+	await fs.makeDirsAsync(distFolder);
+	debug(`created folder(s) ${distFolder}`);
 }
 
 export default clean;
