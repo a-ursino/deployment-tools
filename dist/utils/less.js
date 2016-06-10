@@ -27,7 +27,7 @@ let compileLessAsync = (() => {
 			// transform image url for CDN
 			url(imageurl) {
 				if (minify) {
-					return `${ cdnDomain }/${ projectName }/${ version }${ outputFolder }${ imageurl }`;
+					return `${ cdnDomain }/${ projectName }/${ version }${ outputFolder.substring(0, outputFolder.length - 1) }${ imageurl }`;
 				}
 				return imageurl;
 			}
