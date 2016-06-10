@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 let compileLessAsync = (() => {
-	var ref = _asyncToGenerator(function* ({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName, version }) {
+	var ref = _asyncToGenerator(function* ({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName }) {
 		// if filename is undefined, skip
 		if (filename === undefined) return;
 		const filepath = `${ srcFolder }${ filename }`;
@@ -26,8 +26,8 @@ let compileLessAsync = (() => {
 		const cssProcessor = (0, _postcss2.default)([(0, _autoprefixer2.default)()]).use((0, _postcssUrl2.default)({
 			// transform image url for CDN
 			url(imageurl) {
-				if (minify) {
-					return `${ cdnDomain }/${ projectName }/${ version }${ outputFolder.substring(0, outputFolder.length - 1) }${ imageurl }`;
+				if (minify && !imageurl.startsWith('htt')) {
+					return `${ cdnDomain }/${ projectName }${ imageurl }`;
 				}
 				return imageurl;
 			}
