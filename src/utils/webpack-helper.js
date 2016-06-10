@@ -11,13 +11,18 @@ function getWebpackConfig(config, dev = false) {
 	const webpackConfig = Object.assign({}, webpackConfigFile);
 	// Override some values at run-time
 	// output path
-	// es: s
 	webpackConfig.output.path = path.join(process.cwd(), config.get('buildPathJs'));
 	debug(`webpackConfig.output.path ${webpackConfig.output.path}`);
-	// publicPath for CDN
+	// publicPath for CDN or webpack dev server (in dev mode)
 	// {domain}/{projectName}/{version}/{buildPathJs}
 	// es: http://az889637.vo.msecnd.net/projectName/2.9.0/bundles/
-	webpackConfig.output.publicPath = `${config.get('domain')}/${config.get('projectName')}/${config.get('version')}/${config.get('buildPathJs')}`;
+	if (dev) {
+		// serve js files from webpack dev server on...
+		webpackConfig.output.publicPath = 'http://localhost:8080/';
+	} else {
+		// serve js files from CDN
+		webpackConfig.output.publicPath = `${config.get('domain')}/${config.get('projectName')}/${config.get('version')}/${config.get('buildPathJs')}`;
+	}
 	debug(`webpackConfig.output.publicPath ${webpackConfig.output.publicPath}`);
 
 	// main entry
@@ -44,8 +49,8 @@ function getWebpackConfig(config, dev = false) {
 	// .{srcJsPath}{vendorsBackoffileJs}
 	// es: ./data/scripts/vendors-backoffice.js
 	if (config.get('vendorsBackoffileJs') !== undefined) {
-		webpackConfig.entry.vendors = path.join(process.cwd(), `${config.get('srcJsPath')}${config.get('vendorsBackoffileJs')}`);
-		debug(`webpackConfig.entry.main-backoffice ${webpackConfig.entry['main-backoffice']}`);
+		webpackConfig.entry['vendors-backoffice'] = path.join(process.cwd(), `${config.get('srcJsPath')}${config.get('vendorsBackoffileJs')}`);
+		debug(`webpackConfig.entry.vendors-backoffice ${webpackConfig.entry['vendors-backoffice']}`);
 	}
 	return webpackConfig;
 }
