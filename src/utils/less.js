@@ -11,7 +11,7 @@ import logger from '../libs/logger';
 const loadConfig = () => c().load();
 
 
-async function compileLessAsync({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName, version }) {
+async function compileLessAsync({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName }) {
 	// if filename is undefined, skip
 	if (filename === undefined) return;
 	const filepath = `${srcFolder}${filename}`;
@@ -32,8 +32,8 @@ async function compileLessAsync({ srcFolder, outputFolder, filename, cdnDomain, 
 	const cssProcessor = postcss([autoprefixer()]).use(url({
 		// transform image url for CDN
 		url(imageurl) {
-			if (minify) {
-				return `${cdnDomain}/${projectName}/${version}${outputFolder.substring(0, outputFolder.length - 1)}${imageurl}`;
+			if (minify && !imageurl.startsWith('htt')) {
+				return `${cdnDomain}/${projectName}${imageurl}`;
 			}
 			return imageurl;
 		},

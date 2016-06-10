@@ -21,7 +21,7 @@ function getWebpackConfig(config, dev = false) {
 		webpackConfig.output.publicPath = 'http://localhost:8080/';
 	} else {
 		// serve js files from CDN
-		webpackConfig.output.publicPath = `${config.get('domain')}/${config.get('projectName')}/${config.get('version')}/${config.get('buildPathJs')}`;
+		webpackConfig.output.publicPath = `${config.get('domain')}/${config.get('projectName')}/${config.get('version')}${config.get('buildPathJs')}`;
 	}
 	debug(`webpackConfig.output.publicPath ${webpackConfig.output.publicPath}`);
 
