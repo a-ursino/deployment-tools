@@ -34,7 +34,7 @@ async function clean(config = loadConfig()) {
 	}
 
 	debug(`try to delete folder(s) ${distFolder}`);
-	await del(distFolder, { dot: true });
+	await del(distFolder, { dot: true, force: true });
 	debug(`deleted folder(s) ${distFolder}`);
 	await fs.makeDirsAsync(distFolder);
 	debug(`created folder(s) ${distFolder}`);

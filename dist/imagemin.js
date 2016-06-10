@@ -7,15 +7,16 @@ Object.defineProperty(exports, "__esModule", {
 let imagemin = (() => {
 	var ref = _asyncToGenerator(function* (config = loadConfig()) {
 		// copy image to temp folder
-		if (!config.get('imagePath')) {
+		if (!config.get('imagesPath')) {
 			return;
 		}
-		const srcPath = _path2.default.join(process.cwd(), config.get('imagePath'));
+		const srcPath = _path2.default.join(process.cwd(), config.get('imagesPath'));
+		const srcPathGlob = `${ srcPath }**/*.{jpg,png,gif,svg}`;
 		// normalize path. remove the trailing slash from /data/images/ -> /data/images
-		const dstPath = _path2.default.join(process.cwd(), `${ (0, _trimEnd2.default)(config.get('imagePath'), '/') }-temp`);
-		debug('try to copy images from ', srcPath, 'to', dstPath);
-		const files = yield (0, _imagemin2.default)([`${ srcPath }*.{jpg,png,gif}`], dstPath, {
-			plugins: [(0, _imageminMozjpeg2.default)({ targa: true }), (0, _imageminPngquant2.default)({ quality: '65-80' }), (0, _imageminGifsicle2.default)()]
+		const dstPath = _path2.default.join(process.cwd(), `${ (0, _trimEnd2.default)(config.get('imagesPath'), '/') }-temp`);
+		debug('try to minify images from ', srcPathGlob, 'to', dstPath);
+		const files = yield (0, _imagemin2.default)([srcPathGlob], dstPath, {
+			plugins: [(0, _imageminMozjpeg2.default)({ targa: false }), (0, _imageminPngquant2.default)({ quality: '65-80' }), (0, _imageminGifsicle2.default)()]
 		});
 		_logger2.default.log('minified images', files.map(function (o) {
 			return o.path;
