@@ -23,7 +23,7 @@ let clean = (() => {
 		}
 
 		debug(`try to delete folder(s) ${ distFolder }`);
-		yield (0, _del2.default)(distFolder, { dot: true });
+		yield (0, _del2.default)(distFolder, { dot: true, force: true });
 		debug(`deleted folder(s) ${ distFolder }`);
 		yield _fs2.default.makeDirsAsync(distFolder);
 		debug(`created folder(s) ${ distFolder }`);

@@ -21,16 +21,17 @@ const loadConfig = () => c().load();
 
 async function imagemin(config = loadConfig()) {
 	// copy image to temp folder
-	if (!config.get('imagePath')) {
+	if (!config.get('imagesPath')) {
 		return;
 	}
-	const srcPath = path.join(process.cwd(), config.get('imagePath'));
+	const srcPath = path.join(process.cwd(), config.get('imagesPath'));
+	const srcPathGlob = `${srcPath}**/*.{jpg,png,gif,svg}`;
 	// normalize path. remove the trailing slash from /data/images/ -> /data/images
-	const dstPath = path.join(process.cwd(), `${trimEnd(config.get('imagePath'), '/')}-temp`);
-	debug('try to copy images from ', srcPath, 'to', dstPath);
-	const files = await imageminTask([`${srcPath}*.{jpg,png,gif}`], dstPath, {
+	const dstPath = path.join(process.cwd(), `${trimEnd(config.get('imagesPath'), '/')}-temp`);
+	debug('try to minify images from ', srcPathGlob, 'to', dstPath);
+	const files = await imageminTask([srcPathGlob], dstPath, {
 		plugins: [
-			imageminMozjpeg({ targa: true }),
+			imageminMozjpeg({ targa: false }),
 			imageminPngquant({ quality: '65-80' }),
 			imageminGifsicle(),
 		],
