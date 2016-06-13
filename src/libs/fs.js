@@ -42,6 +42,12 @@ async function readFileAsync(filepath) {
 	return await readFilep(fullPath, 'utf8');
 }
 
+async function readJsonAsync(filepath) {
+	const content = await readFileAsync(filepath);
+	const contentJson = JSON.parse(content);
+	return contentJson;
+}
+
 /**
  * Check if a file exists on the specified path
  * Is an async function, it makes its promise. Any uncaught exception inside it becomes a rejection of that promise
@@ -88,7 +94,9 @@ const makeDirsAsync = (paths) => {
 
 export default {
 	writeFileAsync,
+	writeFileSync: fs.writeFileSync,
 	readFileAsync,
+	readJsonAsync,
 	readFileSync: fs.readFileSync,
 	makeDirsAsync,
 	fileExistsAsync,
