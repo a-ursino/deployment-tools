@@ -38,6 +38,18 @@ let readFileAsync = (() => {
 	};
 })();
 
+let readJsonAsync = (() => {
+	var ref = _asyncToGenerator(function* (filepath) {
+		const content = yield readFileAsync(filepath);
+		const contentJson = JSON.parse(content);
+		return contentJson;
+	});
+
+	return function readJsonAsync(_x4) {
+		return ref.apply(this, arguments);
+	};
+})();
+
 /**
  * Check if a file exists on the specified path
  * Is an async function, it makes its promise. Any uncaught exception inside it becomes a rejection of that promise
@@ -60,7 +72,7 @@ let fileExistsAsync = (() => {
 		}
 	});
 
-	return function fileExistsAsync(_x4) {
+	return function fileExistsAsync(_x5) {
 		return ref.apply(this, arguments);
 	};
 })();
@@ -129,7 +141,9 @@ const makeDirsAsync = paths => {
 
 exports.default = {
 	writeFileAsync,
+	writeFileSync: _fs2.default.writeFileSync,
 	readFileAsync,
+	readJsonAsync,
 	readFileSync: _fs2.default.readFileSync,
 	makeDirsAsync,
 	fileExistsAsync,

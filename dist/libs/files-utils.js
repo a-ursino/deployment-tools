@@ -25,7 +25,7 @@ let updatePackageJson = (() => {
 			_logger2.default.error('updatePackageJson file not found', packageJson);
 			return false;
 		}
-		const newVersion = getNewVersion(category, pkg.version);
+		const newVersion = (0, _version2.default)(category, pkg.version);
 		_logger2.default.log(`Update package.json from ${ pkg.version } to ${ newVersion }`);
 		const newPackageJson = Object.assign({}, pkg, { version: newVersion });
 		// write the package.json updated and return a promise
@@ -64,7 +64,7 @@ let updateWebconfig = (() => {
 			_logger2.default.error('updateWebconfig file not found', webConfig);
 			return false;
 		}
-		const newVersion = getNewVersion(category, pkg.version);
+		const newVersion = (0, _version2.default)(category, pkg.version);
 		const xmlString = yield _fs2.default.readFileAsync(webConfig);
 		const newWebconfigXmlString = xmlString.replace(/<add .*"swversion".*\/>/igm, `<add key="swversion" value="${ newVersion }" />`);
 		return _fs2.default.writeFileAsync(webConfig, newWebconfigXmlString);
@@ -75,10 +75,6 @@ let updateWebconfig = (() => {
 	};
 })();
 
-var _semver = require('semver');
-
-var _semver2 = _interopRequireDefault(_semver);
-
 var _fs = require('./fs');
 
 var _fs2 = _interopRequireDefault(_fs);
@@ -86,6 +82,10 @@ var _fs2 = _interopRequireDefault(_fs);
 var _logger = require('./logger');
 
 var _logger2 = _interopRequireDefault(_logger);
+
+var _version = require('./version.js');
+
+var _version2 = _interopRequireDefault(_version);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -97,20 +97,8 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * LICENSE.txt file in the root directory of this source tree.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          */
 
-/**
- * Increment the string version accorging semver
- * @param  {String} newVersionType A string that contains the new version type
- * @param  {String} version        The actual version
- * @return {String}                The new version accorging to newVersionType
- */
-function getNewVersion(newVersionType, version) {
-	if (newVersionType !== 'patch' && newVersionType !== 'minor' && newVersionType !== 'major') {
-		throw new Error('Use a valid version type between patch, minor, major');
-	}
-	// npm --no-git-tag-version version. this update package.json directly
-	return _semver2.default.inc(version, newVersionType);
-}exports.default = {
-	getNewVersion,
+exports.default = {
+	getNewVersion: _version2.default,
 	updatePackageJson,
 	updateWebconfig
 };
