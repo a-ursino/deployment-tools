@@ -15,6 +15,7 @@ module.exports = function exportsOptions(initOptions) {
 		saveStats: false,
 		failOnError: false,
 		banner: false,
+		modernizr: true,
 	};
 
 	const options = Object.assign(defaultOptions, initOptions || {});
@@ -93,6 +94,13 @@ module.exports = function exportsOptions(initOptions) {
 		plugins.push(new ProgressBarPlugin());
 	}
 
+	// Modernizr
+	if (options.modernizr) {
+		const ModernizrWebpackPlugin = require('modernizr-webpack-plugin'); // eslint-disable-line
+		const modernizrConfig = require('./modernizr-config'); // eslint-disable-line
+		plugins.push(new ModernizrWebpackPlugin(modernizrConfig));
+	}
+
 	const config = {
 		// ENTRY
 		entry: {
@@ -108,11 +116,11 @@ module.exports = function exportsOptions(initOptions) {
 		},
 		output: {
 			path: path.join(__dirname, '../bundles/'), // output path
-			filename: '[name].js', // The filename of the entry chunk (see entry)
+			filename: options.hash ? '[chunkhash].js' : '[name].js', // The filename of the entry chunk (see entry)
 			chunkFilename: options.hash ? '[chunkhash].js' : '[name].chunk.js', // The filename of non-entry chunks as relative path inside the output.path directory [id]-[hash]-
 			publicPath: 'http://localhost:8080/', // percorso dev altrimenti non funzionano i chunk con VS
 			sourceMapFilename: '[name].js.map',
-			pathinfo: false,
+			pathinfo: true,
 		},
 		externals: {
 			// you can use require but the script can be loaded from CDN

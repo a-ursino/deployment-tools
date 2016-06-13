@@ -2,7 +2,7 @@ const webpackConfig = require('./webpack-config');
 
 module.exports = webpackConfig({
 	hot: false,
-	hash: false,
+	hash: true,
 	debug: false, // Switch loaders to debug mode.
 	optimize: true, // enable UglifyJsPlugin
 	progress: true,

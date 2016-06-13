@@ -24,7 +24,7 @@ The scripts available at the moment are:
 
 **General**
 * `domain`: the domain of the Azure CDN, used to built up the path (webpack splitting) for resources on Azure CDN
-* `projectName`: name of the project, used to built up the path for resources ond CDN
+* `projectName`: name of the project, used to built up the path for resources and CDN
 * `webConfig`: the relative path with filename of the webConfig file (es: data/Web.Config). When set, version in the file as `appSettings key swversion` is updated during bump process
 * `packageJson`: the relative path with filename of the `package.json` file
 
@@ -44,6 +44,7 @@ The scripts available at the moment are:
 * `mainBackoffileJs`: the backoffice main-entry (es: main-backoffice.js) [OPT-IN]
 * `vendorsBackoffileJs`: the filename of the vendors file for backoffice (es: vendors-backoffice.js)[OPT-IN]
 * `buildPathJs`: the path of the compiled JavaScript files (es: bundles)
+* `jsLongTermHash`: use hash for js filename
 
 **Image**
 * `imagesPath` minify and copy to CDN the images inside the path (es: /data/images/)[OPT-IT]
@@ -53,7 +54,10 @@ The scripts available at the moment are:
 
 
 ### .Net website and Web.config
-If your your website is a .net website (so with a `Web.config` file) you can add a key to appSetting named `swversion`. When you run `npm run bump` or `npm run deploy` the version inside is upgraded automatically.
+
+#### Version
+
+If your your website is a .net website (so with a `Web.config` file) you can add a key to appSetting named `swversion`. When you run `npm run bump` or `npm run deploy` the version inside is upgraded automatically alongside `package.json` .
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -94,12 +98,48 @@ client-side:
 </html>
 ```
 
+#### Long-Term-Caching
+If you want to use long term caching (more [there](https://webpack.github.io/docs/long-term-caching.html)) you can
+use `jsLongTermHash` option. When so the build process try to update the relative keys inside `Web.config` with the hash of single chunk
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <appSettings>
+		<add key="vendors" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/8f763123f0f046e64dba.js" />
+    <add key="main" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/63ccb10c3a23c226a662.js" />
+    <add key="vendors-backoffice" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/5f015639e77466a19e5d.js" />
+    <add key="main-backoffice" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/5f015639e77466a19e5d.js" />
+		<add key="modernizr" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/modernizr.45f645c83986c0f3e169.js" />
+  </appSettings>
+</configuration>
+```
+
+and you can change your razor views in this way
+
+```html
+<html>
+	....
+	<body>
+		@if (System.Diagnostics.Debugger.IsAttached) {
+        <script src="http://localhost:8080/vendors.js" type="text/javascript"></script>
+        <script src="http://localhost:8080/main.js" type="text/javascript"></script>
+    } else {
+        <script src="@ConfigurationManager.AppSettings['vendors']" type="text/javascript"></script>
+        <script src="@ConfigurationManager.AppSettings['main']" type="text/javascript"></script>
+    }
+	</body>
+</html>
+```
+
+
 
 # Features
 
 * *Transpile* JavaScript files with [Babel 6](https://babeljs.io) and [webpack](http://webpack.github.io/)
 * *Lint* JavaScript files with [ESLint](http://eslint.org/)
 * serve js files via [webpack-dev-server](https://webpack.github.io/docs/webpack-dev-server.html)
+* put hash for js files for [long-term-caching](https://webpack.github.io/docs/long-term-caching.html)
 * compile Less files with [less](https://github.com/less/less.js)
 * process css files with [postcss](https://github.com/postcss/postcss)
 * add vendor prefixes with [autoprefixer](https://github.com/postcss/autoprefixer) postcss's plugin
@@ -165,7 +205,8 @@ and the relative confing settings to `package.json` file
 ## TODO
 * compile sass files
 * add `amazon` CDN provider
-* code coverage
+* add more test
+* add code coverage
 
 ## License
 
