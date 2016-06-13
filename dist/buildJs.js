@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
 
 
@@ -13,22 +13,28 @@ Object.defineProperty(exports, "__esModule", {
  */
 
 let webpack = (() => {
-  var ref = _asyncToGenerator(function* (config = loadConfig()) {
-    try {
-      yield (0, _webpack2.default)(config);
-    } catch (e) {
-      _logger2.default.error(e);
-    }
-  });
+	var ref = _asyncToGenerator(function* (config = loadConfig()) {
+		try {
+			yield (0, _webpack2.default)(config);
+			// update web.config
+			yield (0, _webconfigChunk2.default)({ webConfig: config.get('webConfig'), jsLongTermHash: config.get('jsLongTermHash') });
+		} catch (e) {
+			_logger2.default.error(e);
+		}
+	});
 
-  return function webpack(_x) {
-    return ref.apply(this, arguments);
-  };
+	return function webpack(_x) {
+		return ref.apply(this, arguments);
+	};
 })();
 
 var _webpack = require('./utils/webpack');
 
 var _webpack2 = _interopRequireDefault(_webpack);
+
+var _webconfigChunk = require('./utils/webconfig-chunk');
+
+var _webconfigChunk2 = _interopRequireDefault(_webconfigChunk);
 
 var _config = require('./libs/config');
 
@@ -48,6 +54,5 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * LICENSE.txt file in the root directory of this source tree.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          *
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          */
-
 
 const loadConfig = () => (0, _config2.default)().load();exports.default = webpack;
