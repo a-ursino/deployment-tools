@@ -1,13 +1,14 @@
 ## Contents
-A node.js scripts that helps you to compile and deploy the static assets (css/JavaScript) of your website
-
+A node.js scripts that help you to compile and deploy the static assets (css/JavaScript) of your website.
+More why [here](https://medium.freecodecamp.com/why-i-left-gulp-and-grunt-for-npm-scripts-3d6853dd22b8#.hsmyojdpj).
 
 - [Tasks](#tasks)
 - [Features](#features)
 
 
 ## Tasks
-The scripts available at the moment are:
+The tasks available at the moment are:
+
 * `clean`: delete and create again the JavaScript (`buildPathJs` config key) and Css (`buildPathCss` config key) folder
 * `bump`: update the version inside `package.json` (`packageJson` config key) and `Web.config` (`webConfig` config key) according to major/minor/patch
 * `buildJs`: lint(`eslint-loader`), transpile(`babel-loader`) and minify(`UglifyJsPlugin`) js files with `webpack`
@@ -16,7 +17,7 @@ The scripts available at the moment are:
 * `deploy`: bump -> clean -> build[ js | style ] -> upload
 * `watch`: starts `webpack-dev-server` for js files
 * `test`: test files inside folder with tape/blue-tape (TAP specification) and format the output with faucet
-* `imagemin`: minify images
+* `imagemin`: compress images inside a folder
 
 *note: -> means in serial, | means in parallel*
 
@@ -50,7 +51,7 @@ The scripts available at the moment are:
 * `imagesPath` minify and copy to CDN the images inside the path (es: /data/images/)[OPT-IT]
 
 
-*note all the config path must ends with trailing slash*
+*note: all the config's path must ends with trailing slash*
 
 
 ### .Net website and Web.config
@@ -136,16 +137,26 @@ and you can change your razor views in this way
 
 # Features
 
+## JavaScript
+
+* serving static content from a cookieless domain (so we can reduce sent payload)
 * *Transpile* JavaScript files with [Babel 6](https://babeljs.io) and [webpack](http://webpack.github.io/)
 * *Lint* JavaScript files with [ESLint](http://eslint.org/)
-* serve js files via [webpack-dev-server](https://webpack.github.io/docs/webpack-dev-server.html)
-* put hash for js files for [long-term-caching](https://webpack.github.io/docs/long-term-caching.html)
+* serve js files in dev mode via [webpack-dev-server](https://webpack.github.io/docs/webpack-dev-server.html)
+* [long-term-caching](https://webpack.github.io/docs/long-term-caching.html)
+
+## Style sheet
+
+* serving static content from a cookieless domain (so we can reduce sent payload)
 * compile Less files with [less](https://github.com/less/less.js)
 * process css files with [postcss](https://github.com/postcss/postcss)
 * add vendor prefixes with [autoprefixer](https://github.com/postcss/autoprefixer) postcss's plugin
 * adjust images urls inside css for CDN with [postcss-url](https://github.com/postcss/postcss-url) postcss's plugin
 * minify css files with [cssnano](https://github.com/ben-eb/cssnano) postcss's plugin
-* minify images with [imagemin](https://github.com/imagemin/imagemin) and plugins ([imagemin-mozjpeg](https://github.com/imagemin/imagemin-mozjpeg) [imagemin-pngquant](https://github.com/imagemin/imagemin-pngquant) [imagemin-gifsicle](https://github.com/imagemin/imagemin-gifsicle))
+
+## Images
+* serving static content from a cookieless domain (so we can reduce sent payload)
+* compress images with [imagemin](https://github.com/imagemin/imagemin) and plugins ([imagemin-mozjpeg](https://github.com/imagemin/imagemin-mozjpeg) [imagemin-pngquant](https://github.com/imagemin/imagemin-pngquant) [imagemin-gifsicle](https://github.com/imagemin/imagemin-gifsicle))
 
 ## Package Features
 * conventional commit message validator (`commitizen`, `pre-git`) with [conventional-commit-message](https://github.com/bahmutov/conventional-commit-message)
@@ -184,7 +195,7 @@ and the relative confing settings to `package.json` file
 {
 	"config": {
     "domain": "http://YOUR.CDN.DOMAIN",
-    "projectName": "projectname",
+    "projectName": "project",
     "webConfig": "Web.config",
     "packageJson": "/package.json",
     "srcJsPath": "/script/",
