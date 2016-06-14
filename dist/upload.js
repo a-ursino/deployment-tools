@@ -26,17 +26,23 @@ let prepareCssFiles = (() => {
 })();
 
 let prepareJsFiles = (() => {
-	var ref = _asyncToGenerator(function* ({ buildPathJs, version }) {
+	var ref = _asyncToGenerator(function* ({ buildPathJs, version = '', jsLongTermHash = '' }) {
 		// js?
 		if (buildPathJs !== '') {
 			const jsFiles = yield recDir(_path2.default.join(process.cwd(), buildPathJs));
 			debug(`Upload js files ${ jsFiles } from path ${ buildPathJs }`);
-			// js files on storage: 5.2.8/bundles/main.js
-			// js files with versioning
-			const f = jsFiles.map(function (i) {
+
+			// NOTE: if long-term-cache is enabled (via jsLongTermHash option) don't use folder version inside path. File Hash is the version.
+			// option a) Hash version es: http://your.domain.cdn/project/bundles/1b956c239862619d3a59.js
+			if (!jsLongTermHash) {
+				return jsFiles.map(function (i) {
+					return { file: i, remoteDest: `${ _path2.default.relative(process.cwd(), i) }` };
+				});
+			}
+			// option b) Folder version es: http://your.domain.cdn/project/version/bundles/main.js
+			return jsFiles.map(function (i) {
 				return { file: i, remoteDest: `${ version }/${ _path2.default.relative(process.cwd(), i) }` };
 			});
-			return f;
 		}
 		return [];
 	});
@@ -96,7 +102,7 @@ let upload = (() => {
 
 			const filesToUpload = [];
 			filesToUpload.push(...(yield prepareCssFiles({ buildPathCss: config.get('buildPathCss'), version })));
-			filesToUpload.push(...(yield prepareJsFiles({ buildPathJs: config.get('buildPathJs'), version })));
+			filesToUpload.push(...(yield prepareJsFiles({ buildPathJs: config.get('buildPathJs'), version, jsLongTermHash: config.get('jsLongTermHash') })));
 			filesToUpload.push(...(yield prepareImagesFiles({ imagesPath: config.get('imagesPath') })));
 
 			// logger.log(`Files to upload on container ${container} ${util.inspect(filesToUpload)}`);

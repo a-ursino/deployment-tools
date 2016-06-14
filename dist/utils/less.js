@@ -57,7 +57,7 @@ let compileLessAsync = (() => {
 
 let lessTaskAsync = (() => {
 	var ref = _asyncToGenerator(function* (config = loadConfig(), minify = false) {
-		// if the srcLess is not set -> skip this task
+		// NOTE: if the srcLess is not set -> skip this task
 		if (config.get('srcLess') === undefined) return;
 		const srcFolder = config.get('srcLess');
 		const outputFolder = config.get('buildPathCss');

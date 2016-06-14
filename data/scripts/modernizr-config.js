@@ -1,5 +1,5 @@
 const modernizrconfig = {
-	filename: 'modernizr.[hash].js',
+	filename: process.NODE_ENV === 'production' ? 'modernizr.[hash].js' : 'modernizr-bundle.js',
 	'feature-detects': [
 		'touchevents',
 		'history',

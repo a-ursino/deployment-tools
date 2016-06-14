@@ -58,7 +58,7 @@ async function compileLessAsync({ srcFolder, outputFolder, filename, cdnDomain, 
 
 // cross-env NODE_ENV=production lessc --include-path=node_modules ./less/main.less ./css/main.min.css --clean-css=\"--s1 --advanced --compatibility=ie8\"
 async function lessTaskAsync(config = loadConfig(), minify = false) {
-	// if the srcLess is not set -> skip this task
+	// NOTE: if the srcLess is not set -> skip this task
 	if (config.get('srcLess') === undefined) return;
 	const srcFolder = config.get('srcLess');
 	const outputFolder = config.get('buildPathCss');

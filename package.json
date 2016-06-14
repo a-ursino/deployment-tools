@@ -9,7 +9,7 @@
   },
   "config": {
     "domain": "http://az889637.vo.msecnd.net",
-    "projectName": "projectname",
+    "projectName": "project",
     "webConfig": "/data/Web.config",
     "packageJson": "/data/package.json",
     "srcJsPath": "/data/scripts/",
