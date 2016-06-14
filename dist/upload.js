@@ -33,15 +33,15 @@ let prepareJsFiles = (() => {
 			debug(`Upload js files ${ jsFiles } from path ${ buildPathJs }`);
 
 			// NOTE: if long-term-cache is enabled (via jsLongTermHash option) don't use folder version inside path. File Hash is the version.
-			// option a) Hash version es: http://your.domain.cdn/project/bundles/1b956c239862619d3a59.js
+			// option a) Folder version es: http://your.domain.cdn/project/version/bundles/main.js
 			if (!jsLongTermHash) {
 				return jsFiles.map(function (i) {
-					return { file: i, remoteDest: `${ _path2.default.relative(process.cwd(), i) }` };
+					return { file: i, remoteDest: `${ version }/${ _path2.default.relative(process.cwd(), i) }` };
 				});
 			}
-			// option b) Folder version es: http://your.domain.cdn/project/version/bundles/main.js
+			// option b) Hash version es: http://your.domain.cdn/project/bundles/1b956c239862619d3a59.js
 			return jsFiles.map(function (i) {
-				return { file: i, remoteDest: `${ version }/${ _path2.default.relative(process.cwd(), i) }` };
+				return { file: i, remoteDest: `${ _path2.default.relative(process.cwd(), i) }` };
 			});
 		}
 		return [];
@@ -149,14 +149,7 @@ var _fs2 = _interopRequireDefault(_fs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; } /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * Copyright © 2014-2016 killanaca All rights reserved.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * This source code is licensed under the MIT license found in the
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * LICENSE.txt file in the root directory of this source tree.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         */
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
 require('dotenv').config();
 const debug = require('debug')('dt');

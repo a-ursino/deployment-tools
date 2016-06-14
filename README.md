@@ -116,7 +116,7 @@ use `jsLongTermHash` option. When so the build process try to update the relativ
 </configuration>
 ```
 
-and you can change your razor views in this way
+and you can change your `razor` views in this way
 
 ```html
 <html>
@@ -137,15 +137,16 @@ and you can change your razor views in this way
 
 # Features
 
-## JavaScript
+#### JavaScript
 
 * serving static content from a cookieless domain (so we can reduce sent payload)
 * *Transpile* JavaScript files with [Babel 6](https://babeljs.io) and [webpack](http://webpack.github.io/)
 * *Lint* JavaScript files with [ESLint](http://eslint.org/)
 * serve js files in dev mode via [webpack-dev-server](https://webpack.github.io/docs/webpack-dev-server.html)
 * [long-term-caching](https://webpack.github.io/docs/long-term-caching.html)
+* generate a custom build for `modernizr` with [ModernizrWebpackPlugin](https://github.com/alexpalombaro/modernizr-webpack-plugin)
 
-## Style sheet
+#### Style sheet
 
 * serving static content from a cookieless domain (so we can reduce sent payload)
 * compile Less files with [less](https://github.com/less/less.js)
@@ -154,7 +155,7 @@ and you can change your razor views in this way
 * adjust images urls inside css for CDN with [postcss-url](https://github.com/postcss/postcss-url) postcss's plugin
 * minify css files with [cssnano](https://github.com/ben-eb/cssnano) postcss's plugin
 
-## Images
+#### Images
 * serving static content from a cookieless domain (so we can reduce sent payload)
 * compress images with [imagemin](https://github.com/imagemin/imagemin) and plugins ([imagemin-mozjpeg](https://github.com/imagemin/imagemin-mozjpeg) [imagemin-pngquant](https://github.com/imagemin/imagemin-pngquant) [imagemin-gifsicle](https://github.com/imagemin/imagemin-gifsicle))
 

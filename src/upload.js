@@ -1,12 +1,3 @@
-/**
-*
-* Copyright © 2014-2016 killanaca All rights reserved.
-*
-* This source code is licensed under the MIT license found in the
-* LICENSE.txt file in the root directory of this source tree.
-*
-*/
-
 import { promisify, promisifyAll } from 'bluebird';
 import azure from 'azure-storage';
 import c from './libs/config';
@@ -41,12 +32,12 @@ async function prepareJsFiles({ buildPathJs, version = '', jsLongTermHash = '' }
 		debug(`Upload js files ${jsFiles} from path ${buildPathJs}`);
 
 		// NOTE: if long-term-cache is enabled (via jsLongTermHash option) don't use folder version inside path. File Hash is the version.
-		// option a) Hash version es: http://your.domain.cdn/project/bundles/1b956c239862619d3a59.js
+		// option a) Folder version es: http://your.domain.cdn/project/version/bundles/main.js
 		if (!jsLongTermHash) {
-			return jsFiles.map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
+			return jsFiles.map((i) => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
 		}
-		// option b) Folder version es: http://your.domain.cdn/project/version/bundles/main.js
-		return jsFiles.map((i) => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
+		// option b) Hash version es: http://your.domain.cdn/project/bundles/1b956c239862619d3a59.js
+		return jsFiles.map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
 	}
 	return [];
 }
