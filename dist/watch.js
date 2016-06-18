@@ -7,15 +7,30 @@ Object.defineProperty(exports, "__esModule", {
 let watch = (() => {
 	var ref = _asyncToGenerator(function* (config = loadConfig()) {
 		const tasks = [];
-		// compile less the first time
-		tasks.push((0, _less2.default)(config));
-		const watchLess = _path2.default.join(process.cwd(), config.get('srcLess'));
-		_chokidar2.default.watch(watchLess).on('change', function (filepath) {
-			_logger2.default.log(`${ filepath } changed`);
-			(0, _less2.default)(config);
-		});
 		// add webpack to task. watch and compile js files
 		tasks.push((0, _webpackDevServer2.default)(config));
+
+		// watch less files???
+		if (config.get('srcLess')) {
+			// compile less files for the first time
+			tasks.push((0, _less2.default)(config, false));
+			const watchFiles = _path2.default.join(process.cwd(), config.get('srcLess'));
+			_chokidar2.default.watch(watchFiles).on('change', function (filepath) {
+				_logger2.default.log(`${ filepath } less file changed`);
+				(0, _less2.default)(config);
+			});
+		}
+		// watch sass files???
+		if (config.get('srcSass')) {
+			// compile sass files for the first time
+			tasks.push((0, _sass2.default)(config, false));
+			const watchFiles = _path2.default.join(process.cwd(), config.get('srcSass'));
+			_chokidar2.default.watch(watchFiles).on('change', function (filepath) {
+				_logger2.default.log(`${ filepath } sass file changed`);
+				(0, _sass2.default)(config);
+			});
+		}
+
 		yield Promise.all(tasks);
 	});
 
@@ -35,6 +50,10 @@ var _webpackDevServer2 = _interopRequireDefault(_webpackDevServer);
 var _less = require('./utils/less');
 
 var _less2 = _interopRequireDefault(_less);
+
+var _sass = require('./utils/sass');
+
+var _sass2 = _interopRequireDefault(_sass);
 
 var _chokidar = require('chokidar');
 

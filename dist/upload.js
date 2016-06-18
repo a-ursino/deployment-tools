@@ -5,17 +5,22 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 let prepareCssFiles = (() => {
-	var ref = _asyncToGenerator(function* ({ buildPathCss, version }) {
-		if (buildPathCss !== '') {
+	var ref = _asyncToGenerator(function* ({ buildPathCss, version, longTermHash = '' }) {
+		if (buildPathCss) {
 			// get all the files paths from source
 			const cssFiles = yield recDir(_path2.default.join(process.cwd(), buildPathCss));
 			debug(`Upload css files ${ cssFiles } from path ${ buildPathCss }`);
-			// css files on storage: 5.2.8/css/main.css
-			// css files with versioning
-			const f = cssFiles.map(function (i) {
-				return { file: i, remoteDest: `${ version }/${ _path2.default.relative(process.cwd(), i) }` };
+			// NOTE: if long-term-cache is enabled (via LongTermHash option) don't use folder version inside path. File Hash is the version.
+			// option a) Folder version es: http://your.domain.cdn/project/version/css/main.js
+			if (!longTermHash) {
+				return cssFiles.map(function (i) {
+					return { file: i, remoteDest: `${ version }/${ _path2.default.relative(process.cwd(), i) }` };
+				});
+			}
+			// option b) Hash version es: http://your.domain.cdn/project/css/1b956c239862619d3a59.js
+			return cssFiles.map(function (i) {
+				return { file: i, remoteDest: `${ _path2.default.relative(process.cwd(), i) }` };
 			});
-			return f;
 		}
 		return [];
 	});
@@ -26,15 +31,15 @@ let prepareCssFiles = (() => {
 })();
 
 let prepareJsFiles = (() => {
-	var ref = _asyncToGenerator(function* ({ buildPathJs, version = '', jsLongTermHash = '' }) {
+	var ref = _asyncToGenerator(function* ({ buildPathJs, version = '', longTermHash = '' }) {
 		// js?
-		if (buildPathJs !== '') {
+		if (buildPathJs) {
 			const jsFiles = yield recDir(_path2.default.join(process.cwd(), buildPathJs));
 			debug(`Upload js files ${ jsFiles } from path ${ buildPathJs }`);
 
-			// NOTE: if long-term-cache is enabled (via jsLongTermHash option) don't use folder version inside path. File Hash is the version.
+			// NOTE: if long-term-cache is enabled (via LongTermHash option) don't use folder version inside path. File Hash is the version.
 			// option a) Folder version es: http://your.domain.cdn/project/version/bundles/main.js
-			if (!jsLongTermHash) {
+			if (!longTermHash) {
 				return jsFiles.map(function (i) {
 					return { file: i, remoteDest: `${ version }/${ _path2.default.relative(process.cwd(), i) }` };
 				});
@@ -54,7 +59,7 @@ let prepareJsFiles = (() => {
 
 let prepareImagesFiles = (() => {
 	var ref = _asyncToGenerator(function* ({ imagesPath }) {
-		if (imagesPath !== '') {
+		if (imagesPath) {
 			// read images from temp path not the source one
 			const src = _path2.default.join(process.cwd(), imagesPath);
 			const files = yield recDir(src);
@@ -79,41 +84,38 @@ let prepareImagesFiles = (() => {
 
 let upload = (() => {
 	var ref = _asyncToGenerator(function* (config = loadConfig()) {
-		try {
-			// read the config settings from env
-			const storageName = process.env.STORAGE_NAME;
-			const storageKey = process.env.STORAGE_KEY;
-			debug(`Azure Storage name ${ storageName } key ${ storageKey }`);
-			const blobService = _azureStorage2.default.createBlobService(storageName, storageKey);
-			// promisify all azure methods. (bluebird append Async at the end of the method)
-			const bs = (0, _bluebird.promisifyAll)(blobService);
-			const container = config.getEnsure('projectName', 'Set a valid azureProjectName(container) inside package.json');
-			// read again the correct package.json
-			const pkg = JSON.parse((yield _fs2.default.readFileAsync(config.getEnsure('packageJson'))));
-			const version = pkg.version;
-			_logger2.default.log(`Upload files to container: ${ container } with version: ${ version }`);
-			// create the project container if not exists
-			yield bs.createContainerIfNotExistsAsync(container, { publicAccessLevel: 'blob' });
-			// check if there is already this version
-			const blobResult = yield bs.listBlobsSegmentedWithPrefixAsync(container, version, null);
-			if (blobResult.entries.length > 0) {
-				throw new Error(`The version ${ version } was already deployed on the azure storage`);
-			}
-
-			const filesToUpload = [];
-			filesToUpload.push(...(yield prepareCssFiles({ buildPathCss: config.get('buildPathCss'), version })));
-			filesToUpload.push(...(yield prepareJsFiles({ buildPathJs: config.get('buildPathJs'), version, jsLongTermHash: config.get('jsLongTermHash') })));
-			filesToUpload.push(...(yield prepareImagesFiles({ imagesPath: config.get('imagesPath') })));
-
-			// logger.log(`Files to upload on container ${container} ${util.inspect(filesToUpload)}`);
-			// upload files in parallel
-			yield Promise.all(filesToUpload.map(function (f) {
-				debug(f.remoteDest, f.file);
-				return bs.createBlockBlobFromLocalFileAsync(container, f.remoteDest, f.file);
-			}));
-		} catch (e) {
-			_logger2.default.error('upload', e);
+		// read the config settings from env
+		const storageName = process.env.STORAGE_NAME;
+		const storageKey = process.env.STORAGE_KEY;
+		debug(`Azure Storage name ${ storageName } key ${ storageKey }`);
+		const blobService = _azureStorage2.default.createBlobService(storageName, storageKey);
+		// promisify all azure methods. (bluebird append Async at the end of the method)
+		const bs = (0, _bluebird.promisifyAll)(blobService);
+		const container = config.getEnsure('projectName', 'Set a valid azureProjectName(container) inside package.json');
+		// read again the correct package.json
+		const pkg = JSON.parse((yield _fs2.default.readFileAsync(config.getEnsure('packageJson'))));
+		const version = pkg.version;
+		_logger2.default.log(`Upload files to container: ${ container } with version: ${ version }`);
+		// create the project container if not exists
+		yield bs.createContainerIfNotExistsAsync(container, { publicAccessLevel: 'blob' });
+		// TODO: avoid this check if we are in longTermHash mode
+		// check if there is already this version
+		const blobResult = yield bs.listBlobsSegmentedWithPrefixAsync(container, version, null);
+		if (blobResult.entries.length > 0) {
+			throw new Error(`The version ${ version } was already deployed on the azure storage`);
 		}
+
+		const filesToUpload = [];
+		filesToUpload.push(...(yield prepareCssFiles({ buildPathCss: config.get('buildPathCss'), version, longTermHash: config.get('longTermHash') })));
+		filesToUpload.push(...(yield prepareJsFiles({ buildPathJs: config.get('buildPathJs'), version, longTermHash: config.get('longTermHash') })));
+		filesToUpload.push(...(yield prepareImagesFiles({ imagesPath: config.get('imagesPath') })));
+
+		// logger.log(`Files to upload on container ${container} ${util.inspect(filesToUpload)}`);
+		// upload files in parallel
+		yield Promise.all(filesToUpload.map(function (f) {
+			debug(f.remoteDest, f.file);
+			return bs.createBlockBlobFromLocalFileAsync(container, f.remoteDest, f.file);
+		}));
 	});
 
 	return function upload(_x4) {

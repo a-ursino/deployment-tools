@@ -7,7 +7,14 @@ const debug = require('debug')('dt');
 
 const loadConfig = () => c().load();
 
-async function clean(config = loadConfig()) {
+/**
+ * Delete and recreate folders
+ * This task could be called directly
+ * @param {object} [obj] - obj
+ * @param {object} obj.config - The config Object
+ * @return {Promise} A Promise
+ */
+async function clean({ config = loadConfig() } = {}) {
 	const distFolder = [];
 	// delete js build folder?
 	if (config.get('buildPathJs')) {
@@ -15,7 +22,7 @@ async function clean(config = loadConfig()) {
 	}
 
 	// delete css build folder?
-	if (!config.get('preserveBuildPathCss')) {
+	if (!config.get('preserveBuildPathCss') && config.get('buildPathCss')) {
 		distFolder.push(path.join(process.cwd(), config.get('buildPathCss')));
 	}
 

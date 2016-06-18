@@ -4,13 +4,20 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+
+/**
+ * Build js, css, images
+ * This task could be called directly
+ * @return {Promise} A Promise
+ */
+
 let build = (() => {
 	var ref = _asyncToGenerator(function* () {
 		const config = (0, _config2.default)().load();
 		// clean folder
-		yield (0, _clean2.default)(config);
-		// compile js files
-		yield Promise.all([(0, _buildJs2.default)(config), (0, _buildLess2.default)(config), (0, _imagemin2.default)(config)]);
+		yield (0, _clean2.default)({ config });
+		// compile css, js, image files in parallel
+		return yield Promise.all([(0, _buildJs2.default)({ config, cleaned: true }), (0, _buildCss2.default)({ config, cleaned: true }), (0, _buildImages2.default)({ config, cleaned: true })]);
 	});
 
 	return function build() {
@@ -30,13 +37,13 @@ var _buildJs = require('./buildJs');
 
 var _buildJs2 = _interopRequireDefault(_buildJs);
 
-var _imagemin = require('./imagemin');
+var _buildCss = require('./buildCss');
 
-var _imagemin2 = _interopRequireDefault(_imagemin);
+var _buildCss2 = _interopRequireDefault(_buildCss);
 
-var _buildLess = require('./buildLess');
+var _buildImages = require('./buildImages');
 
-var _buildLess2 = _interopRequireDefault(_buildLess);
+var _buildImages2 = _interopRequireDefault(_buildImages);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

@@ -4,4 +4,7 @@ npm-debug.log
 data/images-temp/
 data/css/
 data/bundles/
+data/styledoc_main/
+data/styledoc_main-admin/
 wp-assets-stats.json
+css-assets-stats.json

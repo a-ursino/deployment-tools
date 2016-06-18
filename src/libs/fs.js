@@ -27,6 +27,13 @@ async function writeFileAsync(filepath, content) {
 	return await writeFilep(fullPath, content);
 }
 
+function writeAsync(filepath, content) {
+	const writeFilep = promisify(fs.writeFile);
+	const fullPath = path.join(process.cwd(), filepath);
+	debug(`try to write a file at path ${fullPath}`);
+	return writeFilep(fullPath, content);
+}
+
 async function readFileAsync(filepath) {
 	const readFilep = promisify(fs.readFile);
 	const fullPath = path.join(process.cwd(), filepath);
@@ -85,6 +92,7 @@ const makeDirsAsync = (paths) => {
 };
 
 export default {
+	writeAsync,
 	writeFileAsync,
 	writeFileSync: fs.writeFileSync,
 	readFileAsync,

@@ -1,24 +1,21 @@
 import webpackTask from './utils/webpack';
-import webconfigChunk from './utils/webconfig-chunk';
+import clean from './clean';
 import c from './libs/config';
-import logger from './libs/logger';
 
 const loadConfig = () => c().load();
 
 /**
  * lint, transpile and minify Js files via webpack
  * This task could be called directly
- * @param {Object} config The config Object
+ * @param {object} [obj] - obj
+ * @param {object} obj.config - The config Object
+ * @param {boolean} obj.cleaned - perform the cleaning phase
  * @return {Promise} A Promise
  */
-async function webpack(config = loadConfig()) {
-	try {
-		await webpackTask(config);
-		// update web.config
-		await webconfigChunk({ webConfig: config.get('webConfig'), jsLongTermHash: config.get('jsLongTermHash') });
-	} catch (e) {
-		logger.error(e);
-	}
+async function webpack({ config = loadConfig(), cleaned = false } = {}) {
+	// we must clean??
+	if (!cleaned) await clean(config);
+	await webpackTask(config);
 }
 
 export default webpack;

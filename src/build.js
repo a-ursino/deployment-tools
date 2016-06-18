@@ -1,18 +1,24 @@
 import c from './libs/config';
 import clean from './clean';
 import buildJS from './buildJs';
-import imagemin from './imagemin';
-import buildLess from './buildLess';
+import buildCss from './buildCss';
+import buildImages from './buildImages';
 
+
+/**
+ * Build js, css, images
+ * This task could be called directly
+ * @return {Promise} A Promise
+ */
 async function build() {
 	const config = c().load();
 	// clean folder
-	await clean(config);
-	// compile js files
-	await Promise.all([
-		buildJS(config),
-		buildLess(config),
-		imagemin(config),
+	await clean({ config });
+	// compile css, js, image files in parallel
+	return await Promise.all([
+		buildJS({ config, cleaned: true }),
+		buildCss({ config, cleaned: true }),
+		buildImages({ config, cleaned: true }),
 	]);
 }
 

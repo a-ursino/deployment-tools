@@ -11,13 +11,14 @@ The tasks available at the moment are:
 
 * `clean`: delete and create again the JavaScript (`buildPathJs` config key) and Css (`buildPathCss` config key) folder
 * `bump`: update the version inside `package.json` (`packageJson` config key) and `Web.config` (`webConfig` config key) according to major/minor/patch
+* `buildImages`: compress images
 * `buildJs`: lint(`eslint-loader`), transpile(`babel-loader`) and minify(`UglifyJsPlugin`) js files with `webpack`
+* `buildCss`: clean -> build stylesheet
 * `build`: test -> clean -> build[ js | style ]
 * `upload`: upload the compiled files on the Azure Storage (CDN)
 * `deploy`: bump -> clean -> build[ js | style ] -> upload
 * `watch`: starts `webpack-dev-server` for js files
 * `test`: test files inside folder with tape/blue-tape (TAP specification) and format the output with faucet
-* `imagemin`: compress images inside a folder
 
 *note: -> means in serial, | means in parallel*
 
@@ -28,7 +29,7 @@ The tasks available at the moment are:
 * `projectName`: name of the project, used to built up the path for resources and CDN
 * `webConfig`: the relative path with filename of the webConfig file (es: data/Web.Config). When set, version in the file as `appSettings key swversion` is updated during bump process
 * `packageJson`: the relative path with filename of the `package.json` file
-
+* `longTermHash`: use hash instead of version folder for filename
 
 **Style**
 * `srcSass`: the path of the sass files (es: sass/). When set __Sass__ is used [OPT-IN]
@@ -37,6 +38,8 @@ The tasks available at the moment are:
 * `mainBackoffileStyle`: the entry file of the backoffice's styles (es: main-admin.less/main.sass) [OPT-IN]
 * `buildPathCss`: the path of the compiled css files (es: css)
 * `preserveBuildPathCss`: when true, avoid to delete the css folder during `clean` task [OPT-IN]
+* `stylelintrc`: path of stylelintrc file [OPT-IN]
+* `styledocPath`: path of the folder for style guides
 
 **JavaScript**
 * `srcJsPath`: the path with the JavaScript files
@@ -45,10 +48,10 @@ The tasks available at the moment are:
 * `mainBackoffileJs`: the backoffice main-entry (es: main-backoffice.js) [OPT-IN]
 * `vendorsBackoffileJs`: the filename of the vendors file for backoffice (es: vendors-backoffice.js)[OPT-IN]
 * `buildPathJs`: the path of the compiled JavaScript files (es: bundles)
-* `jsLongTermHash`: use hash for js filename
 
 **Image**
-* `imagesPath` minify and copy to CDN the images inside the path (es: /data/images/)[OPT-IT]
+* `imagesPath`: minify and copy to CDN the images inside the path (es: /data/images/)[OPT-IT]
+* `imagesCdnAlias`: alias for images on CDN so we can maximize parallel download with multiple domain (used by `postcss` plugin)
 
 
 *note: all the config's path must ends with trailing slash*
@@ -87,7 +90,7 @@ client-side:
 
 ```html
 <html>
-	....
+	<head></head>
 	<body data-swversion='@ConfigurationManager.AppSettings["swversion"]'>
 		<script src="https://cdn.ravenjs.com/3.0.5/raven.min.js"></script>
 <script>
@@ -100,8 +103,8 @@ client-side:
 ```
 
 #### Long-Term-Caching
-If you want to use long term caching (more [there](https://webpack.github.io/docs/long-term-caching.html)) you can
-use `jsLongTermHash` option. When so the build process try to update the relative keys inside `Web.config` with the hash of single chunk
+If you want to use long term caching for js e css (more [there](https://webpack.github.io/docs/long-term-caching.html)) you can
+use `longTermHash` option. When so the build process try to update the relative keys inside `Web.config` with the hash of single file
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -112,6 +115,8 @@ use `jsLongTermHash` option. When so the build process try to update the relativ
     <add key="vendors-backoffice" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/5f015639e77466a19e5d.js" />
     <add key="main-backoffice" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/5f015639e77466a19e5d.js" />
 		<add key="modernizr" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/modernizr.45f645c83986c0f3e169.js" />
+		<add key="main.css" value="http://YOUR.CDN.DOMAIN/projectname/css/38ef2f0c714372f9e033dad37e0cda84.css" />
+		<add key="main-admin.css" value="http://YOUR.CDN.DOMAIN/projectname/css/970d7f6a3392de0876e3aa9fbf8e8d2e.css" />
   </appSettings>
 </configuration>
 ```
@@ -120,7 +125,13 @@ and you can change your `razor` views in this way
 
 ```html
 <html>
-	....
+	<head>
+	@if (System.Diagnostics.Debugger.IsAttached) {
+		<link rel="stylesheet" href="/css/main.css">
+	} else {
+		<link rel="stylesheet" href="@ConfigurationManager.AppSettings['main.css']">
+	}
+	</head>
 	<body>
 		@if (System.Diagnostics.Debugger.IsAttached) {
         <script src="http://localhost:8080/vendors.js" type="text/javascript"></script>
@@ -153,7 +164,9 @@ and you can change your `razor` views in this way
 * process css files with [postcss](https://github.com/postcss/postcss)
 * add vendor prefixes with [autoprefixer](https://github.com/postcss/autoprefixer) postcss's plugin
 * adjust images urls inside css for CDN with [postcss-url](https://github.com/postcss/postcss-url) postcss's plugin
-* minify css files with [cssnano](https://github.com/ben-eb/cssnano) postcss's plugin
+* warn about unsupported features via [doiuse](https://github.com/anandthakker/doiuse)
+* minify css files with [clean-css](https://github.com/leodido/postcss-clean) postcss's plugin
+* create style guides using CSS comments and [mdcss](https://github.com/jonathantneal/mdcss)
 
 #### Images
 * serving static content from a cookieless domain (so we can reduce sent payload)
@@ -180,8 +193,9 @@ then you must copy the `npm` scripts that you want to use to your `package.json`
 	"scripts": {
 		"lint": "babel-node tools/run lint",
 		"clean": "babel-node tools/run clean",
-		"preimagemin": "npm run clean",
-		"imagemin": "babel-node src/run imagemin",
+		"buildCss": "cross-env NODE_ENV=production babel-node tools/run buildCss",
+		"buildCss": "cross-env NODE_ENV=production babel-node tools/run buildCss",
+		"buildJs": "cross-env NODE_ENV=production babel-node tools/run buildJs",
 		"build": "cross-env NODE_ENV=production babel-node tools/run build",
 		"bump": "babel-node tools/run bump",
 		"deploy": "cross-env NODE_ENV=production babel-node tools/run deploy",
@@ -209,16 +223,16 @@ and the relative confing settings to `package.json` file
     "mainBackoffileStyle": "main-admin.less",
     "buildPathCss": "/data/css/",
     "preserveBuildPathCss": "true",
-    "imagesPath": "/data/images/"
+    "imagesPath": "/data/images/",
+		"imagesCdnAlias": "http://your.cdn.domain.alias"
 	}
 }
 ```
 
 ## TODO
-* compile sass files
-* add `amazon` CDN provider
-* add more test
-* add code coverage
+✅ add `amazon` CDN provider
+✅ add more test
+✅ add code coverage
 
 ## License
 

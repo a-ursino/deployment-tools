@@ -11,6 +11,8 @@ let deploy = (() => {
 		yield (0, _bump2.default)(config);
 		// build (clean, build)
 		yield (0, _build2.default)(config);
+		// update web.config
+		yield (0, _webconfigChunk2.default)({ webConfig: config.get('webConfig'), longTermHash: config.get('longTermHash') });
 		// upload to azure storage
 		yield (0, _upload2.default)(config);
 	});
@@ -31,6 +33,10 @@ var _build2 = _interopRequireDefault(_build);
 var _upload = require('./upload');
 
 var _upload2 = _interopRequireDefault(_upload);
+
+var _webconfigChunk = require('./utils/webconfig-chunk');
+
+var _webconfigChunk2 = _interopRequireDefault(_webconfigChunk);
 
 var _config = require('./libs/config');
 

@@ -11,6 +11,10 @@ Object.defineProperty(exports, "__esModule", {
 
 let wp = (() => {
 	var ref = _asyncToGenerator(function* (config = loadConfig()) {
+		// skip webpack task if srcJsPath was not set
+		if (!config.get('srcJsPath')) {
+			return undefined;
+		}
 		debug('load the webpack settings');
 		const webpackConfig = (0, _webpackHelper2.default)(config);
 		return new Promise(function (resolve, reject) {
@@ -20,12 +24,12 @@ let wp = (() => {
 				if (err) {
 					return reject(err);
 				}
-				_fs2.default.writeFileSync(_path2.default.join(process.cwd(), 'wp-assets-stats.json'), JSON.stringify(stats.toJson({ chunks: false, children: false, modules: false })));
 				_logger2.default.log('Webpack stats', stats.toString({
 					source: true,
 					reasons: false,
 					chunks: false
 				}));
+				_fs2.default.writeFileSync(_path2.default.join(process.cwd(), 'wp-assets-stats.json'), JSON.stringify(stats.toJson({ chunks: false, children: false, modules: false })));
 				return resolve();
 			});
 		});

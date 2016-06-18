@@ -1,5 +1,6 @@
 import trimEnd from 'lodash/trimEnd';
 import c from './libs/config';
+import clean from './clean';
 import path from 'path';
 import imageminTask from 'imagemin';
 import imageminMozjpeg from 'imagemin-mozjpeg';
@@ -10,7 +11,9 @@ const debug = require('debug')('dt');
 
 const loadConfig = () => c().load();
 
-async function imagemin(config = loadConfig()) {
+async function buildImages({ config = loadConfig(), cleaned = false } = {}) {
+	// we must clean??
+	if (!cleaned) await clean(config);
 	// copy image to temp folder
 	if (!config.get('imagesPath')) {
 		return;
@@ -19,7 +22,7 @@ async function imagemin(config = loadConfig()) {
 	const srcPathGlob = `${srcPath}**/*.{jpg,png,gif,svg}`;
 	// normalize path. remove the trailing slash from /data/images/ -> /data/images
 	const dstPath = path.join(process.cwd(), `${trimEnd(config.get('imagesPath'), '/')}-temp`);
-	debug('try to minify images from ', srcPathGlob, 'to', dstPath);
+	debug(`try to minify images from ${srcPathGlob} to ${dstPath}`);
 	const files = await imageminTask([srcPathGlob], dstPath, {
 		plugins: [
 			imageminMozjpeg({ targa: false }),
@@ -30,4 +33,4 @@ async function imagemin(config = loadConfig()) {
 	logger.log('minified images', files.map((o) => o.path).join(' , '));
 }
 
-export default imagemin;
+export default buildImages;

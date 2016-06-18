@@ -12,28 +12,31 @@ const recDir = promisify(recursive);
 
 const loadConfig = () => c().load();
 
-async function prepareCssFiles({ buildPathCss, version }) {
-	if (buildPathCss !== '') {
+async function prepareCssFiles({ buildPathCss, version, longTermHash = '' }) {
+	if (buildPathCss) {
 		// get all the files paths from source
 		const cssFiles = await recDir(path.join(process.cwd(), buildPathCss));
 		debug(`Upload css files ${cssFiles} from path ${buildPathCss}`);
-		// css files on storage: 5.2.8/css/main.css
-		// css files with versioning
-		const f = cssFiles.map((i) => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
-		return f;
+		// NOTE: if long-term-cache is enabled (via LongTermHash option) don't use folder version inside path. File Hash is the version.
+		// option a) Folder version es: http://your.domain.cdn/project/version/css/main.js
+		if (!longTermHash) {
+			return cssFiles.map((i) => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
+		}
+		// option b) Hash version es: http://your.domain.cdn/project/css/1b956c239862619d3a59.js
+		return cssFiles.map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
 	}
 	return [];
 }
 
-async function prepareJsFiles({ buildPathJs, version = '', jsLongTermHash = '' }) {
+async function prepareJsFiles({ buildPathJs, version = '', longTermHash = '' }) {
 	// js?
-	if (buildPathJs !== '') {
+	if (buildPathJs) {
 		const jsFiles = await recDir(path.join(process.cwd(), buildPathJs));
 		debug(`Upload js files ${jsFiles} from path ${buildPathJs}`);
 
-		// NOTE: if long-term-cache is enabled (via jsLongTermHash option) don't use folder version inside path. File Hash is the version.
+		// NOTE: if long-term-cache is enabled (via LongTermHash option) don't use folder version inside path. File Hash is the version.
 		// option a) Folder version es: http://your.domain.cdn/project/version/bundles/main.js
-		if (!jsLongTermHash) {
+		if (!longTermHash) {
 			return jsFiles.map((i) => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
 		}
 		// option b) Hash version es: http://your.domain.cdn/project/bundles/1b956c239862619d3a59.js
@@ -43,7 +46,7 @@ async function prepareJsFiles({ buildPathJs, version = '', jsLongTermHash = '' }
 }
 
 async function prepareImagesFiles({ imagesPath }) {
-	if (imagesPath !== '') {
+	if (imagesPath) {
 		// read images from temp path not the source one
 		const src = path.join(process.cwd(), imagesPath);
 		const files = await recDir(src);
@@ -60,43 +63,40 @@ async function prepareImagesFiles({ imagesPath }) {
 }
 
 async function upload(config = loadConfig()) {
-	try {
-		// read the config settings from env
-		const storageName = process.env.STORAGE_NAME;
-		const storageKey = process.env.STORAGE_KEY;
-		debug(`Azure Storage name ${storageName} key ${storageKey}`);
-		const blobService = azure.createBlobService(storageName, storageKey);
-		// promisify all azure methods. (bluebird append Async at the end of the method)
-		const bs = promisifyAll(blobService);
-		const container = config.getEnsure('projectName', 'Set a valid azureProjectName(container) inside package.json');
-		// read again the correct package.json
-		const pkg = JSON.parse(await fs.readFileAsync(config.getEnsure('packageJson')));
-		const version = pkg.version;
-		logger.log(`Upload files to container: ${container} with version: ${version}`);
-		// create the project container if not exists
-		await bs.createContainerIfNotExistsAsync(container, { publicAccessLevel: 'blob' });
-		// check if there is already this version
-		const blobResult = await bs.listBlobsSegmentedWithPrefixAsync(container, version, null);
-		if (blobResult.entries.length > 0) {
-			throw new Error(`The version ${version} was already deployed on the azure storage`);
-		}
-
-		const filesToUpload = [];
-		filesToUpload.push(...(await prepareCssFiles({ buildPathCss: config.get('buildPathCss'), version })));
-		filesToUpload.push(...(await prepareJsFiles({ buildPathJs: config.get('buildPathJs'), version, jsLongTermHash: config.get('jsLongTermHash') })));
-		filesToUpload.push(...(await prepareImagesFiles({ imagesPath: config.get('imagesPath') })));
-
-		// logger.log(`Files to upload on container ${container} ${util.inspect(filesToUpload)}`);
-		// upload files in parallel
-		await Promise.all(
-			filesToUpload.map((f) => {
-				debug(f.remoteDest, f.file);
-				return bs.createBlockBlobFromLocalFileAsync(container, f.remoteDest, f.file);
-			}),
-		);
-	} catch (e) {
-		logger.error('upload', e);
+	// read the config settings from env
+	const storageName = process.env.STORAGE_NAME;
+	const storageKey = process.env.STORAGE_KEY;
+	debug(`Azure Storage name ${storageName} key ${storageKey}`);
+	const blobService = azure.createBlobService(storageName, storageKey);
+	// promisify all azure methods. (bluebird append Async at the end of the method)
+	const bs = promisifyAll(blobService);
+	const container = config.getEnsure('projectName', 'Set a valid azureProjectName(container) inside package.json');
+	// read again the correct package.json
+	const pkg = JSON.parse(await fs.readFileAsync(config.getEnsure('packageJson')));
+	const version = pkg.version;
+	logger.log(`Upload files to container: ${container} with version: ${version}`);
+	// create the project container if not exists
+	await bs.createContainerIfNotExistsAsync(container, { publicAccessLevel: 'blob' });
+	// TODO: avoid this check if we are in longTermHash mode
+	// check if there is already this version
+	const blobResult = await bs.listBlobsSegmentedWithPrefixAsync(container, version, null);
+	if (blobResult.entries.length > 0) {
+		throw new Error(`The version ${version} was already deployed on the azure storage`);
 	}
+
+	const filesToUpload = [];
+	filesToUpload.push(...(await prepareCssFiles({ buildPathCss: config.get('buildPathCss'), version, longTermHash: config.get('longTermHash') })));
+	filesToUpload.push(...(await prepareJsFiles({ buildPathJs: config.get('buildPathJs'), version, longTermHash: config.get('longTermHash') })));
+	filesToUpload.push(...(await prepareImagesFiles({ imagesPath: config.get('imagesPath') })));
+
+	// logger.log(`Files to upload on container ${container} ${util.inspect(filesToUpload)}`);
+	// upload files in parallel
+	await Promise.all(
+		filesToUpload.map((f) => {
+			debug(f.remoteDest, f.file);
+			return bs.createBlockBlobFromLocalFileAsync(container, f.remoteDest, f.file);
+		}),
+	);
 }
 
 export default upload;
