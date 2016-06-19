@@ -7,6 +7,13 @@ function isDev() {
 
 // Factory function
 // Dependency Injection for easily unit testing and clousure for data privacy
+/**
+ * [default description]
+ * @param  {[type]}  {        fileSystem    =              fs            [description]
+ * @param  {[type]}  filename =             'package.json' [description]
+ * @param  {Boolean} inDev    =             isDev(         [description]
+ * @return {[type]}           [description]
+ */
 export default ({ fileSystem = fs, filename = 'package.json', inDev = isDev(), env = process.env.NODE_ENV } = {}) => {
 	let store = {}; // eslint-disable-line no-unused-vars
 	return Object.assign({}, {

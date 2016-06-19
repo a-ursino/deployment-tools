@@ -11,6 +11,16 @@ const debug = require('debug')('dt');
 
 const loadConfig = () => c().load();
 
+/**
+ * Copy the images (jpg,png,gif,svg) inside `imagesPath` to a temp folder and compress them.
+ * This task could be called directly
+ * @param {object} [obj] - obj
+ * @param {object} obj.config - The config Object
+ * @param {boolean} [obj.cleaned=false] - Already performed the cleaning phase
+ * @return {Promise} A Promise
+ * @example <caption>run this on your terminal</caption>
+ * node src/run buildImages
+ */
 async function buildImages({ config = loadConfig(), cleaned = false } = {}) {
 	// we must clean??
 	if (!cleaned) await clean(config);

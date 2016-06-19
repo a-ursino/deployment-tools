@@ -1,10 +1,54 @@
-## Contents
+# Contents
+
 A node.js scripts that help you to compile and deploy the static assets (css/JavaScript) of your website.
 More why [here](https://medium.freecodecamp.com/why-i-left-gulp-and-grunt-for-npm-scripts-3d6853dd22b8#.hsmyojdpj).
 
-- [Tasks](#tasks)
-- [Features](#features)
+<!-- TOC depthFrom:1 depthTo:3 withLinks:1 updateOnSave:1 orderedList:0 -->
 
+- [Contents](#contents)
+	- [Features](#features)
+	- [Package Features](#package-features)
+	- [Tasks](#tasks)
+	- [Configuration](#configuration)
+		- [.Net website and Web.config](#net-website-and-webconfig)
+	- [Getting Started](#getting-started)
+	- [TODO](#todo)
+	- [License](#license)
+
+<!-- /TOC -->
+
+## Features
+
+#### JavaScript
+
+* serving static content from CDN and a cookieless domain (so we can reduce sent payload)
+* *transpile* JavaScript files with [Babel 6](https://babeljs.io) and [webpack](http://webpack.github.io/)
+* *lint* JavaScript files with [ESLint](http://eslint.org/) and [eslint-config-airbnb](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb)
+* serve JavaScript files in dev mode via [webpack-dev-server](https://webpack.github.io/docs/webpack-dev-server.html)
+* [long-term-caching](https://webpack.github.io/docs/long-term-caching.html)
+* generate a custom build for `modernizr` with [ModernizrWebpackPlugin](https://github.com/alexpalombaro/modernizr-webpack-plugin)
+
+#### Style sheet
+
+* serving static content from CDN and a cookieless domain (so we can reduce sent payload)
+* compile Less files with [less](https://github.com/less/less.js)
+* process css files with [postcss](https://github.com/postcss/postcss)
+* add vendor prefixes with [autoprefixer](https://github.com/postcss/autoprefixer) postcss's plugin
+* adjust images urls inside css for CDN with [postcss-url](https://github.com/postcss/postcss-url) postcss's plugin
+* warn about unsupported features via [doiuse](https://github.com/anandthakker/doiuse)
+* minify css files with [clean-css](https://github.com/leodido/postcss-clean) postcss's plugin
+* create style guides using CSS comments and [mdcss](https://github.com/jonathantneal/mdcss)
+
+#### Images
+* serving static content from a cookieless domain (so we can reduce sent payload)
+* compress images with [imagemin](https://github.com/imagemin/imagemin) and plugins ([imagemin-mozjpeg](https://github.com/imagemin/imagemin-mozjpeg) [imagemin-pngquant](https://github.com/imagemin/imagemin-pngquant) [imagemin-gifsicle](https://github.com/imagemin/imagemin-gifsicle))
+
+## Package Features
+* conventional commit message validator (`commitizen`, `pre-git`) with [conventional-commit-message](https://github.com/bahmutov/conventional-commit-message)
+* more functional `npm publish` with [publish-please](https://github.com/inikulin/publish-please)
+* *tests* with [blue-tape](https://github.com/spion/blue-tape) and [sinon](https://github.com/sinonjs/sinon)
+* automatic linting and testing with `git hook` and [pre-git](https://github.com/bahmutov/pre-git)
+* documentation with [esdoc](https://github.com/esdoc/esdoc)
 
 ## Tasks
 The tasks available at the moment are:
@@ -111,9 +155,9 @@ use `longTermHash` option. When so the build process try to update the relative 
 <configuration>
   <appSettings>
 		<add key="vendors" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/8f763123f0f046e64dba.js" />
-    <add key="main" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/63ccb10c3a23c226a662.js" />
-    <add key="vendors-backoffice" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/5f015639e77466a19e5d.js" />
-    <add key="main-backoffice" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/5f015639e77466a19e5d.js" />
+		<add key="main" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/63ccb10c3a23c226a662.js" />
+		<add key="vendors-backoffice" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/5f015639e77466a19e5d.js" />
+		<add key="main-backoffice" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/5f015639e77466a19e5d.js" />
 		<add key="modernizr" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/modernizr.45f645c83986c0f3e169.js" />
 		<add key="main.css" value="http://YOUR.CDN.DOMAIN/projectname/css/38ef2f0c714372f9e033dad37e0cda84.css" />
 		<add key="main-admin.css" value="http://YOUR.CDN.DOMAIN/projectname/css/970d7f6a3392de0876e3aa9fbf8e8d2e.css" />
@@ -146,37 +190,7 @@ and you can change your `razor` views in this way
 
 
 
-# Features
 
-#### JavaScript
-
-* serving static content from a cookieless domain (so we can reduce sent payload)
-* *Transpile* JavaScript files with [Babel 6](https://babeljs.io) and [webpack](http://webpack.github.io/)
-* *Lint* JavaScript files with [ESLint](http://eslint.org/)
-* serve js files in dev mode via [webpack-dev-server](https://webpack.github.io/docs/webpack-dev-server.html)
-* [long-term-caching](https://webpack.github.io/docs/long-term-caching.html)
-* generate a custom build for `modernizr` with [ModernizrWebpackPlugin](https://github.com/alexpalombaro/modernizr-webpack-plugin)
-
-#### Style sheet
-
-* serving static content from a cookieless domain (so we can reduce sent payload)
-* compile Less files with [less](https://github.com/less/less.js)
-* process css files with [postcss](https://github.com/postcss/postcss)
-* add vendor prefixes with [autoprefixer](https://github.com/postcss/autoprefixer) postcss's plugin
-* adjust images urls inside css for CDN with [postcss-url](https://github.com/postcss/postcss-url) postcss's plugin
-* warn about unsupported features via [doiuse](https://github.com/anandthakker/doiuse)
-* minify css files with [clean-css](https://github.com/leodido/postcss-clean) postcss's plugin
-* create style guides using CSS comments and [mdcss](https://github.com/jonathantneal/mdcss)
-
-#### Images
-* serving static content from a cookieless domain (so we can reduce sent payload)
-* compress images with [imagemin](https://github.com/imagemin/imagemin) and plugins ([imagemin-mozjpeg](https://github.com/imagemin/imagemin-mozjpeg) [imagemin-pngquant](https://github.com/imagemin/imagemin-pngquant) [imagemin-gifsicle](https://github.com/imagemin/imagemin-gifsicle))
-
-## Package Features
-* conventional commit message validator (`commitizen`, `pre-git`) with [conventional-commit-message](https://github.com/bahmutov/conventional-commit-message)
-* more functional `npm publish` with [publish-please](https://github.com/inikulin/publish-please)
-* *Tests* with [blue-tape](https://github.com/spion/blue-tape) and [sinon](https://github.com/sinonjs/sinon)
-* automatic linting and testing with `git hook` and [pre-git](https://github.com/bahmutov/pre-git)
 
 ## Getting Started
 
@@ -209,30 +223,30 @@ and the relative confing settings to `package.json` file
 ```json
 {
 	"config": {
-    "domain": "http://YOUR.CDN.DOMAIN",
-    "projectName": "project",
-    "webConfig": "Web.config",
-    "packageJson": "/package.json",
-    "srcJsPath": "/script/",
-    "mainJs": "main.js",
-    "mainBackoffileJs": "main-backoffice.js",
-    "buildPathJs": "/data/bundles/",
-    "srcSassOUT": "/sass/",
-    "srcLess": "/less/",
-    "mainStyle": "main.less",
-    "mainBackoffileStyle": "main-admin.less",
-    "buildPathCss": "/data/css/",
-    "preserveBuildPathCss": "true",
-    "imagesPath": "/data/images/",
+		"domain": "http://YOUR.CDN.DOMAIN",
+		"projectName": "project",
+		"webConfig": "Web.config",
+		"packageJson": "/package.json",
+		"srcJsPath": "/script/",
+		"mainJs": "main.js",
+		"mainBackoffileJs": "main-backoffice.js",
+		"buildPathJs": "/data/bundles/",
+		"srcSassOUT": "/sass/",
+		"srcLess": "/less/",
+		"mainStyle": "main.less",
+		"mainBackoffileStyle": "main-admin.less",
+		"buildPathCss": "/data/css/",
+		"preserveBuildPathCss": "true",
+		"imagesPath": "/data/images/",
 		"imagesCdnAlias": "http://your.cdn.domain.alias"
 	}
 }
 ```
 
 ## TODO
-✅ add `amazon` CDN provider
-✅ add more test
-✅ add code coverage
+* add `amazon` CDN provider
+* add more test
+* add code coverage
 
 ## License
 

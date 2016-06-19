@@ -10,12 +10,14 @@ import fs from './libs/fs';
 const loadConfig = () => c().load();
 
 /**
- * Build, lint and minify css
+ * Build, lint and minify css.
  * This task could be called directly
  * @param {object} [obj] - obj
  * @param {object} obj.config - The config Object
- * @param {boolean} obj.cleaned - perform the cleaning phase
+ * @param {boolean} [obj.cleaned=false] - Already performed the cleaning phase
  * @return {Promise} A Promise
+ * @example <caption>run this on your terminal</caption>
+ * node src/run buildCss
  */
 async function buildCss({ config = loadConfig(), cleaned = false } = {}) {
 	// we must clean??
@@ -32,7 +34,7 @@ async function buildCss({ config = loadConfig(), cleaned = false } = {}) {
 		output.push(...(await sassTask({ config, minify: true })));
 	}
 	const compactOutput = compact(flattenDeep(output));
-	console.log('compactOutput', compactOutput);
+	console.table('compactOutput', compactOutput);
 	// create a hash version of the min files
 	// write css stats inside a file
 	fs.writeFileSync(path.join(process.cwd(), 'css-assets-stats.json'), JSON.stringify({ assets: compactOutput }));

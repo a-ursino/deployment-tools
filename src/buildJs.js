@@ -5,12 +5,14 @@ import c from './libs/config';
 const loadConfig = () => c().load();
 
 /**
- * lint, transpile and minify Js files via webpack
+ * Lint, transpile and minify Js files via webpack.
  * This task could be called directly
  * @param {object} [obj] - obj
  * @param {object} obj.config - The config Object
- * @param {boolean} obj.cleaned - perform the cleaning phase
+ * @param {boolean} [obj.cleaned=false] - Already performed the cleaning phase
  * @return {Promise} A Promise
+ * @example <caption>run this on your terminal</caption>
+ * node src/run buildImages
  */
 async function webpack({ config = loadConfig(), cleaned = false } = {}) {
 	// we must clean??

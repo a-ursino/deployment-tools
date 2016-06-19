@@ -5,9 +5,17 @@ import logger from './libs/logger';
 import recursive from 'recursive-readdir';
 import path from 'path';
 import fs from './libs/fs';
+const debug = require('debug')('dt');
+
+const envalid = require('envalid');
+const { str } = envalid;
+const env = envalid.cleanEnv(process.env, {
+	STORAGE_NAME: str(),
+	STORAGE_KEY: str(),
+});
 
 require('dotenv').config();
-const debug = require('debug')('dt');
+
 const recDir = promisify(recursive);
 
 const loadConfig = () => c().load();
@@ -64,8 +72,8 @@ async function prepareImagesFiles({ imagesPath }) {
 
 async function upload(config = loadConfig()) {
 	// read the config settings from env
-	const storageName = process.env.STORAGE_NAME;
-	const storageKey = process.env.STORAGE_KEY;
+	const storageName = env.STORAGE_NAME;
+	const storageKey = env.STORAGE_KEY;
 	debug(`Azure Storage name ${storageName} key ${storageKey}`);
 	const blobService = azure.createBlobService(storageName, storageKey);
 	// promisify all azure methods. (bluebird append Async at the end of the method)
