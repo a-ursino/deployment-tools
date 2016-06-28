@@ -12,6 +12,10 @@ const loadConfig = () => c().load();
 
 // --progress --colors -p
 async function wp(config = loadConfig()) {
+	// skip webpack task if srcJsPath was not set
+	if (!config.get('srcJsPath')) {
+		return undefined;
+	}
 	debug('load the webpack settings');
 	const webpackConfig = getWebpackConfig(config);
 	return new Promise((resolve, reject) => {
@@ -21,12 +25,12 @@ async function wp(config = loadConfig()) {
 			if (err) {
 				return reject(err);
 			}
-			fs.writeFileSync(path.join(process.cwd(), 'wp-assets-stats.json'), JSON.stringify(stats.toJson({ chunks: false, children: false, modules: false })));
 			logger.log('Webpack stats', stats.toString({
 				source: true,
 				reasons: false,
 				chunks: false,
 			}));
+			fs.writeFileSync(path.join(process.cwd(), 'wp-assets-stats.json'), JSON.stringify(stats.toJson({ chunks: false, children: false, modules: false })));
 			return resolve();
 		});
 	});

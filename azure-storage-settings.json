@@ -1,0 +1,13 @@
+{
+	"Cors":{
+		"CorsRule": [
+			{
+				"AllowedOrigins": ["*"],
+				"AllowedMethods": ["GET"],
+				"AllowedHeaders": ["*"],
+				"ExposedHeaders": ["*"],
+				"MaxAgeInSeconds": 500
+			}
+		]
+	}
+}

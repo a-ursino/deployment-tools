@@ -47,7 +47,7 @@ function getWebpackConfig(config, dev = false) {
 	// es: ./data/scripts/vendors.js
 	if (config.get('vendorsJs') !== undefined) {
 		webpackConfig.entry.vendors = _path2.default.join(process.cwd(), `${ config.get('srcJsPath') }${ config.get('vendorsJs') }`);
-		debug(`webpackConfig.entry.main-backoffice ${ webpackConfig.entry['main-backoffice'] }`);
+		debug(`webpackConfig.entry.vendors ${ webpackConfig.entry.vendors }`);
 	}
 	// main backoffice [OPT-IN]
 	// .{srcJsPath}{mainBackoffileJs}

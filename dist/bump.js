@@ -4,6 +4,15 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+
+/**
+ * Upgrade version inside package.json and web.config ([OPT-IN]) according semver.
+ * This task could be called directly
+ * @return {Promise} A Promise
+ * @example <caption>run this on your terminal</caption>
+ * node src/run bump
+ */
+
 let bump = (() => {
 	var ref = _asyncToGenerator(function* () {
 		const config = (0, _config2.default)().load();
@@ -31,13 +40,6 @@ var _config2 = _interopRequireDefault(_config);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; } /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * Copyright © 2014-2016 killanaca All rights reserved.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * This source code is licensed under the MIT license found in the
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * LICENSE.txt file in the root directory of this source tree.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         */
-
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
 exports.default = bump;

@@ -1,7 +1,8 @@
 const webpack = require('webpack');
-const path = require('path');
 const pkg = require('../package.json');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const WebpackMd5Hash = require('webpack-md5-hash');
+const ChunkManifestPlugin = require('chunk-manifest-webpack-plugin');
 
 module.exports = function exportsOptions(initOptions) {
 	const defaultOptions = {
@@ -26,38 +27,40 @@ module.exports = function exportsOptions(initOptions) {
 			loader: 'babel-loader',
 			// Skip any files outside of your project's `src` directory
 			/* include: [
-				path.resolve(__dirname, 'src'),
-			],*/
-			// OR
+			path.resolve(__dirname, 'src'),
+		],*/
+		// OR
 			exclude: /node_modules/,
-			// Only run `.js` files through Babel
+		// Only run `.js` files through Babel
 			test: /\.js?$/,
-			// Options to configure babel with
-			// the other configurations are inside .babelrc
+		// Options to configure babel with
+		// the other configurations are inside .babelrc
 			query: {
 				cacheDirectory: true,
 				plugins: ['transform-flow-strip-types', 'transform-object-rest-spread'],
 				presets: ['es2015', 'react'],
 			},
 		},
-		{ test: /\.dust$/, loader: 'dust-loader-complete', exclude: /node_modules/, query: { verbose: true } },
+	{ test: /\.dust$/, loader: 'dust-loader-complete', exclude: /node_modules/, query: { verbose: true } },
 	];
 
 	const preLoaders = [
-		// lint es6 files
-		{ test: /\.(js|jsx)$/, loader: 'eslint-loader', exclude: /(node_modules|vendor)/ },
+	// lint es6 files
+	{ test: /\.(js|jsx)$/, loader: 'eslint-loader', exclude: /(node_modules|vendor)/ },
 	];
-	const plugins = [
-		new webpack.DefinePlugin({
-			'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) }, // ("production")
-			// NOTE: DO NOT DO like this (this is the check that react do process.env.NODE_ENV !== 'production')
-			// uglify remove only if statement with confront with constant, so this one is wrong
-			'process.ens': JSON.stringify({ NODE_ENV: process.env.NODE_ENV }), // ({"NODE_ENV":"production"}).NODE_ENV
-			VERSION: pkg.version,
-			__DEV__: JSON.parse(process.env.NODE_ENV === 'development' || 'false'),
-			__PRERELEASE__: JSON.parse(process.env.BUILD_PRERELEASE || 'false'),
-		}),
-	];
+
+	const plugins = [];
+
+	// define enviroment variables
+	plugins.push(new webpack.DefinePlugin({
+		'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) }, // ("production")
+		// NOTE: DO NOT DO like this (this is the check that react do process.env.NODE_ENV !== 'production')
+		// uglify remove only if statement with confront with constant, so this one is wrong
+		'process.ens': JSON.stringify({ NODE_ENV: process.env.NODE_ENV }), // ({"NODE_ENV":"production"}).NODE_ENV
+		VERSION: pkg.version,
+		__DEV__: JSON.parse(process.env.NODE_ENV === 'development' || 'false'),
+		__PRERELEASE__: JSON.parse(process.env.BUILD_PRERELEASE || 'false'),
+	}));
 
 	if (options.hot) {
 		plugins.push(new webpack.HotModuleReplacementPlugin());
@@ -78,8 +81,8 @@ module.exports = function exportsOptions(initOptions) {
 				comments: false, // remove all comments
 			},
 		}));
-		// plugins.push(new webpack.optimize.DedupePlugin());
-		// plugins.push(new webpack.NoErrorsPlugin());
+	// plugins.push(new webpack.optimize.DedupePlugin());
+	// plugins.push(new webpack.NoErrorsPlugin());
 	}
 
 	//	Adds a banner to the top of each generated js files
@@ -101,10 +104,26 @@ module.exports = function exportsOptions(initOptions) {
 		plugins.push(new ModernizrWebpackPlugin(modernizrConfig));
 	}
 
+	// Plugin to replace the standard webpack chunkhash with md5
+	plugins.push(new WebpackMd5Hash());
+
+	plugins.push(new ChunkManifestPlugin({
+		filename: 'webpack-manifest.json',
+		manifestVariable: 'webpackManifest',
+	}));
+
+	//  modules can get different IDs from build to build, resulting in a slightly different content and thus different hashes
+	plugins.push(new webpack.optimize.OccurenceOrderPlugin());
+
+	plugins.push(new webpack.optimize.CommonsChunkPlugin({
+		name: 'vendors',
+		minChunks: Infinity,
+	}));
+
 	const config = {
 		// ENTRY
 		entry: {
-			// various entry point
+			// this configuration option is set inside webpack-helper
 		},
 		resolve: {
 			extensions: ['', '.js'],
@@ -115,11 +134,11 @@ module.exports = function exportsOptions(initOptions) {
 			modulesDirectories: ['./Scripts/libs/', './node_modules/', './templates/'],
 		},
 		output: {
-			path: path.join(__dirname, '../bundles/'), // output path
-			filename: options.hash ? '[chunkhash].js' : '[name].js', // The filename of the entry chunk (see entry)
-			chunkFilename: options.hash ? '[chunkhash].js' : '[name].chunk.js', // The filename of non-entry chunks as relative path inside the output.path directory [id]-[hash]-
-			publicPath: 'http://localhost:8080/', // percorso dev altrimenti non funzionano i chunk con VS
-			sourceMapFilename: '[name].js.map',
+			path: '', // this configuration option is set inside webpack-helper
+			publicPath: '', // this configuration option is set inside webpack-helper
+			filename: options.hash ? '[name].[chunkhash].js' : '[name].js', // The filename of the entry chunk (see entry)
+			chunkFilename: options.hash ? '[name].[chunkhash].js' : '[name].chunk.js', // The filename of non-entry chunks as relative path inside the output.path directory [id]-[hash]-
+			sourceMapFilename: '[name].[chunkhash].js.map',
 			pathinfo: true,
 		},
 		externals: {
@@ -146,6 +165,5 @@ module.exports = function exportsOptions(initOptions) {
 	if (options.devTool) {
 		config.devtool = options.devTool;
 	}
-
 	return config;
 };

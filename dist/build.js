@@ -4,13 +4,22 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+
+/**
+ * Build js, css, images.
+ * This task could be called directly
+ * @return {Promise} A Promise
+ * @example <caption>run this on your terminal</caption>
+ * node src/run build
+ */
+
 let build = (() => {
 	var ref = _asyncToGenerator(function* () {
 		const config = (0, _config2.default)().load();
 		// clean folder
-		yield (0, _clean2.default)(config);
-		// compile js files
-		yield Promise.all([(0, _buildJs2.default)(config), (0, _buildLess2.default)(config), (0, _imagemin2.default)(config)]);
+		yield (0, _clean2.default)({ config });
+		// compile css, js, image files in parallel
+		return Promise.all([(0, _buildJs2.default)({ config, cleaned: true }), (0, _buildCss2.default)({ config, cleaned: true }), (0, _buildImages2.default)({ config, cleaned: true })]);
 	});
 
 	return function build() {
@@ -30,23 +39,16 @@ var _buildJs = require('./buildJs');
 
 var _buildJs2 = _interopRequireDefault(_buildJs);
 
-var _imagemin = require('./imagemin');
+var _buildCss = require('./buildCss');
 
-var _imagemin2 = _interopRequireDefault(_imagemin);
+var _buildCss2 = _interopRequireDefault(_buildCss);
 
-var _buildLess = require('./buildLess');
+var _buildImages = require('./buildImages');
 
-var _buildLess2 = _interopRequireDefault(_buildLess);
+var _buildImages2 = _interopRequireDefault(_buildImages);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; } /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * Copyright © 2014-2016 killanaca All rights reserved.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * This source code is licensed under the MIT license found in the
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * LICENSE.txt file in the root directory of this source tree.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         */
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
 exports.default = build;

@@ -14,7 +14,7 @@ process.on('unhandledRejection', (reason, p) => {
 	_logger2.default.error('unhandledRejection', reason, p);
 }); /**
     *
-    * Copyright © 2014-2016 killanaca All rights reserved.
+    * Copyright © 2016 killanaca All rights reserved.
     *
     * This source code is licensed under the MIT license found in the
     * LICENSE.txt file in the root directory of this source tree.
@@ -25,7 +25,7 @@ process.on('uncaughtException', err => {
 });
 
 /**
-* [run description]
+* Run a promise with some timings
 * @param  {Function} fn      A function async to generator
 * @param  {Object}   [options] The option to pass to promise
 * @return {Promise}           A Promise
@@ -35,14 +35,14 @@ function run(fn, options) {
 	try {
 		const task = typeof fn.default === 'undefined' ? fn : fn.default;
 		const start = new Date();
-		_logger2.default.log(`Starting '${ task.name }${ options ? `(${ options })` : '' }'...`);
+		_logger2.default.log(`Starting task:${ task.name } with options:${ options }`);
 		return task(options).then(() => {
 			const end = new Date();
 			const time = end.getTime() - start.getTime();
-			_logger2.default.log(`Finished '${ task.name }${ options ? `(${ options })` : '' }' after ${ time } ms`);
+			_logger2.default.log(`Finished task:${ task.name } with options:${ options } after ${ time } ms`);
 		});
 	} catch (e) {
-		_logger2.default.error('error', e);
+		_logger2.default.error('Catched Error inside run', e);
 	}
 }
 
@@ -51,6 +51,7 @@ if (process.argv.length > 2) {
 	// __filename is the path of this file
 	// delete require.cache[__filename]; // eslint-disable-line no-underscore-dangle
 	const module = require(`./${ process.argv[2] }.js`).default; // eslint-disable-line global-require
+	// Kick-off
 	run(module).catch(err => _logger2.default.error(err.stack));
 } else {
 	_logger2.default.log('Specify a function to run');

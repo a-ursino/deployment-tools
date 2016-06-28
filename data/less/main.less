@@ -1,25 +1,6 @@
-/*!
-* Main File
-* 26/05/2016
-* Copyright 2013-2016
-*/
 @import "./component/typo.less";
-
-body{
-	background-color: yellow;
-	// to test url substitution for cdn with absolute url
-	background: red url("/images/controls.png") no-repeat center;
-}
-div{
-	// to test url substitution for cdn with absolute url
-	background: red url("http://placehold.it/350x150") no-repeat center;
-}
-p{
-	// to test url substitution for cdn with absolute url in https
-	background: red url("https://placehold.it/350x150") no-repeat center;
-}
-h1{
-	background-color: yellow;
-	// to test url substitution for cdn with absolute url
-	background: red url("images/controls.png") no-repeat center;
-}
+@import "./component/icon.less";
+@import "./component/button.less";
+@import "bootstrap-frontend.less";
+// import css without processing it
+@import "vanilla.less";

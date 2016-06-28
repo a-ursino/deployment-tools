@@ -1,14 +1,6 @@
-/**
-*
-* Copyright © 2014-2016 killanaca All rights reserved.
-*
-* This source code is licensed under the MIT license found in the
-* LICENSE.txt file in the root directory of this source tree.
-*
-*/
-
 import trimEnd from 'lodash/trimEnd';
 import c from './libs/config';
+import clean from './clean';
 import path from 'path';
 import imageminTask from 'imagemin';
 import imageminMozjpeg from 'imagemin-mozjpeg';
@@ -19,7 +11,19 @@ const debug = require('debug')('dt');
 
 const loadConfig = () => c().load();
 
-async function imagemin(config = loadConfig()) {
+/**
+ * Copy the images (jpg,png,gif,svg) inside `imagesPath` to a temp folder and compress them.
+ * This task could be called directly
+ * @param {object} [obj] - obj
+ * @param {object} obj.config - The config Object
+ * @param {boolean} [obj.cleaned=false] - Already performed the cleaning phase
+ * @return {Promise} A Promise
+ * @example <caption>run this on your terminal</caption>
+ * node src/run buildImages
+ */
+async function buildImages({ config = loadConfig(), cleaned = false } = {}) {
+	// we must clean??
+	if (!cleaned) await clean(config);
 	// copy image to temp folder
 	if (!config.get('imagesPath')) {
 		return;
@@ -28,7 +32,7 @@ async function imagemin(config = loadConfig()) {
 	const srcPathGlob = `${srcPath}**/*.{jpg,png,gif,svg}`;
 	// normalize path. remove the trailing slash from /data/images/ -> /data/images
 	const dstPath = path.join(process.cwd(), `${trimEnd(config.get('imagesPath'), '/')}-temp`);
-	debug('try to minify images from ', srcPathGlob, 'to', dstPath);
+	debug(`try to minify images from ${srcPathGlob} to ${dstPath}`);
 	const files = await imageminTask([srcPathGlob], dstPath, {
 		plugins: [
 			imageminMozjpeg({ targa: false }),
@@ -39,4 +43,4 @@ async function imagemin(config = loadConfig()) {
 	logger.log('minified images', files.map((o) => o.path).join(' , '));
 }
 
-export default imagemin;
+export default buildImages;

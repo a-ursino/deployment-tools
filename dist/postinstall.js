@@ -4,6 +4,13 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+
+/**
+ * Copy JavaScript files inside tools folder after installation
+ * This task could be called directly
+ * @return {Promise} A Promise
+ */
+
 let postinstall = (() => {
 	var ref = _asyncToGenerator(function* () {
 		const ncpAsync = (0, _bluebird.promisify)(_ncp2.default);
@@ -12,12 +19,12 @@ let postinstall = (() => {
 		const src = _path2.default.join(packagePath, 'dist');
 		const projectPath = _path2.default.join(packagePath, '../../');
 		const destPath = _path2.default.join(projectPath, 'tools');
-		_logger2.default.log('postinstall try to copy files from src', src, 'to destPath', destPath);
+		_logger2.default.log(`[postinstall] try to copy files from src:${ src } to destPath:${ destPath }`);
 		// first delete folder
 		yield (0, _del2.default)(destPath, { dot: true, dryRun: true, force: true });
 		// then copy dist into projects tools folder
 		yield ncpAsync(src, destPath);
-		_logger2.default.log('postinstall copied files from src', src, 'to destPath', destPath);
+		_logger2.default.log(`[postinstall] copied files from src:${ src } to destPath:${ destPath }`);
 	});
 
 	return function postinstall() {
@@ -45,13 +52,6 @@ var _bluebird = require('bluebird');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; } /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * Copyright © 2014-2016 killanaca All rights reserved.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * This source code is licensed under the MIT license found in the
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         * LICENSE.txt file in the root directory of this source tree.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         */
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
 exports.default = postinstall;
