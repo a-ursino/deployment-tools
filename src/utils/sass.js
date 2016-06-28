@@ -1,18 +1,13 @@
 import c from '../libs/config';
-import logger from '../libs/logger';
 import compileStylesheetAsync from './css';
 const sass = require('postcss-scss');
 
 const loadConfig = () => c().load();
 
-async function compileSassAsync({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName, stylelintrc, styledocPath }) {
-	try {
-		// if filename is undefined, skip
-		if (!filename) return;
-		await compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDomain, minify, projectName, engine: sass, ext: '.sass', stylelintrc, styledocPath });
-	} catch (e) {
-		logger.error(e);
-	}
+function compileSassAsync({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName, stylelintrc, styledocPath, doiuseRules, autoprefixerRules }) {
+	// if filename is undefined, skip
+	if (!filename) return -1;
+	return compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDomain, minify, projectName, engine: sass, ext: '.sass', stylelintrc, styledocPath, doiuseRules, autoprefixerRules });
 }
 
 async function sassTaskAsync({ config = loadConfig(), minify = false }) {
@@ -24,10 +19,14 @@ async function sassTaskAsync({ config = loadConfig(), minify = false }) {
 	const version = config.get('version');
 	const stylelintrc = config.get('stylelintrc');
 	const styledocPath = config.get('styledocPath');
+	const mainStyle = config.get('mainStyle');
+	const mainBackoffileStyle = config.get('mainBackoffileStyle');
+	const doiuseRules = config.get('doiuse');
+	const autoprefixerRules = config.get('autoprefixer');
 	const tasks = [
-		compileSassAsync({ filename: config.get('mainStyle'), srcFolder, outputFolder, cdnDomain, minify, projectName, version, stylelintrc, styledocPath }),
+		compileSassAsync({ filename: mainStyle, srcFolder, outputFolder, cdnDomain, minify, projectName, version, stylelintrc, styledocPath, doiuseRules, autoprefixerRules }),
 		// the main-backoffice is OPT-IN
-		compileSassAsync({ filename: config.get('mainBackoffileStyle'), srcFolder, outputFolder, cdnDomain, minify, projectName, version, stylelintrc, styledocPath }),
+		compileSassAsync({ filename: mainBackoffileStyle, srcFolder, outputFolder, cdnDomain, minify, projectName, version, stylelintrc, styledocPath, doiuseRules, autoprefixerRules }),
 	];
 	await Promise.all(tasks);
 }

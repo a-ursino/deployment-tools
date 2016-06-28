@@ -4,22 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-let compileSassAsync = (() => {
-	var ref = _asyncToGenerator(function* ({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName, stylelintrc, styledocPath }) {
-		try {
-			// if filename is undefined, skip
-			if (!filename) return;
-			yield (0, _css2.default)({ srcFolder, outputFolder, filename, cdnDomain, minify, projectName, engine: sass, ext: '.sass', stylelintrc, styledocPath });
-		} catch (e) {
-			_logger2.default.error(e);
-		}
-	});
-
-	return function compileSassAsync(_x) {
-		return ref.apply(this, arguments);
-	};
-})();
-
 let sassTaskAsync = (() => {
 	var ref = _asyncToGenerator(function* ({ config = loadConfig(), minify = false }) {
 		const srcFolder = config.get('srcSass');
@@ -30,13 +14,17 @@ let sassTaskAsync = (() => {
 		const version = config.get('version');
 		const stylelintrc = config.get('stylelintrc');
 		const styledocPath = config.get('styledocPath');
-		const tasks = [compileSassAsync({ filename: config.get('mainStyle'), srcFolder, outputFolder, cdnDomain, minify, projectName, version, stylelintrc, styledocPath }),
+		const mainStyle = config.get('mainStyle');
+		const mainBackoffileStyle = config.get('mainBackoffileStyle');
+		const doiuseRules = config.get('doiuse');
+		const autoprefixerRules = config.get('autoprefixer');
+		const tasks = [compileSassAsync({ filename: mainStyle, srcFolder, outputFolder, cdnDomain, minify, projectName, version, stylelintrc, styledocPath, doiuseRules, autoprefixerRules }),
 		// the main-backoffice is OPT-IN
-		compileSassAsync({ filename: config.get('mainBackoffileStyle'), srcFolder, outputFolder, cdnDomain, minify, projectName, version, stylelintrc, styledocPath })];
+		compileSassAsync({ filename: mainBackoffileStyle, srcFolder, outputFolder, cdnDomain, minify, projectName, version, stylelintrc, styledocPath, doiuseRules, autoprefixerRules })];
 		yield Promise.all(tasks);
 	});
 
-	return function sassTaskAsync(_x2) {
+	return function sassTaskAsync(_x) {
 		return ref.apply(this, arguments);
 	};
 })();
@@ -44,10 +32,6 @@ let sassTaskAsync = (() => {
 var _config = require('../libs/config');
 
 var _config2 = _interopRequireDefault(_config);
-
-var _logger = require('../libs/logger');
-
-var _logger2 = _interopRequireDefault(_logger);
 
 var _css = require('./css');
 
@@ -60,5 +44,11 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 const sass = require('postcss-scss');
 
 const loadConfig = () => (0, _config2.default)().load();
+
+function compileSassAsync({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName, stylelintrc, styledocPath, doiuseRules, autoprefixerRules }) {
+	// if filename is undefined, skip
+	if (!filename) return -1;
+	return (0, _css2.default)({ srcFolder, outputFolder, filename, cdnDomain, minify, projectName, engine: sass, ext: '.sass', stylelintrc, styledocPath, doiuseRules, autoprefixerRules });
+}
 
 exports.default = sassTaskAsync;

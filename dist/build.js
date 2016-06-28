@@ -6,9 +6,11 @@ Object.defineProperty(exports, "__esModule", {
 
 
 /**
- * Build js, css, images
+ * Build js, css, images.
  * This task could be called directly
  * @return {Promise} A Promise
+ * @example <caption>run this on your terminal</caption>
+ * node src/run build
  */
 
 let build = (() => {
@@ -17,7 +19,7 @@ let build = (() => {
 		// clean folder
 		yield (0, _clean2.default)({ config });
 		// compile css, js, image files in parallel
-		return yield Promise.all([(0, _buildJs2.default)({ config, cleaned: true }), (0, _buildCss2.default)({ config, cleaned: true }), (0, _buildImages2.default)({ config, cleaned: true })]);
+		return Promise.all([(0, _buildJs2.default)({ config, cleaned: true }), (0, _buildCss2.default)({ config, cleaned: true }), (0, _buildImages2.default)({ config, cleaned: true })]);
 	});
 
 	return function build() {

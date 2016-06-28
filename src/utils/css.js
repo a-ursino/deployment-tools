@@ -13,17 +13,6 @@ const crypto = require('crypto');
 const mdcss = require('mdcss');
 import trimEnd from 'lodash/trimEnd';
 
-const AUTOPREFIXER_BROWSERS = [
-	'Android 2.3',
-	'Android >= 4',
-	'Chrome >= 35',
-	'Firefox >= 31',
-	'Explorer >= 9',
-	'iOS >= 7',
-	'Opera >= 12',
-	'Safari >= 7.1',
-];
-
 // function getJSONFromCssModules(cssFileName, json) {
 // 	console.log('getJSONFromCssModules', cssFileName, json);
 // 	const cssName = path.basename(cssFileName, '.css');
@@ -31,6 +20,15 @@ const AUTOPREFIXER_BROWSERS = [
 // 	fs.writeFileSync(jsonFileName, JSON.stringify(json));
 // }
 
+/**
+ * Write minified version of the file
+ * @param {object} [obj] - obj
+ * @param {string} obj.filename -
+ * @param {string} obj.styledocPath -
+ * @param {string} obj.compiledCss -
+ * @param {string} obj.outputFolder -
+ * @return {Promise} A Promise
+ */
 async function generateMinifiedAsync({ filename, styledocPath, compiledCss, outputFolder }) {
 	// write in parallel minified version
 	logger.log(`minify stylesheet: filename:${filename}`);
@@ -53,8 +51,24 @@ async function generateMinifiedAsync({ filename, styledocPath, compiledCss, outp
 	return { filename: `${filename}.css`, filehash: `${filehash}.css` };
 }
 
-
-async function compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName, engine, ext = '.less', stylelintrc, styledocPath }) {
+/**
+ * Build, lint and minify css.
+ * @param {object} [obj] - obj
+ * @param {string} obj.srcFolder -
+ * @param {string} obj.outputFolder -
+ * @param {string} obj.filename -
+ * @param {string} obj.cdnDomain -
+ * @param {boolean} obj.minify -
+ * @param {string} obj.engine -
+ * @param {string} obj.projectName -
+ * @param {string} obj.ext -
+ * @param {string} obj.stylelintrc -
+ * @param {string} obj.styledocPath -
+ * @param {string} obj.doiuseRules - Browser to check with doiuse
+ * @param {string} obj.autoprefixerRules - Browser to autoprefix
+ * @return {Promise} A Promise
+ */
+async function compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName, engine, ext = '.less', stylelintrc, styledocPath, doiuseRules = '', autoprefixerRules = '' }) {
 	const filepath = `${srcFolder}${filename}`;
 	const filesPath = [];
 	// add the folder with the less files
@@ -75,13 +89,19 @@ async function compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDo
 	// PLUGINS: prepare plugins for postCss
 	const postCssPlugins = [];
 	postCssPlugins.push(engine({ strictMath: true, paths: filesPath }));
-	// NOTE: stylelint is OPT-IN
-	// if (stylelintrc) {
-	// 	const stylelintrcFile = path.join(process.cwd(), stylelintrc);
-	// 	debug(`Enable stylint with file ${stylelintrcFile}`);
-	// 	postCssPlugins.push(stylelint({ configFile: stylelintrcFile }));
-	// }
-	postCssPlugins.push(autoprefixer({ browsers: AUTOPREFIXER_BROWSERS }));
+	// USE stylint ??
+	if (stylelintrc) {
+		const stylelintrcFile = path.join(process.cwd(), stylelintrc);
+		debug(`Enable stylint on file:${filename} with file ${stylelintrcFile}`);
+		postCssPlugins.push(stylelint({ configFile: stylelintrcFile }));
+	}
+	// USE AUTOPREFIXER ??
+	const autoprefixerRulesArr = autoprefixerRules.split(',');
+	if (autoprefixerRulesArr.length) {
+		debug(`Enable autoprefixer on file:${filename} with ${autoprefixerRulesArr}`);
+		postCssPlugins.push(autoprefixer({ browsers: autoprefixerRulesArr }));
+	}
+
 	// transform image url for CDN
 	postCssPlugins.push(url({
 		url(imageurl) {
@@ -96,15 +116,19 @@ async function compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDo
 		},
 	}));
 
-	// CAN I USE
-	postCssPlugins.push(doiuse({
-		browsers: ['ie >= 9', '> 1%'],
-		ignore: [], // an optional array of features to ignore 'rem'
-		ignoreFiles: [path.join(process.cwd(), 'node_modules', `/**/*${ext}`)], // an optional array of file globs to match against original source file path, to ignore
-		// onFeatureUsage(usageInfo) {
-		// 	logger.warn('CANIUSE', usageInfo.message);
-		// },
-	}));
+	// CAN I USE ??
+	const doiuseRulesArr = doiuseRules.split(',');
+	if (doiuseRulesArr.length) {
+		debug(`Enable doiuse on file:${filename} with ${doiuseRulesArr}`);
+		postCssPlugins.push(doiuse({
+			browsers: [],
+			ignore: [], // an optional array of features to ignore 'rem'
+			ignoreFiles: [path.join(process.cwd(), 'node_modules', `/**/*${ext}`)], // an optional array of file globs to match against original source file path, to ignore
+			// onFeatureUsage(usageInfo) {
+			// 	logger.warn('CANIUSE', usageInfo.message);
+			// },
+		}));
+	}
 
 	postCssPlugins.push(reporter({ clearMessages: true })); // clearMessages if true, the plugin will clear the result's messages after it logs them
 

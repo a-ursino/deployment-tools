@@ -4,6 +4,15 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+
+/**
+ * Upgrade version inside package.json and web.config ([OPT-IN]) according semver.
+ * This task could be called directly
+ * @return {Promise} A Promise
+ * @example <caption>run this on your terminal</caption>
+ * node src/run bump
+ */
+
 let bump = (() => {
 	var ref = _asyncToGenerator(function* () {
 		const config = (0, _config2.default)().load();

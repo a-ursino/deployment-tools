@@ -8,11 +8,17 @@ import path from 'path';
 
 const loadConfig = () => c().load();
 
-async function watch(config = loadConfig()) {
+/**
+ * Watch JavaScript (via webpack), less/sass folder.
+ * This task could be called directly
+ * @param {object} [obj] - obj
+ * @param {object} obj.config - The config Object
+ * @return {Promise} A Promise
+ */
+async function watch({ config = loadConfig() } = {}) {
 	const tasks = [];
 	// add webpack to task. watch and compile js files
 	tasks.push(webpackDevServer(config));
-
 
 	// watch less files???
 	if (config.get('srcLess')) {

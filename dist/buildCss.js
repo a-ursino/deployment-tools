@@ -6,12 +6,14 @@ Object.defineProperty(exports, "__esModule", {
 
 
 /**
- * Build, lint and minify css
+ * Build, lint and minify css.
  * This task could be called directly
  * @param {object} [obj] - obj
  * @param {object} obj.config - The config Object
- * @param {boolean} obj.cleaned - perform the cleaning phase
+ * @param {boolean} [obj.cleaned=false] - Already performed the cleaning phase
  * @return {Promise} A Promise
+ * @example <caption>run this on your terminal</caption>
+ * node src/run buildCss
  */
 
 let buildCss = (() => {
@@ -30,7 +32,6 @@ let buildCss = (() => {
 			output.push(...(yield (0, _sass2.default)({ config, minify: true })));
 		}
 		const compactOutput = (0, _compact2.default)((0, _flattenDeep2.default)(output));
-		console.log('compactOutput', compactOutput);
 		// create a hash version of the min files
 		// write css stats inside a file
 		_fs2.default.writeFileSync(_path2.default.join(process.cwd(), 'css-assets-stats.json'), JSON.stringify({ assets: compactOutput }));

@@ -6,58 +6,72 @@ import recursive from 'recursive-readdir';
 import path from 'path';
 import fs from './libs/fs';
 const debug = require('debug')('dt');
-
 const envalid = require('envalid');
 const { str } = envalid;
-const env = envalid.cleanEnv(process.env, {
-	STORAGE_NAME: str(),
-	STORAGE_KEY: str(),
-});
 
-require('dotenv').config();
+function loadEnv() {
+	const env = envalid.cleanEnv(process.env, {
+		STORAGE_NAME: str(),
+		STORAGE_KEY: str(),
+	});
+	return env;
+}
+
 
 const recDir = promisify(recursive);
-
 const loadConfig = () => c().load();
+// regExp to match css files in this format: 38ef2f0c714372f9e033dad37e0cda84.css
+const md5RegExpCss = /^[a-f0-9]{32}.css$/i;
+// regExp to match js files in this format: main.0054321a4b9b5e829c03.js
+const md5RegExpJs = /^[a-z0-9]*.\.[a-f0-9]{20}.js$/i;
 
-async function prepareCssFiles({ buildPathCss, version, longTermHash = '' }) {
+/**
+ * Build an array of object with filepath and remote destination
+ * If we use long-term-cache, read hashed files only, otherwise read all files inside buildPathCss folder
+ * @param {object} [obj] - obj
+ * @param {string} obj.buildPathCss - The path where to put the compiled files
+ * @param {string} obj.version - The version of the files
+ * @param {boolean} [obj.longTermHash=false] - Use long-term-cache
+ * @return {Promise} A Promise
+ */
+async function prepareCssFiles({ dir = recDir, buildPathCss, version = '', longTermHash = false } = {}) {
 	if (buildPathCss) {
 		// get all the files paths from source
-		const cssFiles = await recDir(path.join(process.cwd(), buildPathCss));
-		debug(`Upload css files ${cssFiles} from path ${buildPathCss}`);
+		const files = await dir(path.join(process.cwd(), buildPathCss));
+		debug(`Upload css files ${files} from path ${buildPathCss}`);
 		// NOTE: if long-term-cache is enabled (via LongTermHash option) don't use folder version inside path. File Hash is the version.
 		// option a) Folder version es: http://your.domain.cdn/project/version/css/main.js
 		if (!longTermHash) {
-			return cssFiles.map((i) => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
+			return files.map((i) => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
 		}
 		// option b) Hash version es: http://your.domain.cdn/project/css/1b956c239862619d3a59.js
-		return cssFiles.map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
+		// avoid to upload non hashed files
+		return files.filter((i) => md5RegExpCss.test(i)).map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
 	}
 	return [];
 }
 
-async function prepareJsFiles({ buildPathJs, version = '', longTermHash = '' }) {
+async function prepareJsFiles({ dir = recDir, buildPathJs, version = '', longTermHash = '' } = {}) {
 	// js?
 	if (buildPathJs) {
-		const jsFiles = await recDir(path.join(process.cwd(), buildPathJs));
-		debug(`Upload js files ${jsFiles} from path ${buildPathJs}`);
-
+		const files = await dir(path.join(process.cwd(), buildPathJs));
+		debug(`Upload js files ${files} from path ${buildPathJs}`);
 		// NOTE: if long-term-cache is enabled (via LongTermHash option) don't use folder version inside path. File Hash is the version.
 		// option a) Folder version es: http://your.domain.cdn/project/version/bundles/main.js
 		if (!longTermHash) {
-			return jsFiles.map((i) => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
+			return files.map((i) => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
 		}
 		// option b) Hash version es: http://your.domain.cdn/project/bundles/1b956c239862619d3a59.js
-		return jsFiles.map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
+		return files.filter((i) => md5RegExpJs.test(i)).map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
 	}
 	return [];
 }
 
-async function prepareImagesFiles({ imagesPath }) {
+async function prepareImagesFiles({ dir = recDir, imagesPath } = {}) {
 	if (imagesPath) {
 		// read images from temp path not the source one
 		const src = path.join(process.cwd(), imagesPath);
-		const files = await recDir(src);
+		const files = await dir(src);
 		debug(`Upload images files ${files} from path ${imagesPath}`);
 		// images files on storage: images/background.png
 		// images files without versioning
@@ -70,10 +84,11 @@ async function prepareImagesFiles({ imagesPath }) {
 	return [];
 }
 
-async function upload(config = loadConfig()) {
+async function upload({ config = loadConfig(), env = loadEnv() } = {}) {
 	// read the config settings from env
 	const storageName = env.STORAGE_NAME;
 	const storageKey = env.STORAGE_KEY;
+	const longTermHash = config.get('longTermHash');
 	debug(`Azure Storage name ${storageName} key ${storageKey}`);
 	const blobService = azure.createBlobService(storageName, storageKey);
 	// promisify all azure methods. (bluebird append Async at the end of the method)
@@ -85,16 +100,18 @@ async function upload(config = loadConfig()) {
 	logger.log(`Upload files to container: ${container} with version: ${version}`);
 	// create the project container if not exists
 	await bs.createContainerIfNotExistsAsync(container, { publicAccessLevel: 'blob' });
-	// TODO: avoid this check if we are in longTermHash mode
-	// check if there is already this version
-	const blobResult = await bs.listBlobsSegmentedWithPrefixAsync(container, version, null);
-	if (blobResult.entries.length > 0) {
-		throw new Error(`The version ${version} was already deployed on the azure storage`);
+	// check if there's already this version. Avoid this check if we are in longTermHash mode
+	if (longTermHash) {
+		const blobResult = await bs.listBlobsSegmentedWithPrefixAsync(container, version, null);
+		if (blobResult.entries.length > 0) {
+			throw new Error(`The version ${version} was already deployed on the azure storage`);
+		}
 	}
 
+
 	const filesToUpload = [];
-	filesToUpload.push(...(await prepareCssFiles({ buildPathCss: config.get('buildPathCss'), version, longTermHash: config.get('longTermHash') })));
-	filesToUpload.push(...(await prepareJsFiles({ buildPathJs: config.get('buildPathJs'), version, longTermHash: config.get('longTermHash') })));
+	filesToUpload.push(...(await prepareCssFiles({ buildPathCss: config.get('buildPathCss'), version, longTermHash })));
+	filesToUpload.push(...(await prepareJsFiles({ buildPathJs: config.get('buildPathJs'), version, longTermHash })));
 	filesToUpload.push(...(await prepareImagesFiles({ imagesPath: config.get('imagesPath') })));
 
 	// logger.log(`Files to upload on container ${container} ${util.inspect(filesToUpload)}`);
@@ -106,5 +123,7 @@ async function upload(config = loadConfig()) {
 		}),
 	);
 }
-
+export const prepareCssFilesAsync = prepareCssFiles;
+export const prepareJsFilesAsync = prepareJsFiles;
+export const prepareImagesFilesAsync = prepareImagesFiles;
 export default upload;

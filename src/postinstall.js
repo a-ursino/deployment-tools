@@ -4,6 +4,11 @@ import path from 'path';
 import logger from './libs/logger';
 import { promisify } from 'bluebird';
 
+/**
+ * Copy JavaScript files inside tools folder after installation
+ * This task could be called directly
+ * @return {Promise} A Promise
+ */
 async function postinstall() {
 	const ncpAsync = promisify(ncp);
 	// this is the path of the package: ..../node_modules/deployment-tools

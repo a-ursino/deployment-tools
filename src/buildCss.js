@@ -34,7 +34,6 @@ async function buildCss({ config = loadConfig(), cleaned = false } = {}) {
 		output.push(...(await sassTask({ config, minify: true })));
 	}
 	const compactOutput = compact(flattenDeep(output));
-	console.table('compactOutput', compactOutput);
 	// create a hash version of the min files
 	// write css stats inside a file
 	fs.writeFileSync(path.join(process.cwd(), 'css-assets-stats.json'), JSON.stringify({ assets: compactOutput }));

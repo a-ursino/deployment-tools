@@ -4,6 +4,15 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+
+/**
+ * Upload JavaScript, Css and images to storage.
+ * This task could be called directly
+ * @return {Promise} A Promise
+ * @example <caption>run this on your terminal</caption>
+ * node src/run deploy
+ */
+
 let deploy = (() => {
 	var ref = _asyncToGenerator(function* () {
 		// update package.json and web.config version
@@ -12,9 +21,9 @@ let deploy = (() => {
 		// build (clean, build)
 		yield (0, _build2.default)(config);
 		// update web.config
-		yield (0, _webconfigChunk2.default)({ webConfig: config.get('webConfig'), longTermHash: config.get('longTermHash') });
+		yield (0, _webconfigChunk2.default)({ webConfig: config.get('webConfig'), longTermHash: config.get('longTermHash'), outputPath: config.get('buildPathJs') });
 		// upload to azure storage
-		yield (0, _upload2.default)(config);
+		yield (0, _upload2.default)({ config });
 	});
 
 	return function deploy() {

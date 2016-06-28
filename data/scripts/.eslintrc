@@ -1,0 +1,11 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "globals": {
+  },
+  "rules": {
+    // use one tab for indent
+    "indent": [2, "tab"],
+    "max-len": [0],
+  }
+}

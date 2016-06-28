@@ -6,10 +6,7 @@ import { promisify } from 'bluebird';
 import path from 'path';
 const debug = require('debug')('dt');
 
-
 // NOTE: Promise.promisify takes a function that takes a callback as its last argument and converts it into a function that returns a promise (without the need for a callback)
-
-
 const makeDirAsync = promisify(mkdirp);
 const fileExistsPromise = promisify(fs.access);
 
@@ -67,17 +64,6 @@ async function fileExistsAsync(filepath) {
 }
 
 /**
- * Check if file exists on the specified path
- * @param  {String} path The filepath
- * @return {Promise}      A promise that returns true if the file exists, false otherwise
- */
-function fileExistsPr(path) {
-	return fileExistsPromise(path, fs.R_OK)
-	.then(() => true)
-	.catch(Error, () => false);
-}
-
-/**
 * Create folder(s) from a string path or an array of string path
 * @param  {String|Array} paths a string path or an array of string path
 * @return {Promise}      The promise object that is resolved when all the files are created
@@ -100,5 +86,4 @@ export default {
 	readFileSync: fs.readFileSync,
 	makeDirsAsync,
 	fileExistsAsync,
-	fileExistsPr,
 };

@@ -4,6 +4,13 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+
+/**
+ * Copy JavaScript files inside tools folder after installation
+ * This task could be called directly
+ * @return {Promise} A Promise
+ */
+
 let postinstall = (() => {
 	var ref = _asyncToGenerator(function* () {
 		const ncpAsync = (0, _bluebird.promisify)(_ncp2.default);

@@ -4,8 +4,17 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+
+/**
+ * Watch JavaScript (via webpack), less/sass folder.
+ * This task could be called directly
+ * @param {object} [obj] - obj
+ * @param {object} obj.config - The config Object
+ * @return {Promise} A Promise
+ */
+
 let watch = (() => {
-	var ref = _asyncToGenerator(function* (config = loadConfig()) {
+	var ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
 		const tasks = [];
 		// add webpack to task. watch and compile js files
 		tasks.push((0, _webpackDevServer2.default)(config));
@@ -71,6 +80,4 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
-const loadConfig = () => (0, _config2.default)().load();
-
-exports.default = watch;
+const loadConfig = () => (0, _config2.default)().load();exports.default = watch;

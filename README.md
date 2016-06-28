@@ -1,6 +1,7 @@
+[![document](https://doc.esdoc.org/github.com/killanaca/deployment-tools/badge.svg)](https://doc.esdoc.org/github.com/killanaca/deployment-tools/)
 # Contents
 
-A node.js scripts that help you to compile and deploy the static assets (css/JavaScript) of your website.
+A node.js scripts that help you to compile and deploy the static assets (CSS/JavaScript) of your website.
 More why [here](https://medium.freecodecamp.com/why-i-left-gulp-and-grunt-for-npm-scripts-3d6853dd22b8#.hsmyojdpj).
 
 <!-- TOC depthFrom:1 depthTo:3 withLinks:1 updateOnSave:1 orderedList:0 -->
@@ -32,11 +33,11 @@ More why [here](https://medium.freecodecamp.com/why-i-left-gulp-and-grunt-for-np
 
 * serving static content from CDN and a cookieless domain (so we can reduce sent payload)
 * compile Less files with [less](https://github.com/less/less.js)
-* process css files with [postcss](https://github.com/postcss/postcss)
+* process CSS files with [postcss](https://github.com/postcss/postcss)
 * add vendor prefixes with [autoprefixer](https://github.com/postcss/autoprefixer) postcss's plugin
 * adjust images urls inside css for CDN with [postcss-url](https://github.com/postcss/postcss-url) postcss's plugin
 * warn about unsupported features via [doiuse](https://github.com/anandthakker/doiuse)
-* minify css files with [clean-css](https://github.com/leodido/postcss-clean) postcss's plugin
+* minify CSS files with [clean-css](https://github.com/leodido/postcss-clean) postcss's plugin
 * create style guides using CSS comments and [mdcss](https://github.com/jonathantneal/mdcss)
 
 #### Images
@@ -53,7 +54,7 @@ More why [here](https://medium.freecodecamp.com/why-i-left-gulp-and-grunt-for-np
 ## Tasks
 The tasks available at the moment are:
 
-* `clean`: delete and create again the JavaScript (`buildPathJs` config key) and Css (`buildPathCss` config key) folder
+* `clean`: delete and create again the JavaScript (`buildPathJs` config key) and CSS (`buildPathCss` config key) folder
 * `bump`: update the version inside `package.json` (`packageJson` config key) and `Web.config` (`webConfig` config key) according to major/minor/patch
 * `buildImages`: compress images
 * `buildJs`: lint(`eslint-loader`), transpile(`babel-loader`) and minify(`UglifyJsPlugin`) js files with `webpack`
@@ -80,10 +81,12 @@ The tasks available at the moment are:
 * `srcLess`: the path of the less files (es: less/). When set __Less__ is used [OPT-IN]
 * `mainStyle`: the entry file of the front's styles (es: main.less/main.sass)
 * `mainBackoffileStyle`: the entry file of the backoffice's styles (es: main-admin.less/main.sass) [OPT-IN]
-* `buildPathCss`: the path of the compiled css files (es: css)
-* `preserveBuildPathCss`: when true, avoid to delete the css folder during `clean` task [OPT-IN]
+* `buildPathCss`: the path of the compiled CSS files (es: css)
+* `preserveBuildPathCss`: when true, avoid to delete the CSS folder during `clean` task [OPT-IN]
 * `stylelintrc`: path of stylelintrc file [OPT-IN]
 * `styledocPath`: path of the folder for style guides
+* `doiuse`: a list of browser (comma separated) to use with `doiuse` `postcss` plugin
+* `autoprefixer`: a list of browser (comma separated) to use with `autoprefixer` `postcss` plugin
 
 **JavaScript**
 * `srcJsPath`: the path with the JavaScript files
@@ -147,7 +150,7 @@ client-side:
 ```
 
 #### Long-Term-Caching
-If you want to use long term caching for js e css (more [there](https://webpack.github.io/docs/long-term-caching.html)) you can
+If you want to use long term caching for js e CSS (more [there](https://webpack.github.io/docs/long-term-caching.html)) you can
 use `longTermHash` option. When so the build process try to update the relative keys inside `Web.config` with the hash of single file
 
 ```xml
@@ -241,6 +244,21 @@ and the relative confing settings to `package.json` file
 		"imagesCdnAlias": "http://your.cdn.domain.alias"
 	}
 }
+```
+
+## Documentation
+
+The documentation of the package can be generated via `esDoc`
+
+```shell
+npm run doc
+```
+
+## Test
+
+Tests can be run via
+```shell
+ npm test
 ```
 
 ## TODO
