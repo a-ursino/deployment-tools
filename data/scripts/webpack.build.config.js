@@ -10,5 +10,5 @@ module.exports = webpackConfig({
 	profile: true, // Capture timing information for each module.
 	bail: true, // Report the first error as a hard error instead of tolerating it.
 	devTool: 'source-map',
-	banner: true,
+	banner: false,
 });

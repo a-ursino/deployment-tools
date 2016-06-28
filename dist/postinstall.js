@@ -4,6 +4,13 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+
+/**
+ * Copy JavaScript files inside tools folder after installation
+ * This task could be called directly
+ * @return {Promise} A Promise
+ */
+
 let postinstall = (() => {
 	var ref = _asyncToGenerator(function* () {
 		const ncpAsync = (0, _bluebird.promisify)(_ncp2.default);
@@ -12,12 +19,12 @@ let postinstall = (() => {
 		const src = _path2.default.join(packagePath, 'dist');
 		const projectPath = _path2.default.join(packagePath, '../../');
 		const destPath = _path2.default.join(projectPath, 'tools');
-		_logger2.default.log('postinstall try to copy files from src', src, 'to destPath', destPath);
+		_logger2.default.log(`[postinstall] try to copy files from src:${ src } to destPath:${ destPath }`);
 		// first delete folder
 		yield (0, _del2.default)(destPath, { dot: true, dryRun: true, force: true });
 		// then copy dist into projects tools folder
 		yield ncpAsync(src, destPath);
-		_logger2.default.log('postinstall copied files from src', src, 'to destPath', destPath);
+		_logger2.default.log(`[postinstall] copied files from src:${ src } to destPath:${ destPath }`);
 	});
 
 	return function postinstall() {

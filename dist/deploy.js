@@ -4,6 +4,15 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+
+/**
+ * Upload JavaScript, Css and images to storage.
+ * This task could be called directly
+ * @return {Promise} A Promise
+ * @example <caption>run this on your terminal</caption>
+ * node src/run deploy
+ */
+
 let deploy = (() => {
 	var ref = _asyncToGenerator(function* () {
 		// update package.json and web.config version
@@ -11,8 +20,10 @@ let deploy = (() => {
 		yield (0, _bump2.default)(config);
 		// build (clean, build)
 		yield (0, _build2.default)(config);
+		// update web.config
+		yield (0, _webconfigChunk2.default)({ webConfig: config.get('webConfig'), longTermHash: config.get('longTermHash'), outputPath: config.get('buildPathJs') });
 		// upload to azure storage
-		yield (0, _upload2.default)(config);
+		yield (0, _upload2.default)({ config });
 	});
 
 	return function deploy() {
@@ -31,6 +42,10 @@ var _build2 = _interopRequireDefault(_build);
 var _upload = require('./upload');
 
 var _upload2 = _interopRequireDefault(_upload);
+
+var _webconfigChunk = require('./utils/webconfig-chunk');
+
+var _webconfigChunk2 = _interopRequireDefault(_webconfigChunk);
 
 var _config = require('./libs/config');
 

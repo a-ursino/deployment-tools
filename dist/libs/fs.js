@@ -78,10 +78,10 @@ let fileExistsAsync = (() => {
 })();
 
 /**
- * Check if file exists on the specified path
- * @param  {String} path The filepath
- * @return {Promise}      A promise that returns true if the file exists, false otherwise
- */
+* Create folder(s) from a string path or an array of string path
+* @param  {String|Array} paths a string path or an array of string path
+* @return {Promise}      The promise object that is resolved when all the files are created
+*/
 
 
 var _fs = require('fs');
@@ -113,17 +113,16 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 const debug = require('debug')('dt');
 
 // NOTE: Promise.promisify takes a function that takes a callback as its last argument and converts it into a function that returns a promise (without the need for a callback)
-
 const makeDirAsync = (0, _bluebird.promisify)(_mkdirp2.default);
-const fileExistsPromise = (0, _bluebird.promisify)(_fs2.default.access);function fileExistsPr(path) {
-	return fileExistsPromise(path, _fs2.default.R_OK).then(() => true).catch(Error, () => false);
+const fileExistsPromise = (0, _bluebird.promisify)(_fs2.default.access);
+
+function writeAsync(filepath, content) {
+	const writeFilep = (0, _bluebird.promisify)(_fs2.default.writeFile);
+	const fullPath = _path2.default.join(process.cwd(), filepath);
+	debug(`try to write a file at path ${ fullPath }`);
+	return writeFilep(fullPath, content);
 }
 
-/**
-* Create folder(s) from a string path or an array of string path
-* @param  {String|Array} paths a string path or an array of string path
-* @return {Promise}      The promise object that is resolved when all the files are created
-*/
 const makeDirsAsync = paths => {
 	if ((0, _isString2.default)(paths)) {
 		return makeDirAsync(paths);
@@ -134,12 +133,12 @@ const makeDirsAsync = paths => {
 };
 
 exports.default = {
+	writeAsync,
 	writeFileAsync,
 	writeFileSync: _fs2.default.writeFileSync,
 	readFileAsync,
 	readJsonAsync,
 	readFileSync: _fs2.default.readFileSync,
 	makeDirsAsync,
-	fileExistsAsync,
-	fileExistsPr
+	fileExistsAsync
 };

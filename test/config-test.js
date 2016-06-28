@@ -2,7 +2,10 @@ import test from 'blue-tape';
 import { stub } from 'sinon';
 import c from '../src/libs/config';
 
+/** @test {config} */
 test('config', assert => {
+	// first check if module exists
+	// assert.equal(config, , 'should be private');
 	const mockFs = {
 		readFileSync: stub().returns(JSON.stringify({ version: 2, config: { } })),
 	};

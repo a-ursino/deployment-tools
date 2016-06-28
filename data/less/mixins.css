@@ -1,0 +1,9 @@
+/* mixins.css */
+.title {
+    color: black;
+    font-size: 40px;
+}
+
+.title:hover {
+    color: red;
+}

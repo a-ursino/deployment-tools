@@ -15,7 +15,7 @@ process.on('uncaughtException', (err) => {
 });
 
 /**
-* [run description]
+* Run a promise with some timings
 * @param  {Function} fn      A function async to generator
 * @param  {Object}   [options] The option to pass to promise
 * @return {Promise}           A Promise
@@ -24,14 +24,14 @@ function run(fn, options) { // eslint-disable-line consistent-return
 	try {
 		const task = typeof fn.default === 'undefined' ? fn : fn.default;
 		const start = new Date();
-		logger.log(`Starting '${task.name}${options ? `(${options})` : ''}'...`);
+		logger.log(`Starting task:${task.name} with options:${options}`);
 		return task(options).then(() => {
 			const end = new Date();
 			const time = end.getTime() - start.getTime();
-			logger.log(`Finished '${task.name}${options ? `(${options})` : ''}' after ${time} ms`);
+			logger.log(`Finished task:${task.name} with options:${options} after ${time} ms`);
 		});
 	} catch (e) {
-		logger.error('error', e);
+		logger.error('Catched Error inside run', e);
 	}
 }
 
@@ -40,6 +40,7 @@ if (process.argv.length > 2) {
 	// __filename is the path of this file
 	// delete require.cache[__filename]; // eslint-disable-line no-underscore-dangle
 	const module = require(`./${process.argv[2]}.js`).default; // eslint-disable-line global-require
+	// Kick-off
 	run(module).catch(err => logger.error(err.stack));
 } else {
 	logger.log('Specify a function to run');

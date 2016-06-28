@@ -1,48 +1,44 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
 
 
 /**
- * lint, transpile and minify Js files via webpack
+ * Lint, transpile and minify Js files via webpack.
  * This task could be called directly
- * @param {Object} config The config Object
+ * @param {object} [obj] - obj
+ * @param {object} obj.config - The config Object
+ * @param {boolean} [obj.cleaned=false] - Already performed the cleaning phase
  * @return {Promise} A Promise
+ * @example <caption>run this on your terminal</caption>
+ * node src/run buildImages
  */
 
 let webpack = (() => {
-	var ref = _asyncToGenerator(function* (config = loadConfig()) {
-		try {
-			yield (0, _webpack2.default)(config);
-			// update web.config
-			yield (0, _webconfigChunk2.default)({ webConfig: config.get('webConfig'), jsLongTermHash: config.get('jsLongTermHash') });
-		} catch (e) {
-			_logger2.default.error(e);
-		}
-	});
+  var ref = _asyncToGenerator(function* ({ config = loadConfig(), cleaned = false } = {}) {
+    // we must clean??
+    if (!cleaned) yield (0, _clean2.default)(config);
+    yield (0, _webpack2.default)(config);
+  });
 
-	return function webpack(_x) {
-		return ref.apply(this, arguments);
-	};
+  return function webpack(_x) {
+    return ref.apply(this, arguments);
+  };
 })();
 
 var _webpack = require('./utils/webpack');
 
 var _webpack2 = _interopRequireDefault(_webpack);
 
-var _webconfigChunk = require('./utils/webconfig-chunk');
+var _clean = require('./clean');
 
-var _webconfigChunk2 = _interopRequireDefault(_webconfigChunk);
+var _clean2 = _interopRequireDefault(_clean);
 
 var _config = require('./libs/config');
 
 var _config2 = _interopRequireDefault(_config);
-
-var _logger = require('./libs/logger');
-
-var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
