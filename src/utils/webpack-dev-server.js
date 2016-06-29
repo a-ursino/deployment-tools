@@ -1,15 +1,17 @@
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import getWebpackConfig from './webpack-helper';
-// import logger from '../libs/logger';
-// import { promisify } from 'bluebird';
 import c from '../libs/config';
-const debug = require('debug')('dt');
+
 const loadConfig = () => c().load();
 
-
-async function wp(config = loadConfig()) {
-	debug('load the webpack settings');
+/**
+ * Start Webpack Dev Server
+ * @param {object} [obj] - obj
+ * @param {boolean} [obj.config=loadConfig()] - The config object
+ * @return {Promise} A Promise
+ */
+async function wp({ config = loadConfig() } = {}) {
 	const webpackConfig = getWebpackConfig(config, true);
 	// Start webpack-dev-server
 	const server = new WebpackDevServer(webpack(webpackConfig), {

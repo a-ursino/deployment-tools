@@ -31,11 +31,11 @@ let clean = (() => {
 			distFolder.push(_path2.default.join(process.cwd(), `${ (0, _trimEnd2.default)(config.get('imagesPath'), '/') }-temp`));
 		}
 
-		debug(`try to delete folder(s) ${ distFolder }`);
+		debug(`[CLEAN] try to delete folder(s) ${ distFolder }`);
 		yield (0, _del2.default)(distFolder, { dot: true, force: true });
-		debug(`deleted folder(s) ${ distFolder }`);
+		debug(`[CLEAN] deleted folder(s) ${ distFolder }`);
 		yield _fs2.default.makeDirsAsync(distFolder);
-		debug(`created folder(s) ${ distFolder }`);
+		debug(`[CLEAN] created folder(s) ${ distFolder }`);
 	});
 
 	return function clean(_x) {

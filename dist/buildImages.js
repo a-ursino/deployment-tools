@@ -28,7 +28,7 @@ let buildImages = (() => {
 		const srcPathGlob = `${ srcPath }**/*.{jpg,png,gif,svg}`;
 		// normalize path. remove the trailing slash from /data/images/ -> /data/images
 		const dstPath = _path2.default.join(process.cwd(), `${ (0, _trimEnd2.default)(config.get('imagesPath'), '/') }-temp`);
-		debug(`try to minify images from ${ srcPathGlob } to ${ dstPath }`);
+		debug(`[IMAGE] try to minify images from ${ srcPathGlob } to ${ dstPath }`);
 		const files = yield (0, _imagemin2.default)([srcPathGlob], dstPath, {
 			plugins: [(0, _imageminMozjpeg2.default)({ targa: false }), (0, _imageminPngquant2.default)({ quality: '65-80' }), (0, _imageminGifsicle2.default)()]
 		});

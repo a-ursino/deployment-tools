@@ -12,7 +12,7 @@
     "node": ">=6.0.0"
   },
   "config": {
-    "domain": "http://your.cdn.domain",
+    "cdn": "http://your.cdn.domain",
     "projectName": "project",
     "webConfig": "/data/Web.config",
     "packageJson": "/data/package.json",
@@ -32,7 +32,7 @@
     "autoprefixer": "Android 2.3",
     "preserveBuildPathCss": false,
     "imagesPath": "/data/images/",
-    "imagesCdnAlias": "http://your.cdn.domain.alias",
+    "cdnImagesAlias": "http://your.cdn.domain.alias",
     "styledocPath": "/data/styledoc/",
     "pre-git": {
       "commit-msg": "conventional",

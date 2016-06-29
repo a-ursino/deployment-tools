@@ -19,8 +19,8 @@ Object.defineProperty(exports, "__esModule", {
 let webpack = (() => {
   var ref = _asyncToGenerator(function* ({ config = loadConfig(), cleaned = false } = {}) {
     // we must clean??
-    if (!cleaned) yield (0, _clean2.default)(config);
-    yield (0, _webpack2.default)(config);
+    if (!cleaned) yield (0, _clean2.default)({ config });
+    yield (0, _webpack2.default)({ config });
   });
 
   return function webpack(_x) {

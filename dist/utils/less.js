@@ -18,17 +18,11 @@ const less = require('postcss-less-engine');
 
 const loadConfig = () => (0, _config2.default)().load();
 
-function compileLessAsync({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName, stylelintrc, styledocPath, doiuseRules, autoprefixerRules } = {}) {
-	// if filename is undefined, skip
-	if (!filename) return -1;
-	return (0, _css2.default)({ srcFolder, outputFolder, filename, cdnDomain, minify, projectName, engine: less, stylelintrc, styledocPath, doiuseRules, autoprefixerRules });
-}
-
 function lessTaskAsync({ config = loadConfig(), minify = false } = {}) {
 	const srcFolder = config.get('srcLess');
 	const outputFolder = config.get('buildPathCss');
 	// NOTE: use the cdn alias for images
-	const cdnDomain = config.get('imagesCdnAlias');
+	const cdnDomain = config.get('cdnImagesAlias');
 	const projectName = config.get('projectName');
 	const version = config.get('version');
 	const stylelintrc = config.get('stylelintrc');
@@ -37,11 +31,11 @@ function lessTaskAsync({ config = loadConfig(), minify = false } = {}) {
 	const mainBackoffileStyle = config.get('mainBackoffileStyle');
 	const doiuseRules = config.get('doiuse');
 	const autoprefixerRules = config.get('autoprefixer');
-	const tasks = [compileLessAsync({ filename: mainStyle, srcFolder, outputFolder, cdnDomain, minify, projectName, version, stylelintrc, styledocPath, doiuseRules, autoprefixerRules })];
+	const tasks = [(0, _css2.default)({ filename: mainStyle, srcFolder, outputFolder, cdnDomain, minify, projectName, version, stylelintrc, styledocPath, doiuseRules, autoprefixerRules, engine: less })];
 
 	// the main-backoffice is OPT-IN
 	if (mainBackoffileStyle) {
-		tasks.push(compileLessAsync({ filename: mainBackoffileStyle, srcFolder, outputFolder, cdnDomain, minify, projectName, version, stylelintrc, styledocPath, doiuseRules, autoprefixerRules }));
+		tasks.push((0, _css2.default)({ filename: mainBackoffileStyle, srcFolder, outputFolder, cdnDomain, minify, projectName, version, stylelintrc, styledocPath, doiuseRules, autoprefixerRules, engine: less }));
 	}
 	return Promise.all(tasks);
 }

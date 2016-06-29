@@ -20,21 +20,21 @@ const fileExistsPromise = promisify(fs.access);
 async function writeFileAsync(filepath, content) {
 	const writeFilep = promisify(fs.writeFile);
 	const fullPath = path.join(process.cwd(), filepath);
-	debug(`try to write a file at path ${fullPath}`);
+	debug(`[FS] try to write a file at path ${fullPath}`);
 	return await writeFilep(fullPath, content);
 }
 
 function writeAsync(filepath, content) {
 	const writeFilep = promisify(fs.writeFile);
 	const fullPath = path.join(process.cwd(), filepath);
-	debug(`try to write a file at path ${fullPath}`);
+	debug(`[FS] try to write a file at path ${fullPath}`);
 	return writeFilep(fullPath, content);
 }
 
 async function readFileAsync(filepath) {
 	const readFilep = promisify(fs.readFile);
 	const fullPath = path.join(process.cwd(), filepath);
-	debug(`try to read a file at path ${fullPath}`);
+	debug(`[FS] try to read a file at path ${fullPath}`);
 	return await readFilep(fullPath, 'utf8');
 }
 
@@ -52,7 +52,7 @@ async function readJsonAsync(filepath) {
  */
 async function fileExistsAsync(filepath) {
 	const fullPath = path.join(process.cwd(), filepath);
-	debug(`check if file filepath:${filepath} fullPath:${fullPath} exists`);
+	debug(`[FS] check if file filepath:${filepath} fullPath:${fullPath} exists`);
 	try {
 		// fs.access throws an exception if the file doesn't exists.
 		// so we can return false

@@ -21,7 +21,7 @@ async function watch({ config = loadConfig() } = {}) {
 	await clean({ config });
 	const tasks = [];
 	// add webpack to task. watch and compile js files
-	tasks.push(webpackDevServer(config));
+	tasks.push(webpackDevServer({ config }));
 
 	// watch less files???
 	if (config.get('srcLess')) {
