@@ -31,11 +31,11 @@ async function clean({ config = loadConfig() } = {}) {
 		distFolder.push(path.join(process.cwd(), `${trimEnd(config.get('imagesPath'), '/')}-temp`));
 	}
 
-	debug(`try to delete folder(s) ${distFolder}`);
+	debug(`[CLEAN] try to delete folder(s) ${distFolder}`);
 	await del(distFolder, { dot: true, force: true });
-	debug(`deleted folder(s) ${distFolder}`);
+	debug(`[CLEAN] deleted folder(s) ${distFolder}`);
 	await fs.makeDirsAsync(distFolder);
-	debug(`created folder(s) ${distFolder}`);
+	debug(`[CLEAN] created folder(s) ${distFolder}`);
 }
 
 export default clean;

@@ -19,7 +19,7 @@ let watch = (() => {
 		yield (0, _clean2.default)({ config });
 		const tasks = [];
 		// add webpack to task. watch and compile js files
-		tasks.push((0, _webpackDevServer2.default)(config));
+		tasks.push((0, _webpackDevServer2.default)({ config }));
 
 		// watch less files???
 		if (config.get('srcLess')) {

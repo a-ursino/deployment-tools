@@ -8,4 +8,18 @@
 // test computation via postcss-calc
 body{
 	width: calc(100% / 3);
+	height: calc(15px + 2px);
+}
+
+.panel-one{
+	// to test url substitution
+	background: red url("/images/controls.png") no-repeat center;
+}
+.panel-two{
+	// to test url substitution
+	background: red url("images/controls.png") no-repeat center;
+}
+.panel-three{
+	// to test url substitution
+	background: red url("http://www.static.com/images/controls.png") no-repeat center;
 }

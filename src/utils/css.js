@@ -2,19 +2,21 @@ const debug = require('debug')('dt');
 const path = require('path');
 const postcss = require('postcss');
 const postcssDevtools = require('postcss-devtools');
-const postcssUrl = require('postcss-url');
-const postcssReporter = require('postcss-reporter');
+const postcssAtImport = require('postcss-import');
 const postcssAutoprefixer = require('autoprefixer');
+const postcssUrl = require('postcss-url');
+const postcssCalc = require('postcss-calc');
+const postcssReporter = require('postcss-reporter');
 const postcssStylelint = require('stylelint');
 const postcssClean = require('postcss-clean');
-const postcssCalc = require('postcss-calc');
-const postcssAtImport = require('postcss-import');
+const mdcss = require('mdcss');
 const doiuse = require('doiuse');
 const crypto = require('crypto');
-const mdcss = require('mdcss');
+
 const trimEnd = require('lodash/trimEnd');
 import fs from '../libs/fs';
 import logger from '../libs/logger';
+
 /**
  * Write minified version of the file
  * @param {object} [obj] - obj
@@ -32,7 +34,7 @@ async function generateMinifiedAsync({ filename, styledocPath, compiledCss, outp
 	// generate css documentation??
 	if (styledocPath) {
 		const pathDoc = `${trimEnd(styledocPath, '/')}_${filename}`;
-		debug(`Generate documentation for ${filename} pathDoc: ${pathDoc}`);
+		debug(`[CSS] Generate documentation for ${filename} pathDoc: ${pathDoc}`);
 		minPlugins.push(mdcss({ destination: pathDoc, assets: [] })); // assets: The list of files or directories to copy into the style guide directory.
 	}
 	// add css-clean plugin for minify
@@ -53,7 +55,7 @@ async function generateMinifiedAsync({ filename, styledocPath, compiledCss, outp
  * @param {string} obj.srcFolder - The folder that contains the file
  * @param {string} obj.filename - The name of the file (main.less/main.sass)
  * @param {string} obj.outputFolder - The output folder
- * @param {string} obj.cdnDomain - The domain (with http://) of the CDN
+ * @param {string} obj.cdnDomain - The domain (with http://) of the CDN for images
  * @param {boolean} obj.minify=false - Compile a minified version of the file
  * @param {string} obj.engine - Which engine to use less/sass
  * @param {string} obj.projectName - The name of the project
@@ -90,13 +92,13 @@ async function compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDo
 	// USE stylint ??
 	if (stylelintrc) {
 		const stylelintrcFile = path.join(process.cwd(), stylelintrc);
-		debug(`Enable stylint on file:${filename} with file ${stylelintrcFile}`);
+		debug(`[CSS] Enable stylint on file:${filename} with file ${stylelintrcFile}`);
 		postCssPlugins.push(postcssStylelint({ configFile: stylelintrcFile }));
 	}
 	// USE AUTOPREFIXER ??
 	const autoprefixerRulesArr = autoprefixerRules.split(',');
 	if (autoprefixerRulesArr.length) {
-		debug(`Enable autoprefixer on file:${filename} with ${autoprefixerRulesArr}`);
+		debug(`[CSS] Enable autoprefixer on file:${filename} with ${autoprefixerRulesArr}`);
 		postCssPlugins.push(postcssAutoprefixer({ browsers: autoprefixerRulesArr }));
 	}
 
@@ -106,7 +108,7 @@ async function compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDo
 			if (minify) {
 				if (!imageurl.startsWith('http')) {
 					const newImageUrl = imageurl.startsWith('/') ? `${cdnDomain}/${projectName}${imageurl}` : imageurl;
-					debug(`Found an image url original:${imageurl} new:${newImageUrl}`);
+					debug(`[CSS] Found inside ${filename} an image url original:${imageurl} new:${newImageUrl}`);
 					return newImageUrl;
 				}
 			}
@@ -117,7 +119,7 @@ async function compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDo
 	// CAN I USE ??
 	const doiuseRulesArr = doiuseRules.split(',');
 	if (doiuseRulesArr.length) {
-		debug(`Enable doiuse on file:${filename} with ${doiuseRulesArr}`);
+		debug(`[CSS] Enable doiuse on file:${filename} with ${doiuseRulesArr}`);
 		postCssPlugins.push(doiuse({
 			browsers: [],
 			ignore: [], // an optional array of features to ignore 'rem'
@@ -143,9 +145,9 @@ async function compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDo
 	const cssProcessor = postcss(postCssPlugins);
 
 	// process less file
-	debug(`Compiling stylesheet file:${filename}`);
+	debug(`[CSS] Compiling stylesheet file:${filename}`);
 	const processedCssObject = await cssProcessor.process(source, { parser: engine.parser, from: filepath });
-	debug(`Compiled stylesheet file:${filename}`);
+	debug(`[CSS] Compiled stylesheet file:${filename}`);
 
 	// write css output on file
 	const outputTask = [];
@@ -160,7 +162,7 @@ async function compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDo
 		outputTask.push(generateMinifiedAsync({ filename: cssOutputFileName, styledocPath, outputFolder, compiledCss: processedCssObject }));
 	}
 
-	debug(`Running ${outputTask.length} task(s) in parallel`);
+	debug(`[CSS] Running ${outputTask.length} task(s) in parallel`);
 	return Promise.all(outputTask);
 }
 

@@ -16,7 +16,7 @@ let writeFileAsync = (() => {
 	var ref = _asyncToGenerator(function* (filepath, content) {
 		const writeFilep = (0, _bluebird.promisify)(_fs2.default.writeFile);
 		const fullPath = _path2.default.join(process.cwd(), filepath);
-		debug(`try to write a file at path ${ fullPath }`);
+		debug(`[FS] try to write a file at path ${ fullPath }`);
 		return yield writeFilep(fullPath, content);
 	});
 
@@ -29,7 +29,7 @@ let readFileAsync = (() => {
 	var ref = _asyncToGenerator(function* (filepath) {
 		const readFilep = (0, _bluebird.promisify)(_fs2.default.readFile);
 		const fullPath = _path2.default.join(process.cwd(), filepath);
-		debug(`try to read a file at path ${ fullPath }`);
+		debug(`[FS] try to read a file at path ${ fullPath }`);
 		return yield readFilep(fullPath, 'utf8');
 	});
 
@@ -61,7 +61,7 @@ let readJsonAsync = (() => {
 let fileExistsAsync = (() => {
 	var ref = _asyncToGenerator(function* (filepath) {
 		const fullPath = _path2.default.join(process.cwd(), filepath);
-		debug(`check if file filepath:${ filepath } fullPath:${ fullPath } exists`);
+		debug(`[FS] check if file filepath:${ filepath } fullPath:${ fullPath } exists`);
 		try {
 			// fs.access throws an exception if the file doesn't exists.
 			// so we can return false
@@ -119,7 +119,7 @@ const fileExistsPromise = (0, _bluebird.promisify)(_fs2.default.access);
 function writeAsync(filepath, content) {
 	const writeFilep = (0, _bluebird.promisify)(_fs2.default.writeFile);
 	const fullPath = _path2.default.join(process.cwd(), filepath);
-	debug(`try to write a file at path ${ fullPath }`);
+	debug(`[FS] try to write a file at path ${ fullPath }`);
 	return writeFilep(fullPath, content);
 }
 

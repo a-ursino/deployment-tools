@@ -16,8 +16,8 @@ const loadConfig = () => c().load();
  */
 async function webpack({ config = loadConfig(), cleaned = false } = {}) {
 	// we must clean??
-	if (!cleaned) await clean(config);
-	await webpackTask(config);
+	if (!cleaned) await clean({ config });
+	await webpackTask({ config });
 }
 
 export default webpack;

@@ -4,9 +4,16 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+
+/**
+ * Start Webpack Dev Server
+ * @param {object} [obj] - obj
+ * @param {boolean} [obj.config=loadConfig()] - The config object
+ * @return {Promise} A Promise
+ */
+
 let wp = (() => {
-	var ref = _asyncToGenerator(function* (config = loadConfig()) {
-		debug('load the webpack settings');
+	var ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
 		const webpackConfig = (0, _webpackHelper2.default)(config, true);
 		// Start webpack-dev-server
 		const server = new _webpackDevServer2.default((0, _webpack2.default)(webpackConfig), {
@@ -52,11 +59,5 @@ var _config2 = _interopRequireDefault(_config);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
-// import logger from '../libs/logger';
-// import { promisify } from 'bluebird';
 
-
-const debug = require('debug')('dt');
-const loadConfig = () => (0, _config2.default)().load();
-
-exports.default = wp;
+const loadConfig = () => (0, _config2.default)().load();exports.default = wp;

@@ -3,7 +3,7 @@
 [![document](https://doc.esdoc.org/github.com/killanaca/deployment-tools/badge.svg)](https://doc.esdoc.org/github.com/killanaca/deployment-tools/)
 # Contents
 
-A node.js scripts that help you to compile and deploy the static assets (CSS/JavaScript) of your website.
+A Node.js scripts that help you to compile and deploy the static assets (CSS/JavaScript) of your website.
 More why [here](https://medium.freecodecamp.com/why-i-left-gulp-and-grunt-for-npm-scripts-3d6853dd22b8#.hsmyojdpj).
 
 <!-- TOC depthFrom:1 depthTo:3 withLinks:1 updateOnSave:1 orderedList:0 -->
@@ -63,7 +63,7 @@ The tasks available at the moment are:
 * `buildJs`: lint(`eslint-loader`), transpile(`babel-loader`) and minify(`UglifyJsPlugin`) js files with `webpack`
 * `buildCss`: clean -> build stylesheet
 * `build`: test -> clean -> build[ js | style ]
-* `upload`: upload the compiled files on the Azure Storage (CDN)
+* `upload`: upload the compiled files on the CDN
 * `deploy`: bump -> clean -> build[ js | style ] -> upload
 * `watch`: starts `webpack-dev-server` for js files
 * `test`: test files inside folder with tape/blue-tape (TAP specification) and format the output with faucet
@@ -73,7 +73,7 @@ The tasks available at the moment are:
 ## Configuration
 
 **General**
-* `domain`: the domain of the Azure CDN, used to built up the path (webpack splitting) for resources on Azure CDN
+* `cdn`: the domain of the CDN, used to built up the path (webpack splitting) for resources on CDN
 * `projectName`: name of the project, used to built up the path for resources and CDN
 * `webConfig`: the relative path with filename of the webConfig file (es: data/Web.Config). When set, version in the file as `appSettings key swversion` is updated during bump process
 * `packageJson`: the relative path with filename of the `package.json` file
@@ -101,7 +101,7 @@ The tasks available at the moment are:
 
 **Image**
 * `imagesPath`: minify and copy to CDN the images inside the path (es: /data/images/)[OPT-IT]
-* `imagesCdnAlias`: alias for images on CDN so we can maximize parallel download with multiple domain (used by `postcss` plugin)
+* `imagesCdnAlias`: CDN alias for images so we can maximize parallel download with multiple domain (used by `postcss` plugin)
 
 
 *note: all the config's path must ends with trailing slash*
@@ -229,7 +229,7 @@ and the relative confing settings to `package.json` file
 ```json
 {
 	"config": {
-		"domain": "http://YOUR.CDN.DOMAIN",
+		"cdn": "http://YOUR.CDN.DOMAIN",
 		"projectName": "project",
 		"webConfig": "Web.config",
 		"packageJson": "/package.json",

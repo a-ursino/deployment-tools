@@ -32,7 +32,7 @@ async function buildImages({ config = loadConfig(), cleaned = false } = {}) {
 	const srcPathGlob = `${srcPath}**/*.{jpg,png,gif,svg}`;
 	// normalize path. remove the trailing slash from /data/images/ -> /data/images
 	const dstPath = path.join(process.cwd(), `${trimEnd(config.get('imagesPath'), '/')}-temp`);
-	debug(`try to minify images from ${srcPathGlob} to ${dstPath}`);
+	debug(`[IMAGE] try to minify images from ${srcPathGlob} to ${dstPath}`);
 	const files = await imageminTask([srcPathGlob], dstPath, {
 		plugins: [
 			imageminMozjpeg({ targa: false }),
