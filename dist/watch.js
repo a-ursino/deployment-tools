@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", {
 
 let watch = (() => {
 	var ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
+		// clean folder
+		yield (0, _clean2.default)({ config });
 		const tasks = [];
 		// add webpack to task. watch and compile js files
 		tasks.push((0, _webpackDevServer2.default)(config));
@@ -75,6 +77,10 @@ var _logger2 = _interopRequireDefault(_logger);
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
+
+var _clean = require('./clean');
+
+var _clean2 = _interopRequireDefault(_clean);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

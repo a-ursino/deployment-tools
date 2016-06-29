@@ -5,6 +5,7 @@ import sassTask from './utils/sass';
 import chokidar from 'chokidar';
 import logger from './libs/logger';
 import path from 'path';
+import clean from './clean';
 
 const loadConfig = () => c().load();
 
@@ -16,6 +17,8 @@ const loadConfig = () => c().load();
  * @return {Promise} A Promise
  */
 async function watch({ config = loadConfig() } = {}) {
+	// clean folder
+	await clean({ config });
 	const tasks = [];
 	// add webpack to task. watch and compile js files
 	tasks.push(webpackDevServer(config));

@@ -48,7 +48,7 @@ const loadConfig = () => (0, _config2.default)().load();
 function compileSassAsync({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName, stylelintrc, styledocPath, doiuseRules, autoprefixerRules }) {
 	// if filename is undefined, skip
 	if (!filename) return -1;
-	return (0, _css2.default)({ srcFolder, outputFolder, filename, cdnDomain, minify, projectName, engine: sass, ext: '.sass', stylelintrc, styledocPath, doiuseRules, autoprefixerRules });
+	return (0, _css2.default)({ srcFolder, outputFolder, filename, cdnDomain, minify, projectName, engine: sass, stylelintrc, styledocPath, doiuseRules, autoprefixerRules });
 }
 
 exports.default = sassTaskAsync;
