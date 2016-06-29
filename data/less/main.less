@@ -1,6 +1,11 @@
+// import css without processing it
+@import "vanilla.css";
+
 @import "./component/typo.less";
 @import "./component/icon.less";
-@import "./component/button.less";
 @import "bootstrap-frontend.less";
-// import css without processing it
-@import "vanilla.less";
+
+// test computation via postcss-calc
+body{
+	width: calc(100% / 3);
+}
