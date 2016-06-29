@@ -34,11 +34,12 @@ More why [here](https://medium.freecodecamp.com/why-i-left-gulp-and-grunt-for-np
 * serving static content from CDN and a cookieless domain (so we can reduce sent payload)
 * compile Less files with [less](https://github.com/less/less.js)
 * process CSS files with [postcss](https://github.com/postcss/postcss)
-* add vendor prefixes with [autoprefixer](https://github.com/postcss/autoprefixer) postcss's plugin
-* adjust images urls inside css for CDN with [postcss-url](https://github.com/postcss/postcss-url) postcss's plugin
-* warn about unsupported features via [doiuse](https://github.com/anandthakker/doiuse)
-* minify CSS files with [clean-css](https://github.com/leodido/postcss-clean) postcss's plugin
-* create style guides using CSS comments and [mdcss](https://github.com/jonathantneal/mdcss)
+* add vendor prefixes with [autoprefixer](https://github.com/postcss/autoprefixer) `postcss` plugin
+* adjust images urls inside css for CDN with [postcss-url](https://github.com/postcss/postcss-url) `postcss` plugin
+* warn about unsupported features via [doiuse](https://github.com/anandthakker/doiuse) `postcss` plugin
+* minify CSS files with [clean-css](https://github.com/leodido/postcss-clean) `postcss` plugin
+* create style guides using CSS comments and [mdcss](https://github.com/jonathantneal/mdcss) `postcss` plugin
+* use `calc` via  `postcss-calc` `postcss` plugin
 
 #### Images
 * serving static content from a cookieless domain (so we can reduce sent payload)
@@ -74,7 +75,7 @@ The tasks available at the moment are:
 * `projectName`: name of the project, used to built up the path for resources and CDN
 * `webConfig`: the relative path with filename of the webConfig file (es: data/Web.Config). When set, version in the file as `appSettings key swversion` is updated during bump process
 * `packageJson`: the relative path with filename of the `package.json` file
-* `longTermHash`: use hash instead of version folder for filename
+* `longTermHash`: use hash instead of version folder for filename to enable long-term-caching. The output for CSS files is `${outputFolder}${filename}-${filehash}.css` while for JavaScript files you can configure it in `webpack-config.js`
 
 **Style**
 * `srcSass`: the path of the sass files (es: sass/). When set __Sass__ is used [OPT-IN]
