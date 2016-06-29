@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/deployment-tools.svg)](https://badge.fury.io/js/deployment-tools)
+[![Build Status](https://travis-ci.org/killanaca/deployment-tools.svg?branch=master)](https://travis-ci.org/killanaca/deployment-tools)
 [![document](https://doc.esdoc.org/github.com/killanaca/deployment-tools/badge.svg)](https://doc.esdoc.org/github.com/killanaca/deployment-tools/)
 # Contents
 
