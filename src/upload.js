@@ -62,7 +62,7 @@ async function prepareJsFiles({ dir = recDir, buildPathJs, version = '', longTer
 			return files.map((i) => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
 		}
 		// option b) Hash version es: http://your.domain.cdn/project/bundles/1b956c239862619d3a59.js
-		return files.filter((i) => md5RegExpJs.test(i)).map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
+		return files.filter((i) => md5RegExpJs.test(path.basename(i))).map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
 	}
 	return [];
 }
