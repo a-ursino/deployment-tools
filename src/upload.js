@@ -46,7 +46,7 @@ async function prepareCssFiles({ dir = recDir, buildPathCss, version = '', longT
 		}
 		// option b) Hash version es: http://your.domain.cdn/project/css/1b956c239862619d3a59.js
 		// avoid to upload non hashed files
-		return files.filter((i) => md5RegExpCss.test(i)).map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
+		return files.filter((i) => md5RegExpCss.test(path.basename(i))).map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
 	}
 	return [];
 }
