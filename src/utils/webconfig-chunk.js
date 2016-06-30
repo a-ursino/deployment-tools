@@ -2,6 +2,9 @@ import fs from '../libs/fs';
 // import logger from '../libs/logger';
 import find from 'lodash/find';
 import path from 'path';
+import c from '../libs/config';
+const loadConfig = c().load();
+const config = loadConfig();
 
 /**
  * Update web.config with CSS and JS files hash.
@@ -39,7 +42,7 @@ async function updateWebconfigChunk({ longTermHash = false, webConfig, outputPat
 	const mainCss = find(css.assets, (i) => i.filename.indexOf('main.css') >= 0);
 	const mainAdminCss = find(css.assets, (i) => i.filename.indexOf('main-admin.css') >= 0);
 	const jsRemotePath = webpackAssets.publicPath;
-	const cssRemotePath = webpackAssets.publicPath;
+	const cssRemotePath = `${config.get('cdn')}/${config.get('projectName')}${config.get('buildPathCss')}`;
 
 	let newWebconfigXmlString = xmlString.replace(/<add .*"vendors".*\/>/igm, `<add key="vendors" value="${jsRemotePath}${vendorsJs}" />`);
 	newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main".*\/>/igm, `<add key="main" value="${jsRemotePath}${mainJs}" />`);
