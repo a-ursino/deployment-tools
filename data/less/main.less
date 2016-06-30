@@ -1,5 +1,5 @@
-// import css without processing it
-@import "vanilla.css";
+// HACK: at the moment less-parser don't support @import (inline) see issue https://github.com/Crunch/postcss-less/issues/2
+@import (less) "vanilla.css";
 
 @import "./component/typo.less";
 @import "./component/icon.less";

@@ -43,7 +43,7 @@ async function generateMinifiedAsync({ filename, styledocPath, compiledCss, outp
 
 	// compute the hash(md5) of the file
 	const filehash = crypto.createHash('md5').update(processedMinCssObject.css, 'utf8').digest('hex');
-	await fs.writeAsync(`${outputFolder}${filename}-${filehash}.css`, processedMinCssObject.css);
+	await fs.writeAsync(`${outputFolder}${filename}.${filehash}.css`, processedMinCssObject.css);
 	// generate map file for min ???
 	if (processedMinCssObject.map) await fs.writeAsync(`${outputFolder}${filehash}.css.map`, processedMinCssObject.map);
 	return { filename: `${filename}.css`, filehash: `${filehash}.css` };
