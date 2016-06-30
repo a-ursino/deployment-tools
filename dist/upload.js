@@ -32,7 +32,7 @@ let prepareCssFiles = (() => {
 			// option b) Hash version es: http://your.domain.cdn/project/css/1b956c239862619d3a59.js
 			// avoid to upload non hashed files
 			return files.filter(function (i) {
-				return md5RegExpCss.test(i);
+				return md5RegExpCss.test(_path2.default.basename(i));
 			}).map(function (i) {
 				return { file: i, remoteDest: `${ _path2.default.relative(process.cwd(), i) }` };
 			});
@@ -60,7 +60,7 @@ let prepareJsFiles = (() => {
 			}
 			// option b) Hash version es: http://your.domain.cdn/project/bundles/1b956c239862619d3a59.js
 			return files.filter(function (i) {
-				return md5RegExpJs.test(i);
+				return md5RegExpJs.test(_path2.default.basename(i));
 			}).map(function (i) {
 				return { file: i, remoteDest: `${ _path2.default.relative(process.cwd(), i) }` };
 			});
