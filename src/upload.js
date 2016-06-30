@@ -21,9 +21,9 @@ function loadEnv() {
 const recDir = promisify(recursive);
 const loadConfig = () => c().load();
 // regExp to match css files in this format: 38ef2f0c714372f9e033dad37e0cda84.css
-const md5RegExpCss = /^[a-f0-9]{32}.css$/i;
+const md5RegExpCss = /^[a-z0-9\-]+?\.[a-f0-9]{32}.css(?:\.map)?$/i;
 // regExp to match js files in this format: main.0054321a4b9b5e829c03.js
-const md5RegExpJs = /^[a-z0-9]*.\.[a-f0-9]{20}.js$/i;
+const md5RegExpJs = /^[a-z0-9\-]+?\.[a-f0-9]{20}.js(?:\.map)?$/i;
 
 /**
  * Build an array of object with filepath and remote destination

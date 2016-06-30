@@ -34,7 +34,7 @@ More why [here](https://medium.freecodecamp.com/why-i-left-gulp-and-grunt-for-np
 #### Style sheet
 
 * serving static content from CDN and a cookieless domain (so we can reduce sent payload)
-* compile Less files with [less](https://github.com/less/less.js)
+* compile Less files with [postcss-less](https://github.com/crunch/postcss-less)
 * process CSS files with [postcss](https://github.com/postcss/postcss)
 * add vendor prefixes with [autoprefixer](https://github.com/postcss/autoprefixer) `postcss` plugin
 * adjust images urls inside css for CDN with [postcss-url](https://github.com/postcss/postcss-url) `postcss` plugin

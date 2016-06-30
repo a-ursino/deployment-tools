@@ -38,7 +38,7 @@ test('Manage CSS files for upload: prepareCssFilesAsync', async assert => {
 	);
 	assert.deepEqual(
 		await prepareCssFilesAsync({ dir: stub().returns(['38ef2f0c714372f9e033dad37e0cda84.css', 'main.css']), longTermHash: true, buildPathCss: '/data/css/' }),
-		[{ file: '38ef2f0c714372f9e033dad37e0cda84.css', remoteDest: '38ef2f0c714372f9e033dad37e0cda84.css'}],
+		[],
 		'main.css should be take out'
 	);
 });

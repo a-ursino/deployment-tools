@@ -186,9 +186,9 @@ function loadEnv() {
 const recDir = (0, _bluebird.promisify)(_recursiveReaddir2.default);
 const loadConfig = () => (0, _config2.default)().load();
 // regExp to match css files in this format: 38ef2f0c714372f9e033dad37e0cda84.css
-const md5RegExpCss = /^[a-f0-9]{32}.css$/i;
+const md5RegExpCss = /^[a-z0-9\-]+?\.[a-f0-9]{32}.css(?:\.map)?$/i;
 // regExp to match js files in this format: main.0054321a4b9b5e829c03.js
-const md5RegExpJs = /^[a-z0-9]*.\.[a-f0-9]{20}.js$/i;const prepareCssFilesAsync = exports.prepareCssFilesAsync = prepareCssFiles;
+const md5RegExpJs = /^[a-z0-9\-]+?\.[a-f0-9]{20}.js(?:\.map)?$/i;const prepareCssFilesAsync = exports.prepareCssFilesAsync = prepareCssFiles;
 const prepareJsFilesAsync = exports.prepareJsFilesAsync = prepareJsFiles;
 const prepareImagesFilesAsync = exports.prepareImagesFilesAsync = prepareImagesFiles;
 exports.default = upload;
