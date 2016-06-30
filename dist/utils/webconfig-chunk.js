@@ -49,7 +49,7 @@ let updateWebconfigChunk = (() => {
 			return i.filename.indexOf('main-admin.css') >= 0;
 		});
 		const jsRemotePath = webpackAssets.publicPath;
-		const cssRemotePath = webpackAssets.publicPath;
+		const cssRemotePath = `${ config.get('cdn') }/${ config.get('projectName') }${ config.get('buildPathCss') }`;
 
 		let newWebconfigXmlString = xmlString.replace(/<add .*"vendors".*\/>/igm, `<add key="vendors" value="${ jsRemotePath }${ vendorsJs }" />`);
 		newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main".*\/>/igm, `<add key="main" value="${ jsRemotePath }${ mainJs }" />`);
@@ -79,10 +79,15 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
+var _config = require('../libs/config');
+
+var _config2 = _interopRequireDefault(_config);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 // import logger from '../libs/logger';
 
 
-exports.default = updateWebconfigChunk;
+const loadConfig = (0, _config2.default)().load();
+const config = loadConfig();exports.default = updateWebconfigChunk;
