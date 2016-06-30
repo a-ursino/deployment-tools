@@ -46,8 +46,8 @@ async function updateWebconfigChunk({ longTermHash = false, webConfig, outputPat
 	newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"vendors-backoffice".*\/>/igm, `<add key="vendors-backoffice" value="${jsRemotePath}${vendorsBackofficeJs}" />`);
 	newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main-backoffice".*\/>/igm, `<add key="main-backoffice" value="${jsRemotePath}${mainBackofficeJs}" />`);
 	newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"modernizr".*\/>/igm, `<add key="modernizr" value="${jsRemotePath}${modernizrJs}" />`);
-	newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main\.css".*\/>/igm, `<add key="main.css" value="${cssRemotePath}${mainCss.filehash}" />`);
-	newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main-admin\.css".*\/>/igm, `<add key="main-admin.css" value="${cssRemotePath}${mainAdminCss.filehash}" />`);
+	newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main\.css".*\/>/igm, `<add key="main.css" value="${cssRemotePath}${mainCss.filename.replace(/\.css$/, '.')}${mainCss.filehash}" />`);
+	newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main-admin\.css".*\/>/igm, `<add key="main-admin.css" value="${cssRemotePath}${mainAdminCss.filename.replace(/\.css$/, '.')}${mainAdminCss.filehash}" />`);
 	newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"webpackManifest".*\/>/igm, `<add key="webpackManifest" value='${JSON.stringify(webpackManifest)}' />`);
 	return fs.writeFileAsync(webConfig, newWebconfigXmlString);
 }
