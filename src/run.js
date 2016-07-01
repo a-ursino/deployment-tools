@@ -13,7 +13,10 @@ process.on('unhandledRejection', (reason, p) => {
 process.on('uncaughtException', (err) => {
 	logger.error(`Caught exception: ${err}`);
 });
-
+process.on('SIGINT', () => {
+	console.log('Caught interrupt signal');
+	process.exit();
+});
 /**
 * Run a promise with some timings
 * @param  {Function} fn      A function async to generator

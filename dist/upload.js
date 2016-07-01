@@ -31,9 +31,7 @@ let prepareCssFiles = (() => {
 			}
 			// option b) Hash version es: http://your.domain.cdn/project/css/1b956c239862619d3a59.js
 			// avoid to upload non hashed files
-			return files.filter(function (i) {
-				return md5RegExpCss.test(_path2.default.basename(i));
-			}).map(function (i) {
+			return files.map(function (i) {
 				return { file: i, remoteDest: `${ _path2.default.relative(process.cwd(), i) }` };
 			});
 		}
@@ -59,9 +57,7 @@ let prepareJsFiles = (() => {
 				});
 			}
 			// option b) Hash version es: http://your.domain.cdn/project/bundles/1b956c239862619d3a59.js
-			return files.filter(function (i) {
-				return md5RegExpJs.test(_path2.default.basename(i));
-			}).map(function (i) {
+			return files.map(function (i) {
 				return { file: i, remoteDest: `${ _path2.default.relative(process.cwd(), i) }` };
 			});
 		}
@@ -127,7 +123,6 @@ let upload = (() => {
 		filesToUpload.push(...(yield prepareCssFiles({ buildPathCss: config.get('buildPathCss'), version, longTermHash })));
 		filesToUpload.push(...(yield prepareJsFiles({ buildPathJs: config.get('buildPathJs'), version, longTermHash })));
 		filesToUpload.push(...(yield prepareImagesFiles({ imagesPath: config.get('imagesPath') })));
-
 		// logger.log(`Files to upload on container ${container} ${util.inspect(filesToUpload)}`);
 		// upload files in parallel
 		yield Promise.all(filesToUpload.map(function (f) {
@@ -184,11 +179,7 @@ function loadEnv() {
 }
 
 const recDir = (0, _bluebird.promisify)(_recursiveReaddir2.default);
-const loadConfig = () => (0, _config2.default)().load();
-// regExp to match css files in this format: 38ef2f0c714372f9e033dad37e0cda84.css
-const md5RegExpCss = /^[a-z0-9\-]+?\.[a-f0-9]{32}.css(?:\.map)?$/i;
-// regExp to match js files in this format: main.0054321a4b9b5e829c03.js
-const md5RegExpJs = /^[a-z0-9\-]+?\.[a-f0-9]{20}.js(?:\.map)?$/i;const prepareCssFilesAsync = exports.prepareCssFilesAsync = prepareCssFiles;
+const loadConfig = () => (0, _config2.default)().load();const prepareCssFilesAsync = exports.prepareCssFilesAsync = prepareCssFiles;
 const prepareJsFilesAsync = exports.prepareJsFilesAsync = prepareJsFiles;
 const prepareImagesFilesAsync = exports.prepareImagesFilesAsync = prepareImagesFiles;
 exports.default = upload;

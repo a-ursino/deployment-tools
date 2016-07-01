@@ -14,11 +14,17 @@ import c from './libs/config';
 async function deploy() {
 	// update package.json and web.config version
 	const config = c().load();
+	const cdn = config.get('cdn');
+	const longTermHash = config.get('longTermHash');
+	const buildPathJs = config.get('buildPathJs');
+	const projectName = config.get('projectName');
+	const buildPathCss = config.get('buildPathCss');
+	const webConfigFile = config.get('webConfig');
 	await bump(config);
 	// build (clean, build)
 	await build(config);
 	// update web.config
-	await webconfigChunk({ webConfig: config.get('webConfig'), longTermHash: config.get('longTermHash'), outputPath: config.get('buildPathJs') });
+	await webconfigChunk({ longTermHash, webConfigFile, buildPathJs, cdn, projectName, buildPathCss });
 	// upload to azure storage
 	await upload({ config });
 }
