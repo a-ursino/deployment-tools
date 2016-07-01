@@ -32,7 +32,7 @@ More why [here](https://medium.freecodecamp.com/why-i-left-gulp-and-grunt-for-np
 * *transpile* JavaScript files with [Babel 6](https://babeljs.io) and [webpack](http://webpack.github.io/)
 * *lint* JavaScript files with [ESLint](http://eslint.org/) and [eslint-config-airbnb](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb)
 * serve JavaScript files in dev mode via [webpack-dev-server](https://webpack.github.io/docs/webpack-dev-server.html)
-* [long-term-caching](https://webpack.github.io/docs/long-term-caching.html)
+* use [long-term-caching](https://webpack.github.io/docs/long-term-caching.html)
 * generate a custom build for `modernizr` with [ModernizrWebpackPlugin](https://github.com/alexpalombaro/modernizr-webpack-plugin)
 
 #### Style sheet
@@ -157,8 +157,9 @@ client-side:
 ```
 
 #### Long-Term-Caching
-If you want to use long term caching for js e CSS (more [there](https://webpack.github.io/docs/long-term-caching.html)) you can
-use `longTermHash` option. When so the build process try to update the relative keys inside `Web.config` with the hash of single file
+If you want to use long term caching for js e CSS (more [here](https://webpack.github.io/docs/long-term-caching.html) and [here](https://medium.com/@okonetchnikov/long-term-caching-of-static-assets-with-webpack-1ecb139adb95#.ujmnntwwe)) you can
+use `longTermHash` option. When so the build process try to update the relative keys inside `Web.config` with the hash of single file.
+Moreover to avoid a new hash on main entry for every changes inside chuck, we use `webpackManifest`.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -171,6 +172,7 @@ use `longTermHash` option. When so the build process try to update the relative 
 		<add key="modernizr" value="http://YOUR.CDN.DOMAIN/projectname/data/bundles/modernizr.45f645c83986c0f3e169.js" />
 		<add key="main.css" value="http://YOUR.CDN.DOMAIN/projectname/css/38ef2f0c714372f9e033dad37e0cda84.css" />
 		<add key="main-admin.css" value="http://YOUR.CDN.DOMAIN/projectname/css/970d7f6a3392de0876e3aa9fbf8e8d2e.css" />
+		<add key="webpackManifest" value='{"0":"0.25d307f8089adf9f4633.js","1":"1.9899084d910934f61825.js"}' />
   </appSettings>
 </configuration>
 ```
@@ -183,6 +185,9 @@ and you can change your `razor` views in this way
 	@if (System.Diagnostics.Debugger.IsAttached) {
 		<link rel="stylesheet" href="/css/main.css">
 	} else {
+		<script type="text/javascript">
+			window.webpackManifest = @Html.Raw(ConfigurationManager.AppSettings['webpackManifest']);
+		</script>
 		<link rel="stylesheet" href="@ConfigurationManager.AppSettings['main.css']">
 	}
 	</head>

@@ -19,7 +19,6 @@ let deploy = (() => {
 		const config = (0, _config2.default)().load();
 		const cdn = config.get('cdn');
 		const longTermHash = config.get('longTermHash');
-		const buildPathJs = config.get('buildPathJs');
 		const projectName = config.get('projectName');
 		const buildPathCss = config.get('buildPathCss');
 		const webConfigFile = config.get('webConfig');
@@ -27,7 +26,7 @@ let deploy = (() => {
 		// build (clean, build)
 		yield (0, _build2.default)(config);
 		// update web.config
-		yield (0, _webconfigChunk2.default)({ longTermHash, webConfigFile, buildPathJs, cdn, projectName, buildPathCss });
+		yield (0, _webconfigChunk2.default)({ longTermHash, webConfigFile, cdn, projectName, buildPathCss });
 		// upload to azure storage
 		yield (0, _upload2.default)({ config });
 	});

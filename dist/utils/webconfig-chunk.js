@@ -6,16 +6,18 @@ Object.defineProperty(exports, "__esModule", {
 
 
 /**
- * Update web.config with CSS and JS files hash.
+ * Update web.config with webpackManifest, CSS and JS files hash.
  * @param {object} [obj] - obj
  * @param {object} [obj.longTermHash] - Return if long term hash is false
  * @param {string} obj.webConfig - Relative path of webconfig
- * @param {string} obj.outputPath - Relative path of build js folder. In this folder there's webpack-manifest.json file
+ * @param {string} obj.cdn - The CDN domain
+ * @param {string} obj.projectName - The project name
+ * @param {string} obj.buildPathCss - The CSS build Path
  * @return {Promise} A Promise
  */
 
 let updateWebconfigChunk = (() => {
-	var ref = _asyncToGenerator(function* ({ longTermHash = false, webConfigFile, buildPathJs, cdn, projectName, buildPathCss }) {
+	var ref = _asyncToGenerator(function* ({ longTermHash = false, webConfigFile, cdn, projectName, buildPathCss }) {
 		// check if config parameter exists. Web.config is OPT-IN
 		if (!longTermHash) {
 			return false;
@@ -23,7 +25,6 @@ let updateWebconfigChunk = (() => {
 		// TODO: make this parallel
 		const webpackAssets = yield _fs2.default.readJsonAsync('wp-assets-stats.json');
 		const css = yield _fs2.default.readJsonAsync('css-assets-stats.json');
-		const webpackManifest = yield _fs2.default.readJsonAsync(_path2.default.join(buildPathJs, 'webpack-manifest.json'));
 		const xmlString = yield _fs2.default.readFileAsync(webConfigFile);
 		// <add key="vendors" value="" />
 		// <add key="main" value="" />
@@ -50,6 +51,13 @@ let updateWebconfigChunk = (() => {
 		});
 		const jsRemotePath = webpackAssets.publicPath;
 		const cssRemotePath = `${ cdn }/${ projectName }${ buildPathCss }`;
+		const webpackManifest = {};
+		// take only js files (exclude .map files)
+		webpackAssets.assets.filter(function (i) {
+			return i.name.match('.js$') !== null;
+		}).forEach(function (item) {
+			webpackManifest[item.chunks[0]] = item.name;
+		});
 
 		let newWebconfigXmlString = xmlString.replace(/<add .*"vendors".*\/>/igm, `<add key="vendors" value="${ jsRemotePath }${ vendorsJs }" />`);
 		newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main".*\/>/igm, `<add key="main" value="${ jsRemotePath }${ mainJs }" />`);
@@ -75,14 +83,8 @@ var _find = require('lodash/find');
 
 var _find2 = _interopRequireDefault(_find);
 
-var _path = require('path');
-
-var _path2 = _interopRequireDefault(_path);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
-// import logger from '../libs/logger';
-
 
 exports.default = updateWebconfigChunk;

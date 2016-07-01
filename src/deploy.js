@@ -16,7 +16,6 @@ async function deploy() {
 	const config = c().load();
 	const cdn = config.get('cdn');
 	const longTermHash = config.get('longTermHash');
-	const buildPathJs = config.get('buildPathJs');
 	const projectName = config.get('projectName');
 	const buildPathCss = config.get('buildPathCss');
 	const webConfigFile = config.get('webConfig');
@@ -24,7 +23,7 @@ async function deploy() {
 	// build (clean, build)
 	await build(config);
 	// update web.config
-	await webconfigChunk({ longTermHash, webConfigFile, buildPathJs, cdn, projectName, buildPathCss });
+	await webconfigChunk({ longTermHash, webConfigFile, cdn, projectName, buildPathCss });
 	// upload to azure storage
 	await upload({ config });
 }
