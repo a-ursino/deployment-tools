@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", {
  */
 
 let updateWebconfigChunk = (() => {
-	var ref = _asyncToGenerator(function* ({ longTermHash = false, webConfig, outputPath }) {
+	var ref = _asyncToGenerator(function* ({ longTermHash = false, webConfigFile, buildPathJs, cdn, projectName, buildPathCss }) {
 		// check if config parameter exists. Web.config is OPT-IN
 		if (!longTermHash) {
 			return false;
@@ -23,8 +23,8 @@ let updateWebconfigChunk = (() => {
 		// TODO: make this parallel
 		const webpackAssets = yield _fs2.default.readJsonAsync('wp-assets-stats.json');
 		const css = yield _fs2.default.readJsonAsync('css-assets-stats.json');
-		const webpackManifest = yield _fs2.default.readJsonAsync(_path2.default.join(outputPath, 'webpack-manifest.json'));
-		const xmlString = yield _fs2.default.readFileAsync(webConfig);
+		const webpackManifest = yield _fs2.default.readJsonAsync(_path2.default.join(buildPathJs, 'webpack-manifest.json'));
+		const xmlString = yield _fs2.default.readFileAsync(webConfigFile);
 		// <add key="vendors" value="" />
 		// <add key="main" value="" />
 		// <add key="vendors-backoffice" value="" />
@@ -49,7 +49,7 @@ let updateWebconfigChunk = (() => {
 			return i.filename.indexOf('main-admin.css') >= 0;
 		});
 		const jsRemotePath = webpackAssets.publicPath;
-		const cssRemotePath = `${ config.get('cdn') }/${ config.get('projectName') }${ config.get('buildPathCss') }`;
+		const cssRemotePath = `${ cdn }/${ projectName }${ buildPathCss }`;
 
 		let newWebconfigXmlString = xmlString.replace(/<add .*"vendors".*\/>/igm, `<add key="vendors" value="${ jsRemotePath }${ vendorsJs }" />`);
 		newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main".*\/>/igm, `<add key="main" value="${ jsRemotePath }${ mainJs }" />`);
@@ -59,7 +59,7 @@ let updateWebconfigChunk = (() => {
 		newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main\.css".*\/>/igm, `<add key="main.css" value="${ cssRemotePath }${ mainCss.filename.replace(/\.css$/, '.') }${ mainCss.filehash }" />`);
 		newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main-admin\.css".*\/>/igm, `<add key="main-admin.css" value="${ cssRemotePath }${ mainAdminCss.filename.replace(/\.css$/, '.') }${ mainAdminCss.filehash }" />`);
 		newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"webpackManifest".*\/>/igm, `<add key="webpackManifest" value='${ JSON.stringify(webpackManifest) }' />`);
-		return _fs2.default.writeFileAsync(webConfig, newWebconfigXmlString);
+		return _fs2.default.writeFileAsync(webConfigFile, newWebconfigXmlString);
 	});
 
 	return function updateWebconfigChunk(_x) {
@@ -79,15 +79,10 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
-var _config = require('../libs/config');
-
-var _config2 = _interopRequireDefault(_config);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 // import logger from '../libs/logger';
 
 
-const loadConfig = (0, _config2.default)().load();
-const config = loadConfig();exports.default = updateWebconfigChunk;
+exports.default = updateWebconfigChunk;

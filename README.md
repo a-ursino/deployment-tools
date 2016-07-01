@@ -1,20 +1,24 @@
-[![npm version](https://badge.fury.io/js/deployment-tools.svg)](https://badge.fury.io/js/deployment-tools)
-[![Build Status](https://travis-ci.org/killanaca/deployment-tools.svg?branch=master)](https://travis-ci.org/killanaca/deployment-tools)
-[![document](https://doc.esdoc.org/github.com/killanaca/deployment-tools/badge.svg)](https://doc.esdoc.org/github.com/killanaca/deployment-tools/)
-# Contents
-
+# Deployment Tools
 A Node.js scripts that help you to compile and deploy the static assets (CSS/JavaScript) of your website.
 More why [here](https://medium.freecodecamp.com/why-i-left-gulp-and-grunt-for-npm-scripts-3d6853dd22b8#.hsmyojdpj).
 
+[![npm version](https://badge.fury.io/js/deployment-tools.svg)](https://badge.fury.io/js/deployment-tools)
+[![Build Status: Linux](https://travis-ci.org/killanaca/deployment-tools.svg?branch=master)](https://travis-ci.org/killanaca/deployment-tools)
+[![Build status: Windows](https://ci.appveyor.com/api/projects/status/4gvsoowgx3mt4w38?svg=true)](https://ci.appveyor.com/project/killanaca/deployment-tools/branch/master)
+[![document](https://doc.esdoc.org/github.com/killanaca/deployment-tools/badge.svg)](https://doc.esdoc.org/github.com/killanaca/deployment-tools/)
+[![Dependency Status](https://david-dm.org/killanaca/deployment-tools.svg?style=flat-square)](https://david-dm.org/killanaca/deployment-tools)
+
 <!-- TOC depthFrom:1 depthTo:3 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-- [Contents](#contents)
+- [Deployment Tools](#deployment-tools)
 	- [Features](#features)
 	- [Package Features](#package-features)
 	- [Tasks](#tasks)
 	- [Configuration](#configuration)
 		- [.Net website and Web.config](#net-website-and-webconfig)
 	- [Getting Started](#getting-started)
+	- [Documentation](#documentation)
+	- [Test](#test)
 	- [TODO](#todo)
 	- [License](#license)
 
