@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const pkg = require('../package.json');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
-const ChunkManifestPlugin = require('chunk-manifest-webpack-plugin');
 
 module.exports = function exportsOptions(initOptions) {
 	const defaultOptions = {
@@ -107,18 +106,13 @@ module.exports = function exportsOptions(initOptions) {
 	// Plugin to replace the standard webpack chunkhash with md5
 	plugins.push(new WebpackMd5Hash());
 
-	plugins.push(new ChunkManifestPlugin({
-		filename: 'webpack-manifest.json',
-		manifestVariable: 'webpackManifest',
-	}));
-
 	//  modules can get different IDs from build to build, resulting in a slightly different content and thus different hashes
 	plugins.push(new webpack.optimize.OccurenceOrderPlugin());
 
-	plugins.push(new webpack.optimize.CommonsChunkPlugin({
-		name: 'vendors',
-		minChunks: Infinity,
-	}));
+	// plugins.push(new webpack.optimize.CommonsChunkPlugin({
+	// 	name: 'vendors',
+	// 	minChunks: Infinity,
+	// }));
 
 	const config = {
 		// ENTRY

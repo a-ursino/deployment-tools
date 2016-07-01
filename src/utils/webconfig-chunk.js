@@ -1,17 +1,17 @@
 import fs from '../libs/fs';
-// import logger from '../libs/logger';
 import find from 'lodash/find';
-import path from 'path';
 
 /**
- * Update web.config with CSS and JS files hash.
+ * Update web.config with webpackManifest, CSS and JS files hash.
  * @param {object} [obj] - obj
  * @param {object} [obj.longTermHash] - Return if long term hash is false
  * @param {string} obj.webConfig - Relative path of webconfig
- * @param {string} obj.outputPath - Relative path of build js folder. In this folder there's webpack-manifest.json file
+ * @param {string} obj.cdn - The CDN domain
+ * @param {string} obj.projectName - The project name
+ * @param {string} obj.buildPathCss - The CSS build Path
  * @return {Promise} A Promise
  */
-async function updateWebconfigChunk({ longTermHash = false, webConfigFile, buildPathJs, cdn, projectName, buildPathCss }) {
+async function updateWebconfigChunk({ longTermHash = false, webConfigFile, cdn, projectName, buildPathCss }) {
 	// check if config parameter exists. Web.config is OPT-IN
 	if (!longTermHash) {
 		return false;
@@ -19,7 +19,6 @@ async function updateWebconfigChunk({ longTermHash = false, webConfigFile, build
 	// TODO: make this parallel
 	const webpackAssets = await fs.readJsonAsync('wp-assets-stats.json');
 	const css = await fs.readJsonAsync('css-assets-stats.json');
-	const webpackManifest = await fs.readJsonAsync(path.join(buildPathJs, 'webpack-manifest.json'));
 	const xmlString = await fs.readFileAsync(webConfigFile);
 	// <add key="vendors" value="" />
 	// <add key="main" value="" />
@@ -40,6 +39,9 @@ async function updateWebconfigChunk({ longTermHash = false, webConfigFile, build
 	const mainAdminCss = find(css.assets, (i) => i.filename.indexOf('main-admin.css') >= 0);
 	const jsRemotePath = webpackAssets.publicPath;
 	const cssRemotePath = `${cdn}/${projectName}${buildPathCss}`;
+	const webpackManifest = {};
+	// take only js files (exclude .map files)
+	webpackAssets.assets.filter((i) => i.name.match('.js$') !== null).forEach((item) => { webpackManifest[item.chunks[0]] = item.name; });
 
 	let newWebconfigXmlString = xmlString.replace(/<add .*"vendors".*\/>/igm, `<add key="vendors" value="${jsRemotePath}${vendorsJs}" />`);
 	newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main".*\/>/igm, `<add key="main" value="${jsRemotePath}${mainJs}" />`);
