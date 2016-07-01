@@ -17,11 +17,17 @@ let deploy = (() => {
 	var ref = _asyncToGenerator(function* () {
 		// update package.json and web.config version
 		const config = (0, _config2.default)().load();
+		const cdn = config.get('cdn');
+		const longTermHash = config.get('longTermHash');
+		const buildPathJs = config.get('buildPathJs');
+		const projectName = config.get('projectName');
+		const buildPathCss = config.get('buildPathCss');
+		const webConfigFile = config.get('webConfig');
 		yield (0, _bump2.default)(config);
 		// build (clean, build)
 		yield (0, _build2.default)(config);
 		// update web.config
-		yield (0, _webconfigChunk2.default)({ webConfig: config.get('webConfig'), longTermHash: config.get('longTermHash'), outputPath: config.get('buildPathJs') });
+		yield (0, _webconfigChunk2.default)({ longTermHash, webConfigFile, buildPathJs, cdn, projectName, buildPathCss });
 		// upload to azure storage
 		yield (0, _upload2.default)({ config });
 	});

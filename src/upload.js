@@ -20,10 +20,6 @@ function loadEnv() {
 
 const recDir = promisify(recursive);
 const loadConfig = () => c().load();
-// regExp to match css files in this format: 38ef2f0c714372f9e033dad37e0cda84.css
-const md5RegExpCss = /^[a-z0-9\-]+?\.[a-f0-9]{32}.css(?:\.map)?$/i;
-// regExp to match js files in this format: main.0054321a4b9b5e829c03.js
-const md5RegExpJs = /^[a-z0-9\-]+?\.[a-f0-9]{20}.js(?:\.map)?$/i;
 
 /**
  * Build an array of object with filepath and remote destination
@@ -46,7 +42,7 @@ async function prepareCssFiles({ dir = recDir, buildPathCss, version = '', longT
 		}
 		// option b) Hash version es: http://your.domain.cdn/project/css/1b956c239862619d3a59.js
 		// avoid to upload non hashed files
-		return files.filter((i) => md5RegExpCss.test(path.basename(i))).map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
+		return files.map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
 	}
 	return [];
 }
@@ -62,7 +58,7 @@ async function prepareJsFiles({ dir = recDir, buildPathJs, version = '', longTer
 			return files.map((i) => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
 		}
 		// option b) Hash version es: http://your.domain.cdn/project/bundles/1b956c239862619d3a59.js
-		return files.filter((i) => md5RegExpJs.test(path.basename(i))).map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
+		return files.map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
 	}
 	return [];
 }
@@ -113,7 +109,6 @@ async function upload({ config = loadConfig(), env = loadEnv() } = {}) {
 	filesToUpload.push(...(await prepareCssFiles({ buildPathCss: config.get('buildPathCss'), version, longTermHash })));
 	filesToUpload.push(...(await prepareJsFiles({ buildPathJs: config.get('buildPathJs'), version, longTermHash })));
 	filesToUpload.push(...(await prepareImagesFiles({ imagesPath: config.get('imagesPath') })));
-
 	// logger.log(`Files to upload on container ${container} ${util.inspect(filesToUpload)}`);
 	// upload files in parallel
 	await Promise.all(
