@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Upgrade version inside package.json and web.config ([OPT-IN]) according semver.
  * This task could be called directly
@@ -12,9 +11,8 @@ Object.defineProperty(exports, "__esModule", {
  * @example <caption>run this on your terminal</caption>
  * node src/run bump
  */
-
 let bump = (() => {
-	var ref = _asyncToGenerator(function* () {
+	var _ref = _asyncToGenerator(function* () {
 		const config = (0, _config2.default)().load();
 		const versionRequest = process.argv[process.argv.length - 1];
 		// update package.json and web.config(OPT-IN) in parallel
@@ -22,7 +20,7 @@ let bump = (() => {
 	});
 
 	return function bump() {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 

@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Upload JavaScript, Css and images to storage.
  * This task could be called directly
@@ -12,9 +11,8 @@ Object.defineProperty(exports, "__esModule", {
  * @example <caption>run this on your terminal</caption>
  * node src/run deploy
  */
-
 let deploy = (() => {
-	var ref = _asyncToGenerator(function* () {
+	var _ref = _asyncToGenerator(function* () {
 		// update package.json and web.config version
 		const config = (0, _config2.default)().load();
 		const cdn = config.get('cdn');
@@ -32,7 +30,7 @@ let deploy = (() => {
 	});
 
 	return function deploy() {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 

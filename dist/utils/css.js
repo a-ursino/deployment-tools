@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Write minified version of the file
  * @param {object} [obj] - obj
@@ -14,9 +13,8 @@ Object.defineProperty(exports, "__esModule", {
  * @param {string} obj.outputFolder -
  * @return {Promise} A Promise
  */
-
 let generateMinifiedAsync = (() => {
-	var ref = _asyncToGenerator(function* ({ filename, styledocPath, compiledCss, outputFolder }) {
+	var _ref = _asyncToGenerator(function* ({ filename, styledocPath, compiledCss, outputFolder }) {
 		// write in parallel minified version
 		_logger2.default.log(`minify stylesheet: filename:${ filename }`);
 		// minify via clean-css
@@ -40,7 +38,7 @@ let generateMinifiedAsync = (() => {
 	});
 
 	return function generateMinifiedAsync(_x) {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 
@@ -63,7 +61,7 @@ let generateMinifiedAsync = (() => {
 
 
 let compileStylesheetAsync = (() => {
-	var ref = _asyncToGenerator(function* ({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName, engine, stylelintrc, styledocPath, doiuseRules = '', autoprefixerRules = '' }) {
+	var _ref2 = _asyncToGenerator(function* ({ srcFolder, outputFolder, filename, cdnDomain, minify = false, projectName, engine, stylelintrc, styledocPath, doiuseRules = '', autoprefixerRules = '' }) {
 		const filepath = `${ srcFolder }${ filename }`;
 		const filesPath = [];
 		// add the folder with the less files
@@ -124,10 +122,6 @@ let compileStylesheetAsync = (() => {
 				ignoreFiles: [path.join(process.cwd(), 'node_modules', `/**/*${ ext }`)] }));
 		}
 		// use calc
-		// an optional array of file globs to match against original source file path, to ignore
-		// onFeatureUsage(usageInfo) {
-		// 	logger.warn('CANIUSE', usageInfo.message);
-		// },
 		postCssPlugins.push(postcssCalc());
 
 		postCssPlugins.push(postcssReporter({ clearMessages: true })); // clearMessages if true, the plugin will clear the result's messages after it logs them
@@ -165,7 +159,7 @@ let compileStylesheetAsync = (() => {
 	});
 
 	return function compileStylesheetAsync(_x2) {
-		return ref.apply(this, arguments);
+		return _ref2.apply(this, arguments);
 	};
 })();
 

@@ -4,15 +4,13 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Copy JavaScript files inside tools folder after installation
  * This task could be called directly
  * @return {Promise} A Promise
  */
-
 let postinstall = (() => {
-	var ref = _asyncToGenerator(function* () {
+	var _ref = _asyncToGenerator(function* () {
 		const ncpAsync = (0, _bluebird.promisify)(_ncp2.default);
 		// this is the path of the package: ..../node_modules/deployment-tools
 		const packagePath = process.cwd();
@@ -28,7 +26,7 @@ let postinstall = (() => {
 	});
 
 	return function postinstall() {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 

@@ -4,16 +4,14 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Compile JavaScript files with webpack
  * @param {object} [obj] - obj
  * @param {boolean} [obj.config=loadConfig()] - The config object
  * @return {Promise} A Promise
  */
-
 let wp = (() => {
-	var ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
+	var _ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
 		// skip webpack task if srcJsPath was not set
 		if (!config.get('srcJsPath')) {
 			return undefined;
@@ -38,7 +36,7 @@ let wp = (() => {
 	});
 
 	return function wp(_x) {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 
