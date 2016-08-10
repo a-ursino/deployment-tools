@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Build js, css, images.
  * This task could be called directly
@@ -12,9 +11,8 @@ Object.defineProperty(exports, "__esModule", {
  * @example <caption>run this on your terminal</caption>
  * node src/run build
  */
-
 let build = (() => {
-	var ref = _asyncToGenerator(function* () {
+	var _ref = _asyncToGenerator(function* () {
 		const config = (0, _config2.default)().load();
 		// clean folder
 		yield (0, _clean2.default)({ config });
@@ -23,7 +21,7 @@ let build = (() => {
 	});
 
 	return function build() {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 

@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Build, lint and minify css.
  * This task could be called directly
@@ -15,9 +14,8 @@ Object.defineProperty(exports, "__esModule", {
  * @example <caption>run this on your terminal</caption>
  * node src/run buildCss
  */
-
 let buildCss = (() => {
-	var ref = _asyncToGenerator(function* ({ config = loadConfig(), cleaned = false } = {}) {
+	var _ref = _asyncToGenerator(function* ({ config = loadConfig(), cleaned = false } = {}) {
 		// we must clean??
 		if (!cleaned) yield (0, _clean2.default)(config);
 
@@ -38,7 +36,7 @@ let buildCss = (() => {
 	});
 
 	return function buildCss(_x) {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 

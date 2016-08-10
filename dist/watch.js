@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Watch JavaScript (via webpack), less/sass folder.
  * This task could be called directly
@@ -12,9 +11,8 @@ Object.defineProperty(exports, "__esModule", {
  * @param {object} obj.config - The config Object
  * @return {Promise} A Promise
  */
-
 let watch = (() => {
-	var ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
+	var _ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
 		// clean folder
 		yield (0, _clean2.default)({ config });
 		const tasks = [];
@@ -46,7 +44,7 @@ let watch = (() => {
 	});
 
 	return function watch(_x) {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 

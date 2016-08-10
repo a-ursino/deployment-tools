@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Update web.config with webpackManifest, CSS and JS files hash.
  * @param {object} [obj] - obj
@@ -15,9 +14,8 @@ Object.defineProperty(exports, "__esModule", {
  * @param {string} obj.buildPathCss - The CSS build Path
  * @return {Promise} A Promise
  */
-
 let updateWebconfigChunk = (() => {
-	var ref = _asyncToGenerator(function* ({ longTermHash = false, webConfigFile, cdn, projectName, buildPathCss }) {
+	var _ref = _asyncToGenerator(function* ({ longTermHash = false, webConfigFile, cdn, projectName, buildPathCss }) {
 		// check if config parameter exists. Web.config is OPT-IN
 		if (!longTermHash) {
 			return false;
@@ -64,14 +62,18 @@ let updateWebconfigChunk = (() => {
 		newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"vendors-backoffice".*\/>/igm, `<add key="vendors-backoffice" value="${ jsRemotePath }${ vendorsBackofficeJs }" />`);
 		newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main-backoffice".*\/>/igm, `<add key="main-backoffice" value="${ jsRemotePath }${ mainBackofficeJs }" />`);
 		newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"modernizr".*\/>/igm, `<add key="modernizr" value="${ jsRemotePath }${ modernizrJs }" />`);
-		newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main\.css".*\/>/igm, `<add key="main.css" value="${ cssRemotePath }${ mainCss.filename.replace(/\.css$/, '.') }${ mainCss.filehash }" />`);
-		newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main-admin\.css".*\/>/igm, `<add key="main-admin.css" value="${ cssRemotePath }${ mainAdminCss.filename.replace(/\.css$/, '.') }${ mainAdminCss.filehash }" />`);
+		if (mainCss) {
+			newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main\.css".*\/>/igm, `<add key="main.css" value="${ cssRemotePath }${ mainCss.filename.replace(/\.css$/, '.') }${ mainCss.filehash }" />`);
+		}
+		if (mainAdminCss) {
+			newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main-admin\.css".*\/>/igm, `<add key="main-admin.css" value="${ cssRemotePath }${ mainAdminCss.filename.replace(/\.css$/, '.') }${ mainAdminCss.filehash }" />`);
+		}
 		newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"webpackManifest".*\/>/igm, `<add key="webpackManifest" value='${ JSON.stringify(webpackManifest) }' />`);
 		return _fs2.default.writeFileAsync(webConfigFile, newWebconfigXmlString);
 	});
 
 	return function updateWebconfigChunk(_x) {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 

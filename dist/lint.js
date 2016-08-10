@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Lint JavaScript files
  * This task could be called directly
@@ -14,9 +13,8 @@ Object.defineProperty(exports, "__esModule", {
  * @example <caption>run this on your terminal</caption>
  * node src/run lint
  */
-
 let lint = (() => {
-	var ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
+	var _ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
 		try {
 			const CLIEngine = _eslint2.default.CLIEngine;
 			const cli = new CLIEngine({
@@ -33,7 +31,7 @@ let lint = (() => {
 	});
 
 	return function lint(_x) {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 
