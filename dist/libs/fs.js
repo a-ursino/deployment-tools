@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 // OR with promisify.fromCallback
 // const readFileAsync = (file) => promisify.fromCallback(cb => fs.readFile(file, 'utf8', cb));
 // OR
@@ -13,7 +12,7 @@ Object.defineProperty(exports, "__esModule", {
 // });
 
 let writeFileAsync = (() => {
-	var ref = _asyncToGenerator(function* (filepath, content) {
+	var _ref = _asyncToGenerator(function* (filepath, content) {
 		const writeFilep = (0, _bluebird.promisify)(_fs2.default.writeFile);
 		const fullPath = _path2.default.join(process.cwd(), filepath);
 		debug(`[FS] try to write a file at path ${ fullPath }`);
@@ -21,12 +20,12 @@ let writeFileAsync = (() => {
 	});
 
 	return function writeFileAsync(_x, _x2) {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 
 let readFileAsync = (() => {
-	var ref = _asyncToGenerator(function* (filepath) {
+	var _ref2 = _asyncToGenerator(function* (filepath) {
 		const readFilep = (0, _bluebird.promisify)(_fs2.default.readFile);
 		const fullPath = _path2.default.join(process.cwd(), filepath);
 		debug(`[FS] try to read a file at path ${ fullPath }`);
@@ -34,19 +33,19 @@ let readFileAsync = (() => {
 	});
 
 	return function readFileAsync(_x3) {
-		return ref.apply(this, arguments);
+		return _ref2.apply(this, arguments);
 	};
 })();
 
 let readJsonAsync = (() => {
-	var ref = _asyncToGenerator(function* (filepath) {
+	var _ref3 = _asyncToGenerator(function* (filepath) {
 		const content = yield readFileAsync(filepath);
 		const contentJson = JSON.parse(content);
 		return contentJson;
 	});
 
 	return function readJsonAsync(_x4) {
-		return ref.apply(this, arguments);
+		return _ref3.apply(this, arguments);
 	};
 })();
 
@@ -59,7 +58,7 @@ let readJsonAsync = (() => {
 
 
 let fileExistsAsync = (() => {
-	var ref = _asyncToGenerator(function* (filepath) {
+	var _ref4 = _asyncToGenerator(function* (filepath) {
 		const fullPath = _path2.default.join(process.cwd(), filepath);
 		debug(`[FS] check if file filepath:${ filepath } fullPath:${ fullPath } exists`);
 		try {
@@ -73,7 +72,7 @@ let fileExistsAsync = (() => {
 	});
 
 	return function fileExistsAsync(_x5) {
-		return ref.apply(this, arguments);
+		return _ref4.apply(this, arguments);
 	};
 })();
 

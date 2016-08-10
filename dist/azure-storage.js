@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Configure CORS settings for Azure Storage. You can change the settings using azure-storage-settings.json file.
  * We use the the azure remote service as data validator, so if there is something wrong in the settings we display the error in the response.
@@ -13,9 +12,8 @@ Object.defineProperty(exports, "__esModule", {
  * @example <caption>run this on your terminal</caption>
  * node src/run azureStorage
  */
-
 let azureStorage = (() => {
-	var ref = _asyncToGenerator(function* () {
+	var _ref = _asyncToGenerator(function* () {
 		// read the config settings from env
 		const storageName = env.STORAGE_NAME;
 		const storageKey = env.STORAGE_KEY;
@@ -33,7 +31,7 @@ let azureStorage = (() => {
 	});
 
 	return function azureStorage() {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 

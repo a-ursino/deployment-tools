@@ -4,16 +4,14 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Start Webpack Dev Server
  * @param {object} [obj] - obj
  * @param {boolean} [obj.config=loadConfig()] - The config object
  * @return {Promise} A Promise
  */
-
 let wp = (() => {
-	var ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
+	var _ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
 		const webpackConfig = (0, _webpackHelper2.default)(config, true);
 		// Start webpack-dev-server
 		const server = new _webpackDevServer2.default((0, _webpack2.default)(webpackConfig), {
@@ -36,7 +34,7 @@ let wp = (() => {
 	});
 
 	return function wp(_x) {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 

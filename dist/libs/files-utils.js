@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Increment version inside package.json file according to a category
  * @param  {String} category It must be a value between patch, minor, major
@@ -12,9 +11,8 @@ Object.defineProperty(exports, "__esModule", {
  * @param  {Object} config The config object (from package.json)
  * @return {Promise}         The promise
  */
-
 let updatePackageJson = (() => {
-	var ref = _asyncToGenerator(function* (category, pkg, config) {
+	var _ref = _asyncToGenerator(function* (category, pkg, config) {
 		const packageJson = config.get('packageJson');
 		if (!packageJson) {
 			return false;
@@ -33,7 +31,7 @@ let updatePackageJson = (() => {
 	});
 
 	return function updatePackageJson(_x, _x2, _x3) {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 
@@ -48,7 +46,7 @@ let updatePackageJson = (() => {
 
 
 let updateWebconfig = (() => {
-	var ref = _asyncToGenerator(function* (category, pkg, config) {
+	var _ref2 = _asyncToGenerator(function* (category, pkg, config) {
 		// check if config parameter exists. Web.config is OPT-IN
 		const webConfig = config.get('webConfig');
 		if (!webConfig) {
@@ -71,7 +69,7 @@ let updateWebconfig = (() => {
 	});
 
 	return function updateWebconfig(_x4, _x5, _x6) {
-		return ref.apply(this, arguments);
+		return _ref2.apply(this, arguments);
 	};
 })();
 

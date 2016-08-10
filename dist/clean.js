@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-
 /**
  * Delete and recreate folders
  * This task could be called directly
@@ -12,9 +11,8 @@ Object.defineProperty(exports, "__esModule", {
  * @param {object} obj.config - The config Object
  * @return {Promise} A Promise
  */
-
 let clean = (() => {
-	var ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
+	var _ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
 		const distFolder = [];
 		// delete js build folder?
 		if (config.get('buildPathJs')) {
@@ -39,7 +37,7 @@ let clean = (() => {
 	});
 
 	return function clean(_x) {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 

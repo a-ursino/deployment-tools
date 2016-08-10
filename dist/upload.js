@@ -5,7 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.prepareImagesFilesAsync = exports.prepareJsFilesAsync = exports.prepareCssFilesAsync = undefined;
 
-
 /**
  * Build an array of object with filepath and remote destination
  * If we use long-term-cache, read hashed files only, otherwise read all files inside buildPathCss folder
@@ -15,9 +14,8 @@ exports.prepareImagesFilesAsync = exports.prepareJsFilesAsync = exports.prepareC
  * @param {boolean} [obj.longTermHash=false] - Use long-term-cache
  * @return {Promise} A Promise
  */
-
 let prepareCssFiles = (() => {
-	var ref = _asyncToGenerator(function* ({ dir = recDir, buildPathCss, version = '', longTermHash = false } = {}) {
+	var _ref = _asyncToGenerator(function* ({ dir = recDir, buildPathCss, version = '', longTermHash = false } = {}) {
 		if (buildPathCss) {
 			// get all the files paths from source
 			const files = yield dir(_path2.default.join(process.cwd(), buildPathCss));
@@ -39,12 +37,12 @@ let prepareCssFiles = (() => {
 	});
 
 	return function prepareCssFiles(_x) {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 
 let prepareJsFiles = (() => {
-	var ref = _asyncToGenerator(function* ({ dir = recDir, buildPathJs, version = '', longTermHash = '' } = {}) {
+	var _ref2 = _asyncToGenerator(function* ({ dir = recDir, buildPathJs, version = '', longTermHash = '' } = {}) {
 		// js?
 		if (buildPathJs) {
 			const files = yield dir(_path2.default.join(process.cwd(), buildPathJs));
@@ -65,12 +63,12 @@ let prepareJsFiles = (() => {
 	});
 
 	return function prepareJsFiles(_x2) {
-		return ref.apply(this, arguments);
+		return _ref2.apply(this, arguments);
 	};
 })();
 
 let prepareImagesFiles = (() => {
-	var ref = _asyncToGenerator(function* ({ dir = recDir, imagesPath } = {}) {
+	var _ref3 = _asyncToGenerator(function* ({ dir = recDir, imagesPath } = {}) {
 		if (imagesPath) {
 			// read images from temp path not the source one
 			const src = _path2.default.join(process.cwd(), imagesPath);
@@ -90,12 +88,12 @@ let prepareImagesFiles = (() => {
 	});
 
 	return function prepareImagesFiles(_x3) {
-		return ref.apply(this, arguments);
+		return _ref3.apply(this, arguments);
 	};
 })();
 
 let upload = (() => {
-	var ref = _asyncToGenerator(function* ({ config = loadConfig(), env = loadEnv() } = {}) {
+	var _ref4 = _asyncToGenerator(function* ({ config = loadConfig(), env = loadEnv() } = {}) {
 		// read the config settings from env
 		const storageName = env.STORAGE_NAME;
 		const storageKey = env.STORAGE_KEY;
@@ -132,7 +130,7 @@ let upload = (() => {
 	});
 
 	return function upload(_x4) {
-		return ref.apply(this, arguments);
+		return _ref4.apply(this, arguments);
 	};
 })();
 

@@ -5,13 +5,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 let up = (() => {
-	var ref = _asyncToGenerator(function* () {
+	var _ref = _asyncToGenerator(function* () {
 		const result = yield (0, _upload.prepareJsFilesAsync)({ longTermHash: true, buildPathCss: '/data/Scripts/' });
 		console.log('Result', result);
 	});
 
 	return function up() {
-		return ref.apply(this, arguments);
+		return _ref.apply(this, arguments);
 	};
 })();
 
