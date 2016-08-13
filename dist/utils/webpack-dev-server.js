@@ -13,10 +13,14 @@ Object.defineProperty(exports, "__esModule", {
 let wp = (() => {
 	var _ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
 		const webpackConfig = (0, _webpackHelper2.default)(config, true);
+		const webpackDevServerHost = !config.get('webpackDevServerHost') ? 'localhost' : config.get('webpackDevServerHost');
+		const webpackDevServerPath = !config.get('webpackDevServerPath') ? 'data' : config.get('webpackDevServerPath');
+		const webpackDevServerPort = !config.get('webpackDevServerPort') ? 8080 : config.get('webpackDevServerPort');
+
 		// Start webpack-dev-server
 		const server = new _webpackDevServer2.default((0, _webpack2.default)(webpackConfig), {
 			hot: true, //  adds the HotModuleReplacementPlugin and switch the server to hot mode.
-			contentBase: 'data', // Directory of index.html
+			contentBase: webpackDevServerPath, // Directory of the files
 			progress: true,
 			// webpack-dev-middleware options
 			stats: { colors: true },
@@ -26,8 +30,12 @@ let wp = (() => {
 			noInfo: false
 		});
 		return new Promise(function (resolve, reject) {
-			server.listen(8080, 'localhost', function (err) {
-				if (err) return reject(err);
+			server.listen(webpackDevServerPort, webpackDevServerHost, function (err) {
+				if (err) {
+					_logger2.default.error('ERROR while starting Webpack Dev Server', err);
+					return reject(err);
+				}
+				_logger2.default.log('Webpack Dev Server started at', `http://${ webpackDevServerHost }:${ webpackDevServerPort }`, 'with path:', webpackDevServerPath);
 				return resolve();
 			});
 		});
@@ -53,6 +61,10 @@ var _webpackHelper2 = _interopRequireDefault(_webpackHelper);
 var _config = require('../libs/config');
 
 var _config2 = _interopRequireDefault(_config);
+
+var _logger = require('../libs/logger');
+
+var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

@@ -34,6 +34,9 @@
     "imagesPath": "/data/images/",
     "cdnImagesAlias": "http://your.cdn.domain.alias",
     "styledocPath": "/data/styledoc/",
+		"webpackDevServerPath": "data",
+		"webpackDevServerHost": "localhost",
+		"webpackDevServerPort": "8080",
     "pre-git": {
       "commit-msg": "conventional",
       "pre-commit": [
