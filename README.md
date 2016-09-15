@@ -103,6 +103,12 @@ The tasks available at the moment are:
 * `vendorsBackoffileJs`: the filename of the vendors file for backoffice (es: vendors-backoffice.js)[OPT-IN]
 * `buildPathJs`: the path of the compiled JavaScript files (es: bundles)
 
+**JavaScript (Webpack Dev Server)**
+All these configuration are relative to the Webpack Dev Server used to compile js files and to serve static assets
+* `webpackDevServerPath`: the root directory (default: data)
+* `webpackDevServerHost`: the host (default: localhost)
+* `webpackDevServerPort`: the port (default: 8080)
+
 **Image**
 * `imagesPath`: minify and copy to CDN the images inside the path (es: /data/images/)[OPT-IT]
 * `imagesCdnAlias`: CDN alias for images so we can maximize parallel download with multiple domain (used by `postcss` plugin)

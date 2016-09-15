@@ -53,9 +53,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
 
+const envalid = require('envalid');
 const debug = require('debug')('dt');
 
-const envalid = require('envalid');
+// validate enviroment variables
+// STORAGE_NAME and STORAGE_KEY are required and a string
 const { str } = envalid;
 const env = envalid.cleanEnv(process.env, {
 	STORAGE_NAME: str(),

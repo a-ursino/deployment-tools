@@ -168,6 +168,8 @@ const debug = require('debug')('dt');
 const envalid = require('envalid');
 const { str } = envalid;
 
+// validate enviroment variables
+// STORAGE_NAME and STORAGE_KEY are required and a string
 function loadEnv() {
 	const env = envalid.cleanEnv(process.env, {
 		STORAGE_NAME: str(),
