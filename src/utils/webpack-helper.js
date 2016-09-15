@@ -7,7 +7,8 @@ function getWebpackConfig(config, dev = false) {
 	const filePath = path.join(process.cwd(), `${config.get('srcJsPath')}${file}`);
 	debug(`[WEBPACK-HELPER] load Webpack file ${filePath} dev:${dev} cwd:${process.cwd()}`);
 	const webpackConfigFile = require(filePath); // eslint-disable-line global-require
-
+	const webpackDevServerHost = config.get('webpackDevServerHost') || 'localhost';
+	const webpackDevServerPort = config.get('webpackDevServerPort') || 8080;
 	const webpackConfig = Object.assign({}, webpackConfigFile);
 	// Override some values at run-time
 	// output path
@@ -18,7 +19,7 @@ function getWebpackConfig(config, dev = false) {
 	// es: http://az889637.vo.msecnd.net/projectName/2.9.0/bundles/
 	if (dev) {
 		// serve js files from webpack dev server on...
-		webpackConfig.output.publicPath = 'http://localhost:8080/';
+		webpackConfig.output.publicPath = `http://${webpackDevServerHost}:${webpackDevServerPort}/`;
 	} else {
 		// serve js files from CDN
 		webpackConfig.output.publicPath = `${config.get('cdn')}/${config.get('projectName')}${config.get('buildPathJs')}`;

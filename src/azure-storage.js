@@ -2,10 +2,11 @@ import { promisifyAll } from 'bluebird';
 import azure from 'azure-storage';
 import logger from './libs/logger';
 import fs from './libs/fs';
-
+const envalid = require('envalid');
 const debug = require('debug')('dt');
 
-const envalid = require('envalid');
+// validate enviroment variables
+// STORAGE_NAME and STORAGE_KEY are required and a string
 const { str } = envalid;
 const env = envalid.cleanEnv(process.env, {
 	STORAGE_NAME: str(),

@@ -13,9 +13,9 @@ Object.defineProperty(exports, "__esModule", {
 let wp = (() => {
 	var _ref = _asyncToGenerator(function* ({ config = loadConfig() } = {}) {
 		const webpackConfig = (0, _webpackHelper2.default)(config, true);
-		const webpackDevServerHost = !config.get('webpackDevServerHost') ? 'localhost' : config.get('webpackDevServerHost');
-		const webpackDevServerPath = !config.get('webpackDevServerPath') ? 'data' : config.get('webpackDevServerPath');
-		const webpackDevServerPort = !config.get('webpackDevServerPort') ? 8080 : config.get('webpackDevServerPort');
+		const webpackDevServerPath = config.get('webpackDevServerPath') || 'data';
+		const webpackDevServerHost = config.get('webpackDevServerHost') || 'localhost';
+		const webpackDevServerPort = config.get('webpackDevServerPort') || 8080;
 
 		// Start webpack-dev-server
 		const server = new _webpackDevServer2.default((0, _webpack2.default)(webpackConfig), {

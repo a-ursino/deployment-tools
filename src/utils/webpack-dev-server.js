@@ -14,9 +14,9 @@ const loadConfig = () => c().load();
  */
 async function wp({ config = loadConfig() } = {}) {
 	const webpackConfig = getWebpackConfig(config, true);
-	const webpackDevServerHost = !config.get('webpackDevServerHost') ? 'localhost' : config.get('webpackDevServerHost');
-	const webpackDevServerPath = !config.get('webpackDevServerPath') ? 'data' : config.get('webpackDevServerPath');
-	const webpackDevServerPort = !config.get('webpackDevServerPort') ? 8080 : config.get('webpackDevServerPort');
+	const webpackDevServerPath = config.get('webpackDevServerPath') || 'data';
+	const webpackDevServerHost = config.get('webpackDevServerHost') || 'localhost';
+	const webpackDevServerPort = config.get('webpackDevServerPort') || 8080;
 
 	// Start webpack-dev-server
 	const server = new WebpackDevServer(webpack(webpackConfig), {
