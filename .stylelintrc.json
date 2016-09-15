@@ -1,6 +1,7 @@
 {
-  "extends": "stylelint-config-standard",
+	"extends": "stylelint-config-standard",
+	"ignoreFiles": "node_modules",
   "rules": {
-		"indentation": 2,
+		"declaration-bang-space-after": "always"
   }
 }

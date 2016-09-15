@@ -92,7 +92,7 @@ async function compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDo
 	// USE stylint ??
 	if (stylelintrc) {
 		const stylelintrcFile = path.join(process.cwd(), stylelintrc);
-		debug(`[CSS] Enable stylint on file:${filename} with file ${stylelintrcFile}`);
+		debug(`[CSS] Enable stylint on file:${filename} with file ${stylelintrcFile} and cwd ${process.cwd()}`);
 		postCssPlugins.push(postcssStylelint({ configFile: stylelintrcFile }));
 	}
 	// USE AUTOPREFIXER ??
