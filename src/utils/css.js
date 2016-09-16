@@ -89,12 +89,6 @@ async function compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDo
 	postCssPlugins.push(engine({ strictMath: true, paths: filesPath }));
 	postCssPlugins.push(postcssAtImport({ path: ['data/less'] }));
 
-	// USE stylint ??
-	if (stylelintrc) {
-		const stylelintrcFile = path.join(process.cwd(), stylelintrc);
-		debug(`[CSS] Enable stylint on file:${filename} with file ${stylelintrcFile} and cwd ${process.cwd()}`);
-		postCssPlugins.push(postcssStylelint({ configFile: stylelintrcFile }));
-	}
 	// USE AUTOPREFIXER ??
 	const autoprefixerRulesArr = autoprefixerRules.split(',');
 	if (autoprefixerRulesArr.length) {
@@ -129,17 +123,17 @@ async function compileStylesheetAsync({ srcFolder, outputFolder, filename, cdnDo
 			// },
 		}));
 	}
-	// use calc
+	// use postcss calc plugin
 	postCssPlugins.push(postcssCalc());
 
-	postCssPlugins.push(postcssReporter({ clearMessages: true })); // clearMessages if true, the plugin will clear the result's messages after it logs them
+	// USE stylint ??
+	if (stylelintrc) {
+		const stylelintrcFile = path.join(process.cwd(), stylelintrc);
+		debug(`[CSS] Enable stylint on file:${filename} with file ${stylelintrcFile} and cwd ${process.cwd()}`);
+		postCssPlugins.push(postcssStylelint({ configFile: stylelintrcFile }));
+	}
 
-	// Use Css Module
-	// postCssPlugins.push(cssmodules({
-	// 	scopeBehaviour: 'global', // can be 'global' or 'local',
-	// 	// generateScopedName: '[name]__[local]___[hash:base64:5]',
-	// 	getJSON: getJSONFromCssModules,
-	// }));
+	postCssPlugins.push(postcssReporter({ clearMessages: true })); // clearMessages if true, the plugin will clear the result's messages after it logs them
 
 	// postcss(plugins)  list of PostCSS plugins to be included as processors.
 	const cssProcessor = postcss(postCssPlugins);
