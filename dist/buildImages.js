@@ -44,14 +44,6 @@ var _trimEnd = require('lodash/trimEnd');
 
 var _trimEnd2 = _interopRequireDefault(_trimEnd);
 
-var _config = require('./libs/config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _clean = require('./clean');
-
-var _clean2 = _interopRequireDefault(_clean);
-
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
@@ -71,6 +63,14 @@ var _imageminPngquant2 = _interopRequireDefault(_imageminPngquant);
 var _imageminGifsicle = require('imagemin-gifsicle');
 
 var _imageminGifsicle2 = _interopRequireDefault(_imageminGifsicle);
+
+var _config = require('./libs/config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _clean = require('./clean');
+
+var _clean2 = _interopRequireDefault(_clean);
 
 var _logger = require('./libs/logger');
 

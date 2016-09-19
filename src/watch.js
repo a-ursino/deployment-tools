@@ -1,10 +1,10 @@
+import path from 'path';
+import chokidar from 'chokidar';
 import c from './libs/config';
 import webpackDevServer from './utils/webpack-dev-server';
 import lessTask from './utils/less';
 import sassTask from './utils/sass';
-import chokidar from 'chokidar';
 import logger from './libs/logger';
-import path from 'path';
 import clean from './clean';
 
 const loadConfig = () => c().load();

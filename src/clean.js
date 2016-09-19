@@ -1,8 +1,9 @@
 import del from 'del';
-import fs from './libs/fs';
 import trimEnd from 'lodash/trimEnd';
-import c from './libs/config';
 import path from 'path';
+import fs from './libs/fs';
+import c from './libs/config';
+
 const debug = require('debug')('dt');
 
 const loadConfig = () => c().load();

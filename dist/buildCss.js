@@ -40,25 +40,9 @@ let buildCss = (() => {
 	};
 })();
 
-var _less = require('./utils/less');
-
-var _less2 = _interopRequireDefault(_less);
-
-var _sass = require('./utils/sass');
-
-var _sass2 = _interopRequireDefault(_sass);
-
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
-
-var _clean = require('./clean');
-
-var _clean2 = _interopRequireDefault(_clean);
-
-var _config = require('./libs/config');
-
-var _config2 = _interopRequireDefault(_config);
 
 var _flattenDeep = require('lodash/flattenDeep');
 
@@ -67,6 +51,22 @@ var _flattenDeep2 = _interopRequireDefault(_flattenDeep);
 var _compact = require('lodash/compact');
 
 var _compact2 = _interopRequireDefault(_compact);
+
+var _less = require('./utils/less');
+
+var _less2 = _interopRequireDefault(_less);
+
+var _sass = require('./utils/sass');
+
+var _sass2 = _interopRequireDefault(_sass);
+
+var _clean = require('./clean');
+
+var _clean2 = _interopRequireDefault(_clean);
+
+var _config = require('./libs/config');
+
+var _config2 = _interopRequireDefault(_config);
 
 var _fs = require('./libs/fs');
 

@@ -45,21 +45,21 @@ var _del = require('del');
 
 var _del2 = _interopRequireDefault(_del);
 
-var _fs = require('./libs/fs');
-
-var _fs2 = _interopRequireDefault(_fs);
-
 var _trimEnd = require('lodash/trimEnd');
 
 var _trimEnd2 = _interopRequireDefault(_trimEnd);
 
-var _config = require('./libs/config');
-
-var _config2 = _interopRequireDefault(_config);
-
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
+
+var _fs = require('./libs/fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _config = require('./libs/config');
+
+var _config2 = _interopRequireDefault(_config);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

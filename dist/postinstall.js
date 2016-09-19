@@ -30,6 +30,8 @@ let postinstall = (() => {
 	};
 })();
 
+var _bluebird = require('bluebird');
+
 var _ncp = require('ncp');
 
 var _ncp2 = _interopRequireDefault(_ncp);
@@ -45,8 +47,6 @@ var _path2 = _interopRequireDefault(_path);
 var _logger = require('./libs/logger');
 
 var _logger2 = _interopRequireDefault(_logger);
-
-var _bluebird = require('bluebird');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

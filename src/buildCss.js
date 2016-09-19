@@ -1,10 +1,10 @@
-import lessTask from './utils/less';
-import sassTask from './utils/sass';
 import path from 'path';
-import clean from './clean';
-import c from './libs/config';
 import flattenDeep from 'lodash/flattenDeep';
 import compact from 'lodash/compact';
+import lessTask from './utils/less';
+import sassTask from './utils/sass';
+import clean from './clean';
+import c from './libs/config';
 import fs from './libs/fs';
 
 const loadConfig = () => c().load();

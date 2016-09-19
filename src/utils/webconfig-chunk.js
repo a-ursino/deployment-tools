@@ -1,5 +1,5 @@
-import fs from '../libs/fs';
 import find from 'lodash/find';
+import fs from '../libs/fs';
 
 /**
  * Update web.config with webpackManifest, CSS and JS files hash.
@@ -32,16 +32,16 @@ async function updateWebconfigChunk({ longTermHash = false, webConfigFile, cdn, 
 	const mainBackofficeJs = webpackAssets.assetsByChunkName['main-backoffice'] ? webpackAssets.assetsByChunkName['main-backoffice'][0] : '';
 	const vendorsBackofficeJs = webpackAssets.assetsByChunkName['vendors-backoffice'] ? webpackAssets.assetsByChunkName['vendors-backoffice'][0] : '';
 
-	const modernizr = find(webpackAssets.assets, (i) => i.name.indexOf('modernizr') >= 0);
+	const modernizr = find(webpackAssets.assets, i => i.name.indexOf('modernizr') >= 0);
 	const modernizrJs = modernizr ? modernizr.name : '';
 
-	const mainCss = find(css.assets, (i) => i.filename.indexOf('main.css') >= 0);
-	const mainAdminCss = find(css.assets, (i) => i.filename.indexOf('main-admin.css') >= 0);
+	const mainCss = find(css.assets, i => i.filename.indexOf('main.css') >= 0);
+	const mainAdminCss = find(css.assets, i => i.filename.indexOf('main-admin.css') >= 0);
 	const jsRemotePath = webpackAssets.publicPath;
 	const cssRemotePath = `${cdn}/${projectName}${buildPathCss}`;
 	const webpackManifest = {};
 	// take only js files (exclude .map files)
-	webpackAssets.assets.filter((i) => i.name.match('.js$') !== null).forEach((item) => { webpackManifest[item.chunks[0]] = item.name; });
+	webpackAssets.assets.filter(i => i.name.match('.js$') !== null).forEach((item) => { webpackManifest[item.chunks[0]] = item.name; });
 
 	let newWebconfigXmlString = xmlString.replace(/<add .*"vendors".*\/>/igm, `<add key="vendors" value="${jsRemotePath}${vendorsJs}" />`);
 	newWebconfigXmlString = newWebconfigXmlString.replace(/<add .*"main".*\/>/igm, `<add key="main" value="${jsRemotePath}${mainJs}" />`);

@@ -2,6 +2,7 @@ import { promisifyAll } from 'bluebird';
 import azure from 'azure-storage';
 import logger from './libs/logger';
 import fs from './libs/fs';
+
 const envalid = require('envalid');
 const debug = require('debug')('dt');
 

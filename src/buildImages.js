@@ -1,12 +1,13 @@
 import trimEnd from 'lodash/trimEnd';
-import c from './libs/config';
-import clean from './clean';
 import path from 'path';
 import imageminTask from 'imagemin';
 import imageminMozjpeg from 'imagemin-mozjpeg';
 import imageminPngquant from 'imagemin-pngquant';
 import imageminGifsicle from 'imagemin-gifsicle';
+import c from './libs/config';
+import clean from './clean';
 import logger from './libs/logger';
+
 const debug = require('debug')('dt');
 
 const loadConfig = () => c().load();
@@ -40,7 +41,7 @@ async function buildImages({ config = loadConfig(), cleaned = false } = {}) {
 			imageminGifsicle(),
 		],
 	});
-	logger.log('minified images', files.map((o) => o.path).join(' , '));
+	logger.log('minified images', files.map(o => o.path).join(' , '));
 }
 
 export default buildImages;
