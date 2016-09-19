@@ -7,6 +7,10 @@
     // use one tab for indent
     "indent": [2, "tab"],
     "max-len": [0],
-    "no-console": [0]
+    "linebreak-style": ["error", "windows"],
+    "no-tabs": [0],
+    "react/jsx-filename-extension": [0],
+    "react/require-extension": "off",
+    "react/jsx-indent": [2, 'tab'],
   }
 }

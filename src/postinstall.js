@@ -1,8 +1,8 @@
+import { promisify } from 'bluebird';
 import ncp from 'ncp';
 import del from 'del';
 import path from 'path';
 import logger from './libs/logger';
-import { promisify } from 'bluebird';
 
 /**
  * Copy JavaScript files inside tools folder after installation

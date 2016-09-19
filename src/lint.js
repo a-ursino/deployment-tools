@@ -1,3 +1,4 @@
+/* eslint-disable require-yield */
 import path from 'path';
 import eslint from 'eslint';
 import util from 'util';
@@ -23,7 +24,10 @@ async function lint({ config = loadConfig() } = {}) {
 		});
 		const jsFolder = path.join(process.cwd(), config.get('srcJsPath'));
 		const eslintReport = cli.executeOnFiles([jsFolder]);
-		logger.log(util.inspect(eslintReport.results.filter(i => i.errorCount > 0), { showHidden: true, depth: null }));
+		const reportResult = eslintReport.results.filter(i => i.errorCount > 0);
+		if (reportResult.length) {
+			logger.error('EsLint Error', util.inspect(reportResult, { showHidden: true, depth: null }));
+		}
 	}	catch (e) {
 		logger.error('ERROR', e, e.stack);
 	}

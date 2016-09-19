@@ -17,6 +17,10 @@
     "id-length": [0],
     "valid-jsdoc": [2],
     "max-len": [0],
-    "array-callback-return":[0]
+    "array-callback-return": [0],
+    "react/require-extension": "off",
+    "linebreak-style": ["error", "windows"],
+    "no-tabs": [0],
+    "generator-star-spacing": [0]
   }
 }

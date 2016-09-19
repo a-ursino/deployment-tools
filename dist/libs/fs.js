@@ -128,7 +128,7 @@ const makeDirsAsync = paths => {
 	} else if ((0, _isArray2.default)(paths)) {
 		return Promise.all(paths.map(i => makeDirAsync(i)));
 	}
-	throw new Error(`Invalid parameter name  ${ name }. It must be a string or an array`);
+	throw new Error(`Invalid parameter name  ${ paths }. It must be a string or an array`);
 };
 
 exports.default = {

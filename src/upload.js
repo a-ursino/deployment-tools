@@ -1,12 +1,14 @@
 import { promisify, promisifyAll } from 'bluebird';
 import azure from 'azure-storage';
-import c from './libs/config';
-import logger from './libs/logger';
 import recursive from 'recursive-readdir';
 import path from 'path';
+import c from './libs/config';
+import logger from './libs/logger';
 import fs from './libs/fs';
+
 const debug = require('debug')('dt');
 const envalid = require('envalid');
+
 const { str } = envalid;
 
 // validate enviroment variables
@@ -40,11 +42,11 @@ async function prepareCssFiles({ dir = recDir, buildPathCss, version = '', longT
 		// NOTE: if long-term-cache is enabled (via LongTermHash option) don't use folder version inside path. File Hash is the version.
 		// option a) Folder version es: http://your.domain.cdn/project/version/css/main.js
 		if (!longTermHash) {
-			return files.map((i) => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
+			return files.map(i => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
 		}
 		// option b) Hash version es: http://your.domain.cdn/project/css/1b956c239862619d3a59.js
 		// avoid to upload non hashed files
-		return files.map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
+		return files.map(i => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
 	}
 	return [];
 }
@@ -57,10 +59,10 @@ async function prepareJsFiles({ dir = recDir, buildPathJs, version = '', longTer
 		// NOTE: if long-term-cache is enabled (via LongTermHash option) don't use folder version inside path. File Hash is the version.
 		// option a) Folder version es: http://your.domain.cdn/project/version/bundles/main.js
 		if (!longTermHash) {
-			return files.map((i) => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
+			return files.map(i => ({ file: i, remoteDest: `${version}/${path.relative(process.cwd(), i)}` }));
 		}
 		// option b) Hash version es: http://your.domain.cdn/project/bundles/1b956c239862619d3a59.js
-		return files.map((i) => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
+		return files.map(i => ({ file: i, remoteDest: `${path.relative(process.cwd(), i)}` }));
 	}
 	return [];
 }
@@ -76,7 +78,7 @@ async function prepareImagesFiles({ dir = recDir, imagesPath } = {}) {
 		// the images are inside folder temp folder (images-temp) but goes inside imagesPath /images/
 		// remove the first / otherwise an empty folder is created on storage
 		const dest = imagesPath.substr(1);
-		const f = files.map((i) => ({ file: i, remoteDest: `${dest}${path.basename(i)}` }));
+		const f = files.map(i => ({ file: i, remoteDest: `${dest}${path.basename(i)}` }));
 		return f;
 	}
 	return [];

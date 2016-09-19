@@ -1,4 +1,5 @@
 import path from 'path';
+
 const debug = require('debug')('dt');
 
 function getWebpackConfig(config, dev = false) {

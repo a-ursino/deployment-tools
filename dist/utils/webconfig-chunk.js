@@ -77,13 +77,13 @@ let updateWebconfigChunk = (() => {
 	};
 })();
 
-var _fs = require('../libs/fs');
-
-var _fs2 = _interopRequireDefault(_fs);
-
 var _find = require('lodash/find');
 
 var _find2 = _interopRequireDefault(_find);
+
+var _fs = require('../libs/fs');
+
+var _fs2 = _interopRequireDefault(_fs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

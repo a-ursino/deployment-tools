@@ -4,6 +4,7 @@ import isString from 'lodash/isString';
 import isArray from 'lodash/isArray';
 import { promisify } from 'bluebird';
 import path from 'path';
+
 const debug = require('debug')('dt');
 
 // NOTE: Promise.promisify takes a function that takes a callback as its last argument and converts it into a function that returns a promise (without the need for a callback)
@@ -74,7 +75,7 @@ const makeDirsAsync = (paths) => {
 	} else if (isArray(paths)) {
 		return Promise.all(paths.map(i => makeDirAsync(i)));
 	}
-	throw new Error(`Invalid parameter name  ${name}. It must be a string or an array`);
+	throw new Error(`Invalid parameter name  ${paths}. It must be a string or an array`);
 };
 
 export default {

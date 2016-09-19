@@ -140,14 +140,6 @@ var _azureStorage = require('azure-storage');
 
 var _azureStorage2 = _interopRequireDefault(_azureStorage);
 
-var _config = require('./libs/config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _logger = require('./libs/logger');
-
-var _logger2 = _interopRequireDefault(_logger);
-
 var _recursiveReaddir = require('recursive-readdir');
 
 var _recursiveReaddir2 = _interopRequireDefault(_recursiveReaddir);
@@ -155,6 +147,14 @@ var _recursiveReaddir2 = _interopRequireDefault(_recursiveReaddir);
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
+
+var _config = require('./libs/config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _logger = require('./libs/logger');
+
+var _logger2 = _interopRequireDefault(_logger);
 
 var _fs = require('./libs/fs');
 
@@ -166,6 +166,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 const debug = require('debug')('dt');
 const envalid = require('envalid');
+
 const { str } = envalid;
 
 // validate enviroment variables

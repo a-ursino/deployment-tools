@@ -1,3 +1,4 @@
+/* eslint-disable require-yield */
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import getWebpackConfig from './webpack-helper';

@@ -1,8 +1,9 @@
-import fs from '../libs/fs';
+/* eslint-disable require-yield */
 import webpack from 'webpack';
+import path from 'path';
+import fs from '../libs/fs';
 import logger from '../libs/logger';
 import c from '../libs/config';
-import path from 'path';
 import getWebpackConfig from './webpack-helper';
 
 const loadConfig = () => c().load();

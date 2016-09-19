@@ -48,6 +48,14 @@ let watch = (() => {
 	};
 })();
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _chokidar = require('chokidar');
+
+var _chokidar2 = _interopRequireDefault(_chokidar);
+
 var _config = require('./libs/config');
 
 var _config2 = _interopRequireDefault(_config);
@@ -64,17 +72,9 @@ var _sass = require('./utils/sass');
 
 var _sass2 = _interopRequireDefault(_sass);
 
-var _chokidar = require('chokidar');
-
-var _chokidar2 = _interopRequireDefault(_chokidar);
-
 var _logger = require('./libs/logger');
 
 var _logger2 = _interopRequireDefault(_logger);
-
-var _path = require('path');
-
-var _path2 = _interopRequireDefault(_path);
 
 var _clean = require('./clean');
 
