@@ -91,11 +91,11 @@
   ],
   "license": "ISC",
   "devDependencies": {
-    "bootstrap": "^3.3.7",
-    "pre-git": "3.10.0",
-    "publish-please": "^2.2.0",
-    "react": "^15.3.1",
-    "react-dom": "^15.3.1"
+    "bootstrap": "^4.3.1",
+    "pre-git": "3.17.1",
+    "publish-please": "^5.4.3",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3"
   },
   "dependencies": {
     "autoprefixer": "6.4.1",
