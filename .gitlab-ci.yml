@@ -2,7 +2,7 @@ stages:
   - test
   - build
 
-image: node:8.10.1
+image: node:8.10.0
 
 cache:
   paths:
