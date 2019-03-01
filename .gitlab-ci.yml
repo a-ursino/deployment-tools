@@ -1,0 +1,15 @@
+stages:
+  - test
+  - build
+
+image: node:8.10.1
+
+cache:
+  paths:
+  - node_modules/
+
+test:
+  stage: test
+  script:
+   - npm ci
+   - npm run test
