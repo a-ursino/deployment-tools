@@ -144,7 +144,7 @@
     "mkdirp": "0.5.1",
     "modernizr-webpack-plugin": "1.0.5",
     "ncp": "2.0.0",
-    "postcss": "5.2.0",
+    "postcss": "8.4.31",
     "postcss-calc": "5.3.1",
     "postcss-clean": "1.0.2",
     "postcss-devtools": "1.1.0",
